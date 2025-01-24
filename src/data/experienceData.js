@@ -6,27 +6,27 @@ const experienceData = [
   {
     company: 'StartNoo LLC.',
     role: 'Full Stack Developer',
-    duration: 'June 2021 - Present',
+    duration: 'August 2024 - December 2024',
     description: 'Leading a team of developers in building scalable web applications using React and Node.js. Implemented performance optimizations that reduced load times by 30%.',
     
   },
   {
     company: 'OPSWAT',
     role: 'Associate Technical Support Engineer',
-    duration: 'January 2019 - May 2021',
+    duration: 'January 2024 - August 2024',
     description: 'Developed RESTful APIs with Python and Django. Collaborated with cross-functional teams to design and launch new features, enhancing user engagement by 25%.',
     
   },
   {
     company: 'OPSWAT',
     role: 'Application Developer / QA Engineer',
-    duration: 'January 2019 - May 2021',
+    duration: 'January 2022 - December 2023',
     description: 'Developed RESTful APIs with Python and Django. Collaborated with cross-functional teams to design and launch new features, enhancing user engagement by 25%.',
   },
   {
     company: 'OPSWAT',
     role: 'Software Engineer Intern',
-    duration: 'August 2022 - December 2022',
+    duration: 'August 2021 - December 2021',
     description: 'Assisted in the development of cybersecurity software. Gained hands-on experience in software testing and debugging.',
    
   },
