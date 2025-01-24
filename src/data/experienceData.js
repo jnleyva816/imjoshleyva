@@ -7,7 +7,7 @@ const experienceData = [
     company: 'StartNoo LLC.',
     role: 'Full Stack Developer',
     duration: 'August 2024 - December 2024',
-    description: 'Refactoed a WordPress Site to Ruby on Rails, improving performance and maintainability. Worked closly with Data Analysts to create a data visualization dashboard, enhancing data accessibility for stakeholders.',
+    description: 'Refactored a WordPress Site to Ruby on Rails, improving performance and maintainability. Worked closly with Data Analysts to create a data visualization dashboard, enhancing data accessibility for stakeholders.',
     
   },
   {
