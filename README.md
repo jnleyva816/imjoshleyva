@@ -30,7 +30,7 @@
 
 ## Demo
 
-![Homepage Screenshot](path-to-screenshot.png)
+![Homepage Screenshot](/public/screenshot.png)
 
 Access the live demo [here](https://your-live-demo-link.com).
 
