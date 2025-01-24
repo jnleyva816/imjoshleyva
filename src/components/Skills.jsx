@@ -12,19 +12,23 @@ import {
   FaJedi, // Alternative for Jest
   FaRust,
 } from 'react-icons/fa';
+import { TbBrandCpp } from "react-icons/tb";
+import { SiSelenium,SiRubyonrails } from 'react-icons/si';
 
 const skillsData = {
-  'Programming Languages': [
+  'Programming Languages': [   
+    { name: 'Java', icon: <FaJava className="w-8 h-8 text-red-500" /> },
+    { name: 'Rust', icon: <FaRust className="w-8 h-8 text-orange-500" /> }, 
+    { name: 'C++', icon: <TbBrandCpp className="w-8 h-8 text-blue-700" /> },
     { name: 'JavaScript', icon: <FaJsSquare className="w-8 h-8 text-yellow-500" /> },
     { name: 'Python', icon: <FaPython className="w-8 h-8 text-blue-500" /> },
-    { name: 'Java', icon: <FaJava className="w-8 h-8 text-red-500" /> },
-    { name: 'Rust', icon: <FaRust className="w-8 h-8 text-orange-500" /> },
-
   ],
   'Frameworks & Testing': [
     { name: 'React', icon: <FaReact className="w-8 h-8 text-blue-400" /> },
     { name: 'Node.js', icon: <FaNodeJs className="w-8 h-8 text-green-500" /> },
-    { name: 'Jest', icon: <FaJedi className="w-8 h-8 text-purple-500" /> }, // Using FaJedi as an alternative
+    { name: 'Jest', icon: <FaJedi className="w-8 h-8 text-purple-500" /> },
+    { name: 'Selenium', icon: <SiSelenium className="w-8 h-8 text-green-500" /> },
+    { name: 'Ruby on Rails', icon: <SiRubyonrails className="w-8 h-8 text-red-500" /> },
   ],
   'Cloud Services': [
     { name: 'AWS', icon: <FaAws className="w-8 h-8 text-orange-500" /> },
@@ -32,6 +36,7 @@ const skillsData = {
     { name: 'Google Cloud', icon: <FaGoogle className="w-8 h-8 text-blue-500" /> },
   ],
 };
+
 
 function Skills() {
   return (
