@@ -32,7 +32,7 @@
 
 ![Homepage Screenshot](/public/screenshot.png)
 
-Access the live demo [here](https://your-live-demo-link.com).
+Access the live demo [here](https://imjoshleyva.vercel.app).
 
 ## Technologies Used
 
