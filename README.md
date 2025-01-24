@@ -86,7 +86,7 @@ Follow these steps to set up the project locally:
    yarn start
    ```
 
-   The application will run at `http://localhost:3000`.
+   The application will run at `http://localhost:5143`.
 
 ## Usage
 
@@ -161,7 +161,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 Joshua N. Leyva  
-Email: [joshua.leyva@example.com](mailto:joshua.leyva@example.com)  
+Email: [joshleyva816@gmail.com](mailto:joshleyva816@gmail.com)  
 GitHub: [jnleyva816](https://github.com/jnleyva816)  
 LinkedIn: [linkedin.com/in/joshua-leyva](https://www.linkedin.com/in/joshua-leyva/)  
 LeetCode: [leetcode.com/jleyva](https://leetcode.com/jleyva)  
