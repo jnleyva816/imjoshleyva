@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+
+@theme {  
+    --color-forest-green: #606c38;
+    --color-deep-olive: #283618;
+    --color-pale-cream: #fefae0;
+    --color-warm-yellow: #dda15e;
+    --color-rust-brown: #bc6c25;
+
+    --font-script: Sans-serif Mono;
+}
+
