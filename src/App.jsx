@@ -8,6 +8,8 @@ import LeetCode_heatmap from './components/LeetCode_heatmap';
 import MusicPlayer from './components/Music-Player';
 import Experience from './components/Experience';
 
+import { Analytics } from "@vercel/analytics/react"
+
 function App() {
   return (
     <section className="w-full min-h-screen flex flex-col items-center bg-forest-green text-pale-cream font-script">
@@ -53,7 +55,11 @@ function App() {
       
       {/* Separator Line */}
       <div className="w-full h-px bg-warm-yellow my-4 md:w-1/2 lg:w-1/3 mx-auto"></div>
+
+      <Analytics />
     </section>
+
+    
   );
 }
 
