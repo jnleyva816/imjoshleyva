@@ -1,6 +1,7 @@
 // src/components/Experience.jsx
 import React from 'react';
 import experienceData from '../data/experienceData';
+import { FaBriefcase } from "react-icons/fa6";
 
 function Experience() {
   return (
@@ -14,8 +15,7 @@ function Experience() {
           {experienceData.map((exp, index) => (
             <div key={index} className="bg-pale-cream rounded-lg shadow-md p-6 flex">
               {/* Icon */}
-
-              
+                           
               {/* Experience Details */}
               <div className="ml-4">
                 <h3 className="text-xl font-semibold text-gray-800">{exp.role}</h3>

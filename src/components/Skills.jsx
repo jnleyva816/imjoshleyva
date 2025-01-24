@@ -13,13 +13,15 @@ import {
   FaRust,
 } from 'react-icons/fa';
 import { TbBrandCpp } from "react-icons/tb";
-import { SiSelenium,SiRubyonrails } from 'react-icons/si';
+import { SiSelenium,SiRubyonrails, SiSpring } from 'react-icons/si';
+import { DiRuby } from "react-icons/di";
 
 const skillsData = {
   'Programming Languages': [   
     { name: 'Java', icon: <FaJava className="w-8 h-8 text-red-500" /> },
     { name: 'Rust', icon: <FaRust className="w-8 h-8 text-orange-500" /> }, 
     { name: 'C++', icon: <TbBrandCpp className="w-8 h-8 text-blue-700" /> },
+    { name: 'Ruby', icon: <DiRuby className="w-8 h-8 text-red-500" /> },
     { name: 'JavaScript', icon: <FaJsSquare className="w-8 h-8 text-yellow-500" /> },
     { name: 'Python', icon: <FaPython className="w-8 h-8 text-blue-500" /> },
   ],
@@ -29,6 +31,7 @@ const skillsData = {
     { name: 'Jest', icon: <FaJedi className="w-8 h-8 text-purple-500" /> },
     { name: 'Selenium', icon: <SiSelenium className="w-8 h-8 text-green-500" /> },
     { name: 'Ruby on Rails', icon: <SiRubyonrails className="w-8 h-8 text-red-500" /> },
+    { name: 'Spring', icon: <SiSpring className="w-8 h-8 text-green-500" /> },
   ],
   'Cloud Services': [
     { name: 'AWS', icon: <FaAws className="w-8 h-8 text-orange-500" /> },
