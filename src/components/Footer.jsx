@@ -8,7 +8,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">ImJoshLeya</h3>
             <p className="text-sm">
-              Personal Portfolio Website  <br /> Built with React and TailwindCSS <br /> © 2025 Josh Leyva
+              Personal Portfolio Website  <br /> Built with React and TailwindCSS <br /> © 2025 ImJoshLeyva
             </p> 
           </div>
           <div>
@@ -32,7 +32,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <h3 className="text-lg font-semibold mb-4">Contact Me</h3>
             <p className="text-sm">
               joshleyva816@gmail.com 
             </p>

@@ -1,5 +1,6 @@
 // src/components/Topbar.jsx
 import React, { useState } from 'react';
+import portfolio from '/portfolio.svg';
 
 function Topbar() {
   // State to manage mobile menu visibility
@@ -8,7 +9,7 @@ function Topbar() {
   // Function to toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  };  
 
   return (
     <nav className="bg-forest-green fixed w-full z-10">
@@ -17,18 +18,30 @@ function Topbar() {
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center">
             <a href="#" className="text-xl font-bold text-pale-cream">
-              ImJoshLeyva
+              <img src={portfolio} alt="Portfolio" className="h-8 w-8" /> 
             </a>
           </div>
-
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-8 items-center">
             <a
               href="#"
-              className="text-deep-olive hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              className="text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
             >
               Home
-            </a> 
+            </a>
+            <a
+              href="#experience"
+              className="text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Experience
+            </a>
+            <a
+              href="#projects"
+              className="text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Projects
+            </a>
+
           </div>
 
           {/* Mobile Menu Button */}
@@ -76,10 +89,23 @@ function Topbar() {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <a
               href="#"
-              className="block text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium"
+              className="block text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium"
             >
               Home
-            </a> 
+            </a>
+            <a
+              href="#experience"
+              className="block text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium"
+            >
+              Experience
+            </a>
+            <a
+              href="#projects"
+              className="block text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium"
+            >
+              Projects
+            </a>
+
           </div>
         </div>
       )}
