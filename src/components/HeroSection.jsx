@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import profile_picture from '../assets/profile_picture.jpg';
 import resume from '../assets/JoshuaLeyvaResume.pdf'; // Import your resume file
+import { GrDownload } from "react-icons/gr";
 
 function HeroSection() {
   const tabs = [
@@ -81,9 +82,9 @@ function HeroSection() {
                 <a
                   href={resume}
                   download="JoshuaLeyvaResume.pdf"
-                  className="bg-forest-green text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
+                  className="bg-forest-green text-white px-4 py-2 rounded-md hover:bg-rust-brown transition-colors"
                 >
-                  Download Resume
+                  Download Resume <GrDownload className="inline-block ml-2 text-sm mb-2"  /> 
                 </a>
               </div>
             )}
