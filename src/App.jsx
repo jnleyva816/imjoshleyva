@@ -7,6 +7,9 @@ import Skills from './components/Skills';
 import LeetCode_heatmap from './components/LeetCode_heatmap';
 import MusicPlayer from './components/Music-Player';
 import Experience from './components/Experience';
+import ProjectList from './components/ProjectList';
+import projects from './data/projectsData';
+import Footer from './components/Footer';
 
 import { Analytics } from "@vercel/analytics/react"
 
@@ -26,7 +29,7 @@ function App() {
       <div className="w-full h-px bg-warm-yellow my-4 md:w-1/2 lg:w-1/3 mx-auto mt-10"></div>
 
       {/* Experience Section */}
-      <div className="py-10">
+      <div className="py-10" id="experience">
         <Experience /> 
       </div>
 
@@ -55,6 +58,14 @@ function App() {
       
       {/* Separator Line */}
       <div className="w-full h-px bg-warm-yellow my-4 md:w-1/2 lg:w-1/3 mx-auto"></div>
+
+      {/*Projects Section*/}
+      <div className="py-10" id="projects">
+         <ProjectList projects={projects} />
+      </div>
+
+      {/* Footer */}
+      <Footer />
 
       <Analytics />
     </section>
