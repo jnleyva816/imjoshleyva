@@ -12,7 +12,8 @@ import projects from './data/projectsData';
 import Footer from './components/Footer';
 
 import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
+
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
 
       <Analytics />
       <SpeedInsights />
+
     </section>
 
     
