@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">ImJoshLeya</h3>
+            <h3 className="text-lg font-semibold mb-4">ImJoshLeyva</h3>
             <p className="text-sm">
               Personal Portfolio Website  <br /> Built with React and TailwindCSS <br /> © 2025 ImJoshLeyva
             </p> 
