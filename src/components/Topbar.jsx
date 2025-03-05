@@ -41,6 +41,12 @@ function Topbar() {
             >
               Projects
             </a>
+            <a
+              href="https://jnleyvaphotos.vercel.app"
+              className="text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Photography
+            </a>
 
           </div>
 
@@ -105,7 +111,12 @@ function Topbar() {
             >
               Projects
             </a>
-
+            <a
+              href="https://jnleyvaphotos.vercel.app"
+              className="block text-pale-cream hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium"
+            >
+              Photography
+            </a>
           </div>
         </div>
       )}
