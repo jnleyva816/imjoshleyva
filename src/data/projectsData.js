@@ -1,5 +1,6 @@
 import React from 'react';
 import portfolioImage from '../assets/portfolio.jpg';
+import jobTrackerImage from '../assets/job_app_tracker.png';
 
 
 const projects = [
@@ -10,6 +11,14 @@ const projects = [
     technologies: ["React", "TailwindCSS", "MongoDB", "Vercel"],
     liveUrl: "https://imjoshleyva.vercel.app",
     codeUrl: "https://github.com/jnleyva816/imjoshleyva"
+  },
+  {
+    title: "Job Application Tracker",
+    description: "Full Stack Job Application Tracker built with Spring Boot backend and React frontend.",
+    imageUrl: jobTrackerImage,
+    technologies: ["React", "Spring Boot", "Java", "PostgreSQL"],
+    liveUrl: "https://job-application-tracker-docs.vercel.app",
+    codeUrl: "https://github.com/jnleyva816/job-application-tracker"
   },
   // {
   //   title: "Project 2",
