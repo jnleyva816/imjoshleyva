@@ -1,13 +1,599 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {  
-    --color-forest-green: #606c38;
-    --color-deep-olive: #283618;
-    --color-pale-cream: #fefae0;
-    --color-warm-yellow: #dda15e;
-    --color-rust-brown: #bc6c25;
+/* CSS Custom Properties for Theme Colors */
+:root {
+  /* Primary Colors */
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-primary-dark: #4f46e5;
+  
+  /* Secondary Colors */
+  --color-secondary: #10b981;
+  --color-secondary-light: #34d399;
+  --color-secondary-dark: #059669;
+  
+  /* Accent Colors */
+  --color-accent: #f59e0b;
+  --color-accent-light: #fbbf24;
+  --color-accent-dark: #d97706;
+  
+  /* Neutral Colors */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+}
 
-    --font-script: Sans-serif Mono;
+/* Dark mode color overrides */
+.dark {
+  --color-primary: #818cf8;
+  --color-primary-light: #a5b4fc;
+  --color-primary-dark: #6366f1;
+  
+  --color-secondary: #34d399;
+  --color-secondary-light: #6ee7b7;
+  --color-secondary-dark: #10b981;
+}
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transition: color 0.3s ease, background 0.3s ease;
+}
+
+/* Dark mode styles */
+.dark body {
+    color: #e2e8f0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* Main container background */
+.main-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-neutral-50), var(--color-neutral-100), var(--color-neutral-200));
+    transition: background 0.3s ease;
+}
+
+.dark .main-container {
+    background: linear-gradient(135deg, var(--color-neutral-900), var(--color-neutral-800), var(--color-neutral-900));
+}
+
+/* Mobile menu background fix */
+.mobile-menu {
+    background-color: white;
+    border-top: 1px solid var(--color-neutral-200);
+}
+
+.dark .mobile-menu {
+    background-color: var(--color-neutral-900);
+    border-top-color: var(--color-neutral-700);
+}
+
+/* Custom Color Classes */
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-accent { background-color: var(--color-accent); }
+
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+
+.border-primary { border-color: var(--color-primary); }
+.border-secondary { border-color: var(--color-secondary); }
+.border-accent { border-color: var(--color-accent); }
+
+/* Hover states */
+.hover\:text-primary:hover { color: var(--color-primary); }
+.hover\:text-primary-light:hover { color: var(--color-primary-light); }
+.hover\:bg-primary:hover { background-color: var(--color-primary); }
+
+/* Custom Navigation Styles */
+.nav-fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 40;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-neutral-200);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.dark .nav-fixed {
+    background-color: rgba(15, 23, 42, 0.95);
+    border-bottom-color: var(--color-neutral-700);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+}
+
+.nav-link {
+    color: var(--color-neutral-700);
+    transition: color 0.2s ease;
+}
+
+.dark .nav-link {
+    color: var(--color-neutral-300);
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+}
+
+.dark .nav-link:hover {
+    color: var(--color-primary-light);
+}
+
+/* Comprehensive Text Color Classes */
+.text-neutral-50 {
+    color: var(--color-neutral-50);
+}
+.dark .text-neutral-50 {
+    color: var(--color-neutral-50);
+}
+
+.text-neutral-100 {
+    color: var(--color-neutral-100);
+}
+.dark .text-neutral-100 {
+    color: var(--color-neutral-100);
+}
+
+.text-neutral-200 {
+    color: var(--color-neutral-200);
+}
+.dark .text-neutral-200 {
+    color: var(--color-neutral-200);
+}
+
+.text-neutral-300 {
+    color: var(--color-neutral-300);
+}
+.dark .text-neutral-300 {
+    color: var(--color-neutral-300);
+}
+
+.text-neutral-400 {
+    color: var(--color-neutral-400);
+}
+.dark .text-neutral-400 {
+    color: var(--color-neutral-400);
+}
+
+.text-neutral-500 {
+    color: var(--color-neutral-500);
+}
+.dark .text-neutral-500 {
+    color: var(--color-neutral-400);
+}
+
+.text-neutral-600 {
+    color: var(--color-neutral-600);
+}
+.dark .text-neutral-600 {
+    color: var(--color-neutral-300);
+}
+
+.text-neutral-700 {
+    color: var(--color-neutral-700);
+}
+.dark .text-neutral-700 {
+    color: var(--color-neutral-200);
+}
+
+.text-neutral-800 {
+    color: var(--color-neutral-800);
+}
+.dark .text-neutral-800 {
+    color: var(--color-neutral-200);
+}
+
+.text-neutral-900 {
+    color: var(--color-neutral-900);
+}
+.dark .text-neutral-900 {
+    color: var(--color-neutral-100);
+}
+
+/* White and Black text for maximum contrast */
+.text-white {
+    color: #ffffff;
+}
+.dark .text-white {
+    color: #ffffff;
+}
+
+.text-black {
+    color: #000000;
+}
+.dark .text-black {
+    color: #ffffff;
+}
+
+/* Icon color classes for proper contrast */
+.icon-light {
+    color: var(--color-neutral-600);
+}
+.dark .icon-light {
+    color: var(--color-neutral-300);
+}
+
+.icon-dark {
+    color: var(--color-neutral-800);
+}
+.dark .icon-dark {
+    color: var(--color-neutral-200);
+}
+
+/* SVG and icon fill colors */
+svg {
+    color: inherit;
+    fill: currentColor;
+}
+
+/* Theme Toggle Button Enhanced */
+.theme-toggle {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 50;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    border: 1px solid var(--color-neutral-200);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--color-neutral-700);
+}
+
+.dark .theme-toggle {
+    background-color: var(--color-neutral-800);
+    border-color: var(--color-neutral-700);
+    color: var(--color-neutral-200);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+.dark .theme-toggle:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+}
+
+/* Fix for text stacking issue */
+p, .text-xl, .text-lg, .text-base {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    white-space: normal;
+    word-break: normal;
+    text-align: left;
+    display: block;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Ensure proper text flow in flex containers */
+.flex p, 
+.flex .text-xl, 
+.flex .text-lg {
+    flex-shrink: 1;
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
+}
+
+/* Center-aligned text should still center but not break words */
+.text-center p,
+.text-center .text-xl,
+.text-center .text-lg {
+    text-align: center;
+}
+
+/* Utility Classes */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Dark mode glass card */
+.dark .glass-card {
+    background: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Dark mode gradient text enhancement */
+.dark .gradient-text {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Dark mode hover lift */
+.dark .hover-lift:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+}
+
+/* Section separators */
+.section-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.separator-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-neutral-300), transparent);
+}
+
+.dark .separator-line {
+    background: linear-gradient(to right, transparent, var(--color-neutral-600), transparent);
+}
+
+.separator-dot {
+    margin: 0 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.separator-dot.primary {
+    background-color: var(--color-primary);
+}
+
+.separator-dot.secondary {
+    background-color: var(--color-secondary);
+}
+
+.separator-dot.accent {
+    background-color: var(--color-accent);
+}
+
+/* Fix for motion div text issues */
+[data-framer-name] p,
+[data-framer-name] .text-xl {
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+}
+
+/* Additional safety for subtitle text */
+.subtitle-text {
+    display: block !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    text-align: center !important;
+    line-height: 1.6 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* Fix for all text elements to prevent letter-by-letter display */
+h1, h2, h3, h4, h5, h6, p, span, div {
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    hyphens: auto !important;
+}
+
+/* Specific fixes for flex containers that might cause text issues */
+.flex h1, .flex h2, .flex h3, .flex h4, .flex h5, .flex h6,
+.flex p, .flex span, .flex div {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+}
+
+/* Force normal text flow for motion components */
+[data-framer-name] *,
+.motion-div *,
+motion-div * {
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    display: block !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Specific fix for project section text */
+.project-text,
+.project-section *,
+.text-center * {
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: inherit !important;
+}
+
+/* Custom Scrollbar Styling */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-primary-dark), var(--color-secondary-dark));
+    background-clip: content-box;
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar {
+    scrollbar-color: var(--color-primary-light) transparent;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--color-primary-light), var(--color-secondary-light));
+    background-clip: content-box;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
+    background-clip: content-box;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Enhanced focus styles for accessibility */
+.focus-visible\:ring-primary:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+/* Dark mode focus styles */
+.dark .focus-visible\:ring-primary:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea, select {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Loading animation for images */
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.image-loading {
+    background: linear-gradient(90deg, #f0f0f0 0px, #e0e0e0 40px, #f0f0f0 80px);
+    background-size: 200px;
+    animation: shimmer 1.5s linear infinite;
+}
+
+/* Dark mode image loading */
+.dark .image-loading {
+    background: linear-gradient(90deg, #374151 0px, #4b5563 40px, #374151 80px);
+    background-size: 200px;
+    animation: shimmer 1.5s linear infinite;
+}
+
+/* Animations */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-spin-slow {
+    animation: spin 3s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+    animation: spin 3s linear infinite reverse;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth theme transition */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 

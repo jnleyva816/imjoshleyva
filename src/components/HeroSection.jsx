@@ -1,31 +1,36 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import profile_picture from '../assets/profile_picture.jpg';
-import resume from '../assets/JoshuaLeyvaResume.pdf'; // Import your resume file
+import resume from '../assets/JoshuaLeyvaResume.pdf';
 import { GrDownload } from "react-icons/gr";
+import { FaGithub, FaLinkedin, FaCode } from "react-icons/fa";
 
 function HeroSection() {
   const tabs = [
     {
       label: 'General',
+      icon: '👋',
       content: (
         <>
-          Hi, I'm <strong className="text-rust-brown">Josh Leyva</strong>! Follow my socials!!
+          Hi, I'm <strong className="text-primary font-semibold">Josh Leyva</strong>! Welcome to my digital space where creativity meets technology. Let's connect and explore the possibilities together!
         </>
       ),
     },
     {
       label: 'Recruiter',
+      icon: '💼',
       content: (
         <>
-          Hello! I'm <strong className="text-rust-brown">Josh Leyva</strong>, a dedicated software developer specializing in Java, C#, and Rust. With a proven track record of building responsive, user-friendly interfaces and developing robust backend systems, I thrive on solving complex problems and delivering high-quality solutions. Let's connect to discuss how I can contribute to your team's success!
+          Hello! I'm <strong className="text-primary font-semibold">Josh Leyva</strong>, a dedicated software developer specializing in Java, C#, and Rust. With a proven track record of building responsive, user-friendly interfaces and developing robust backend systems, I thrive on solving complex problems and delivering high-quality solutions. Let's connect to discuss how I can contribute to your team's success!
         </>
       ),
     },
     {
       label: 'Developer',
+      icon: '🚀',
       content: (
         <>
-          Hey there! I'm <strong className="text-rust-brown">Josh Leyva</strong>, a passionate developer experienced in Python, C ++, C#, and Rust, and front-end technologies. I enjoy collaborating on innovative projects, optimizing performance, and exploring new technologies to enhance development workflows. Check out my projects and let's build something awesome together!
+          Hey there! I'm <strong className="text-primary font-semibold">Josh Leyva</strong>, a passionate developer experienced in Python, C++, C#, and Rust, along with modern front-end technologies. I enjoy collaborating on innovative projects, optimizing performance, and exploring new technologies to enhance development workflows. Check out my projects and let's build something awesome together!
         </>
       ),
     },
@@ -38,142 +43,222 @@ function HeroSection() {
   };
 
   const activeContent = tabs.find((tab) => tab.label === activeTab)?.content;
+  const activeIcon = tabs.find((tab) => tab.label === activeTab)?.icon;
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
+  const socialLinks = [
+    {
+      href: "https://github.com/jnleyva816",
+      icon: FaGithub,
+      label: "GitHub Profile",
+      color: "hover:text-neutral-800"
+    },
+    {
+      href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/?trk=opento_sprofile_details",
+      icon: FaLinkedin,
+      label: "LinkedIn Profile",
+      color: "hover:text-blue-600"
+    },
+    {
+      href: "https://leetcode.com/jleyva",
+      icon: FaCode,
+      label: "LeetCode Profile",
+      color: "hover:text-orange-500"
+    }
+  ];
 
   return (
-    <section className="py-12 bg-pale-cream rounded-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center lg:items-start">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-forest-green lg:mr-8 shadow-md">
-            <img
-              src={profile_picture}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-          </div>
+    <motion.section 
+      className="relative overflow-hidden"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-emerald-500/5 to-amber-500/5 rounded-3xl"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-amber-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
 
-          <div className="mt-6 lg:mt-0 w-full">
-            <h1 className="text-3xl font-bold text-rust-brown text-center lg:text-left">
-              Joshua N. Leyva
-            </h1>
-
-            <div className="mt-4 flex justify-center lg:justify-start space-x-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.label}
-                  onClick={() => handleTabClick(tab.label)}
-                  className={`px-3 py-1 rounded-md font-medium focus:outline-none transition-colors ${
-                    activeTab === tab.label
-                      ? 'bg-forest-green text-white'
-                      : 'bg-transparent text-rust-brown hover:bg-forest-green hover:text-white'
-                  }`}
+      {/* Main Content */}
+      <div className="relative z-10 bg-white/10 dark:bg-slate-900/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 md:p-12 lg:p-16 transition-all duration-300">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Profile Image */}
+            <motion.div 
+              className="lg:col-span-4 flex justify-center lg:justify-start"
+              variants={itemVariants}
+            >
+              <div className="relative">
+                {/* Animated rings */}
+                <div 
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 to-emerald-500 p-1"
+                  style={{
+                    animation: 'spin 8s linear infinite'
+                  }}
                 >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            <p className="mt-4 text-base sm:text-lg lg:text-xl text-rust-brown max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
-              {activeContent}
-            </p>
-
-            {/* Resume Download Button (Conditional) */}
-            {activeTab === 'Recruiter' && (
-              <div className="mt-6 flex justify-center lg:justify-start">
-                <a
-                  href={resume}
-                  download="JoshuaLeyvaResume.pdf"
-                  className="bg-forest-green text-white px-4 py-2 rounded-md hover:bg-rust-brown transition-colors"
+                  <div className="w-full h-full rounded-full bg-white dark:bg-slate-900"></div>
+                </div>
+                <div 
+                  className="absolute inset-2 rounded-full bg-gradient-to-r from-amber-500 to-indigo-500 p-1"
+                  style={{
+                    animation: 'spin 6s linear infinite reverse'
+                  }}
                 >
-                  Download Resume <GrDownload className="inline-block ml-2 text-sm mb-2"  /> 
-                </a>
+                  <div className="w-full h-full rounded-full bg-white dark:bg-slate-900"></div>
+                </div>
+                
+                {/* Profile Picture */}
+                <div className="relative w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl">
+                  <img
+                    src={profile_picture}
+                    alt="Joshua N. Leyva"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                  />
+                </div>
+
+                {/* Floating Badge */}
+                <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-indigo-500 to-emerald-500 text-white px-4 py-2 rounded-full shadow-lg animate-bounce">
+                  <span className="text-2xl">{activeIcon}</span>
+                </div>
               </div>
-            )}
+            </motion.div>
 
-            <div className="flex justify-center lg:justify-start space-x-6 mt-6">
-              <a
-                href="https://github.com/jnleyva816"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-rust-brown hover:text-gray-400 transition-colors"
-                aria-label="GitHub Profile"
+            {/* Content */}
+            <div className="lg:col-span-8 space-y-8">
+              
+              {/* Name and Title */}
+              <motion.div 
+                className="text-center lg:text-left"
+                variants={itemVariants}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-1.78.37-2.22-.43-2.36-.83-.09-.23-.48-.83-.82-1-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.13 0 0 .67-.21 2.2.82a7.59 7.59 0 0 1 2-.27c.68.003 1.36.092 2 .27 1.53-1.03 2.2-.82 2.2-.82.44 1.11.16 1.93.08 2.13.51.56 .82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
-                </svg>
-              </a>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                  <span className="bg-gradient-to-r from-indigo-500 to-emerald-500 bg-clip-text text-transparent">Joshua N. Leyva</span>
+                </h1>
+                <div className="flex items-center justify-center lg:justify-start space-x-4 text-lg md:text-xl text-slate-600 dark:text-slate-300">
+                  <span>Software Developer</span>
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+                  <span>Problem Solver</span>
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span>Tech Enthusiast</span>
+                </div>
+              </motion.div>
 
-              <a
-                href="https://www.linkedin.com/in/joshua-leyva-0b9942b6/?trk=opento_sprofile_details"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-rust-brown hover:text-gray-400 transition-colors"
-                aria-label="LinkedIn Profile"
+              {/* Interactive Tabs */}
+              <motion.div 
+                className="space-y-6"
+                variants={itemVariants}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  className="w-6 h-6"
+                <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                  {tabs.map((tab) => (
+                    <motion.button
+                      key={tab.label}
+                      onClick={() => handleTabClick(tab.label)}
+                      className={`px-6 py-3 rounded-2xl font-medium text-sm md:text-base transition-all duration-300 transform ${
+                        activeTab === tab.label
+                          ? 'bg-gradient-to-r from-indigo-500 to-emerald-500 text-white shadow-lg scale-105'
+                          : 'bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 hover:scale-105 hover:shadow-md'
+                      }`}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="mr-2">{tab.icon}</span>
+                      {tab.label}
+                    </motion.button>
+                  ))}
+                </div>
+
+                {/* Tab Content */}
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border border-white/20 dark:border-white/10"
                 >
-                 <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.487
+                  <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed text-center lg:text-left">
+                    {activeContent}
+                  </p>
+                </motion.div>
+              </motion.div>
 
-                           0 16 .57 16 1.146v13.708c0 .633-.526 1.146-1.175
-
-                           1.146H1.175C.513 16 0 15.43 0 14.854V1.146zm4.943
-
-                           12.248V5.337H2.542v8.057h2.401zm-1.2-9.18c.837
-
-                           0 1.357-.555 1.357-1.25-.015-.71-.52-1.249-1.341
-
-                           -1.249-.821 0-1.357.539-1.357 1.249 0 .695.52
-
-                           1.25 1.326 1.25h.015zm4.907 9.18V9.359c0-.213.016
-
-                           -.426.078-.576.172-.426.566-.868 1.227-.868.866
-
-                           0 1.214.654 1.214 1.61v4.072h2.401V9.28c0-2.22-1.186
-
-                           -3.252-2.77-3.252-1.28 0-1.845.711-2.165 1.203h.016v-1.034H6.22c.
-
-                           03.678 0 8.057 0 8.057h2.401z"/>                </svg>
-              </a>
-
-              <a
-                href="https://leetcode.com/jleyva"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-rust-brown hover:text-gray-400 transition-colors"
-                aria-label="LeetCode Profile"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 50 50"
-                  fill="currentColor"
-                  className="w-6 h-6"
+              {/* Resume Download Button */}
+              {activeTab === 'Recruiter' && (
+                <motion.div 
+                  className="flex justify-center lg:justify-start"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <path d="M25 2c12.703 0 23 10.297 23 23S37.703 48 25 48 2 37.703 2 25 12.297 2 25 2m0-2C11.192 0 0 11.193 0 25s11.193 25 25 25 25-11.193 25-25S38.807 0 25 0z" />
-                  <text
-                    x="50%"
-                    y="58%"
-                    textAnchor="middle"
-                    fill="currentColor"
-                    fontSize="14"
-                    fontFamily="Arial"
+                  <motion.a
+                    href={resume}
+                    download="JoshuaLeyvaResume.pdf"
+                    className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-500 to-emerald-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    LC
-                  </text>
-                </svg>
-              </a>
+                    <span className="mr-3">Download Resume</span>
+                    <GrDownload className="text-lg group-hover:translate-y-1 transition-transform duration-300" />
+                  </motion.a>
+                </motion.div>
+              )}
+
+              {/* Social Links */}
+              <motion.div 
+                className="flex justify-center lg:justify-start space-x-6"
+                variants={itemVariants}
+              >
+                {socialLinks.map((social, index) => {
+                  const IconComponent = social.icon;
+                  return (
+                    <motion.a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`p-4 bg-white/80 dark:bg-slate-800/80 rounded-2xl text-slate-600 dark:text-slate-400 ${social.color} transition-all duration-300 shadow-md hover:shadow-lg group`}
+                      aria-label={social.label}
+                      whileHover={{ scale: 1.1, y: -3 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <IconComponent className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+                    </motion.a>
+                  );
+                })}
+              </motion.div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Decorative Elements */}
+      <div className="absolute top-1/4 left-8 w-4 h-4 bg-indigo-500/30 rounded-full animate-pulse"></div>
+      <div className="absolute top-1/3 right-12 w-6 h-6 bg-emerald-500/30 rounded-full animate-pulse delay-1000"></div>
+      <div className="absolute bottom-1/4 left-16 w-3 h-3 bg-amber-500/30 rounded-full animate-pulse delay-500"></div>
+    </motion.section>
   );
 }
 
