@@ -1,6 +1,6 @@
 import React from 'react';
 import portfolioImage from '../assets/portfolio.jpg';
-import jobTrackerImage from '../assets/job_app_tracker.png';
+import jobTrackerImage from '../assets/nextmove_logo.png';
 
 const projects = [
   {
@@ -34,7 +34,7 @@ const projects = [
     imageUrl: jobTrackerImage,
     technologies: ["React", "Spring Boot", "Java", "PostgreSQL", "REST API", "JWT", "Material-UI", "Docker"],
     demo: "https://job-application-tracker-docs.vercel.app",
-    github: "https://github.com/jnleyva816/job-application-tracker",
+    github: "https://github.com/jnleyva816/NextMove",
     category: "Web Applications",
     year: "2025",
     featured: true,
