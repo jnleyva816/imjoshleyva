@@ -1,17 +1,19 @@
 // src/App.jsx
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import TopBar from './components/Topbar';
 import HeroSection from './components/HeroSection';
 import Skills from './components/Skills';
-import LeetCode_heatmap from './components/LeetCode_heatmap';
-import MusicPlayer from './components/Music-Player';
 import Experience from './components/Experience';
 import Education from './components/Education';
-import ProjectList from './components/ProjectList';
 import Footer from './components/Footer';
 import { ThemeProvider } from './components/ThemeProvider';
 import ThemeToggle from './components/ThemeToggle';
+
+// Lazy load heavy components
+const LeetCode_heatmap = lazy(() => import('./components/LeetCode_heatmap'));
+const MusicPlayer = lazy(() => import('./components/Music-Player'));
+const ProjectList = lazy(() => import('./components/ProjectList'));
 
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
@@ -151,7 +153,9 @@ function App() {
                   A showcase of my technical skills and creative problem-solving
                 </motion.p>
               </div>
-              <ProjectList />
+              <Suspense fallback={<div className="text-center text-slate-600 dark:text-slate-300">Loading projects...</div>}>
+                <ProjectList />
+              </Suspense>
             </motion.section>
 
             {/* Modern Separator */}
@@ -277,7 +281,9 @@ function App() {
                   <h3 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-6 text-center">
                     LeetCode Progress
                   </h3>
-                  <LeetCode_heatmap />
+                  <Suspense fallback={<div className="text-center text-slate-500">Loading...</div>}>
+                    <LeetCode_heatmap />
+                  </Suspense>
                 </motion.div>
                 
                 {/* Music Player */}
@@ -288,7 +294,9 @@ function App() {
                   <h3 className="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-6 text-center">
                     Coding Soundtrack
                   </h3>
-                  <MusicPlayer />
+                  <Suspense fallback={<div className="text-center text-slate-500">Loading...</div>}>
+                    <MusicPlayer />
+                  </Suspense>
                 </motion.div>
               </div>
             </motion.section>

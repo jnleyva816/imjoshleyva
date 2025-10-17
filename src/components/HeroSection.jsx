@@ -137,6 +137,8 @@ function HeroSection() {
                     src={profile_picture}
                     alt="Joshua N. Leyva"
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                    loading="eager"
+                    decoding="async"
                   />
                 </div>
 

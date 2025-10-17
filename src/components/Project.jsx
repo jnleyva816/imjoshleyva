@@ -38,6 +38,8 @@ const Project = ({ project, index }) => {
               isImageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setIsImageLoaded(true)}
+            loading="lazy"
+            decoding="async"
           />
           
           {/* Overlay */}

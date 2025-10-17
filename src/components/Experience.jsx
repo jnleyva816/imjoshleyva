@@ -9,12 +9,14 @@ import {
   FaChartLine, 
   FaShieldAlt,
   FaLaptopCode,
-  FaRocket
+  FaRocket,
+  FaDatabase
 } from "react-icons/fa";
 
 function Experience() {
   // Icon mapping for different roles/companies
   const getCompanyIcon = (company, role) => {
+    if (company.includes('Cryptio')) return FaDatabase;
     if (company.includes('StartNoo')) return FaRocket;
     if (company.includes('OPSWAT')) return FaShieldAlt;
     if (role.includes('Full Stack')) return FaCode;
@@ -145,6 +147,19 @@ function Experience() {
                       
                       {/* Achievement Highlights */}
                       <div className="mt-4 flex flex-wrap gap-2">
+                        {exp.company.includes('Cryptio') && (
+                          <>
+                            <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-full text-xs font-medium">
+                              Crypto/FinTech
+                            </span>
+                            <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 rounded-full text-xs font-medium">
+                              SQL
+                            </span>
+                            <span className="px-3 py-1 bg-slate-100 dark:bg-slate-700/30 text-slate-800 dark:text-slate-300 rounded-full text-xs font-medium">
+                              Production Support
+                            </span>
+                          </>
+                        )}
                         {exp.role.includes('Full Stack') && (
                           <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">
                             Full Stack
