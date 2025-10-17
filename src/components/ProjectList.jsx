@@ -67,8 +67,8 @@ const ProjectList = () => {
     <section className="relative py-16 lg:py-24">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-emerald-500/5 to-amber-500/5 rounded-3xl"></div>
-      <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-amber-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-tr from-amber-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
 
       <motion.div 
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"

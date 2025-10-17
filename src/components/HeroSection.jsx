@@ -99,8 +99,8 @@ function HeroSection() {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-emerald-500/5 to-amber-500/5 rounded-3xl"></div>
-      <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-amber-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 md:w-72 md:h-72 bg-gradient-to-tr from-amber-500/10 to-indigo-500/10 rounded-full blur-3xl"></div>
 
       {/* Main Content */}
       <div className="relative z-10 bg-white/10 dark:bg-slate-900/30 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-8 md:p-12 lg:p-16 transition-all duration-300">
@@ -257,9 +257,9 @@ function HeroSection() {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-1/4 left-8 w-4 h-4 bg-indigo-500/30 rounded-full animate-pulse"></div>
-      <div className="absolute top-1/3 right-12 w-6 h-6 bg-emerald-500/30 rounded-full animate-pulse delay-1000"></div>
-      <div className="absolute bottom-1/4 left-16 w-3 h-3 bg-amber-500/30 rounded-full animate-pulse delay-500"></div>
+      <div className="hidden md:block absolute top-1/4 left-8 w-4 h-4 bg-indigo-500/30 rounded-full animate-pulse"></div>
+      <div className="hidden md:block absolute top-1/3 right-12 w-6 h-6 bg-emerald-500/30 rounded-full animate-pulse delay-1000"></div>
+      <div className="hidden md:block absolute bottom-1/4 left-16 w-3 h-3 bg-amber-500/30 rounded-full animate-pulse delay-500"></div>
     </motion.section>
   );
 }
