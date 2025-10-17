@@ -224,20 +224,20 @@ function Skills() {
                             <span className="font-semibold text-slate-800 dark:text-slate-200 group-hover/skill:text-indigo-500 dark:group-hover/skill:text-indigo-400 transition-colors duration-300">
                               {skill.name}
                             </span>
-                            <div className="text-xs text-slate-500 mt-1">
+                            <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                               {skill.experience}
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm font-bold text-slate-700">
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-100">
                             {skill.level}%
                           </span>
                         </div>
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="relative h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div className="relative h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           custom={skill.level}
                           variants={progressVariants}
@@ -250,25 +250,25 @@ function Skills() {
                 </div>
 
                 {/* Category Stats */}
-                <div className="relative z-10 mt-8 pt-6 border-t border-slate-200/50">
+                <div className="relative z-10 mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
                   <div className="flex items-center justify-between">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-slate-800">
+                      <div className="text-2xl font-bold text-slate-800 dark:text-slate-100">
                         {Math.round(categoryData.skills.reduce((acc, skill) => acc + skill.level, 0) / categoryData.skills.length)}%
                       </div>
-                      <div className="text-xs text-slate-600">Avg Proficiency</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-400">Avg Proficiency</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-slate-800">
+                      <div className="text-2xl font-bold text-slate-800 dark:text-slate-100">
                         {categoryData.skills.length}
                       </div>
-                      <div className="text-xs text-slate-600">Technologies</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-400">Technologies</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-slate-800">
+                      <div className="text-2xl font-bold text-slate-800 dark:text-slate-100">
                         {Math.max(...categoryData.skills.map(s => parseInt(s.experience)))}+
                       </div>
-                      <div className="text-xs text-slate-600">Years Exp</div>
+                      <div className="text-xs text-slate-600 dark:text-slate-400">Years Exp</div>
                     </div>
                   </div>
                 </div>
@@ -291,29 +291,29 @@ function Skills() {
                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-2xl font-bold text-white">25+</span>
                 </div>
-                <h4 className="font-bold text-slate-800">Technologies</h4>
-                <p className="text-sm text-slate-600 mt-1">Mastered</p>
+                <h4 className="font-bold text-slate-800 dark:text-slate-100">Technologies</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Mastered</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-2xl font-bold text-white">4+</span>
                 </div>
-                <h4 className="font-bold text-slate-800">Years</h4>
-                <p className="text-sm text-slate-600 mt-1">Experience</p>
+                <h4 className="font-bold text-slate-800 dark:text-slate-100">Years</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Experience</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-2xl font-bold text-white">5</span>
                 </div>
-                <h4 className="font-bold text-slate-800">Categories</h4>
-                <p className="text-sm text-slate-600 mt-1">Expertise</p>
+                <h4 className="font-bold text-slate-800 dark:text-slate-100">Categories</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Expertise</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <span className="text-2xl font-bold text-white">90%</span>
                 </div>
-                <h4 className="font-bold text-slate-800">Proficiency</h4>
-                <p className="text-sm text-slate-600 mt-1">Average</p>
+                <h4 className="font-bold text-slate-800 dark:text-slate-100">Proficiency</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Average</p>
               </div>
             </div>
           </div>
