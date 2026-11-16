@@ -6,10 +6,10 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 [**imjoshleyva.vercel.app**](https://imjoshleyva.vercel.app) · [Photography](https://jnleyvaphotos.vercel.app) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva/)
 
-![React 18](https://img.shields.io/badge/React-18-20232a?logo=react&logoColor=61dafb)
-![Vite 6](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)
+![React 19](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb)
+![Vite 8](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
 ![Tailwind CSS 4](https://img.shields.io/badge/Tailwind-4-0f172a?logo=tailwindcss&logoColor=38bdf8)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-111?logo=framer&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-14-111?logo=framer&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-deployed-000?logo=vercel&logoColor=white)
 
 <picture>
@@ -48,16 +48,17 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 | Layer | Choice |
 | --- | --- |
-| UI | React 18 and Framer Motion |
+| UI | React 19, Framer Motion, and View Transitions for the lightbox and theme switch |
 | Styling | Tailwind CSS v4 with CSS-variable design tokens (`@theme inline`) |
-| Type | Fraunces (display), Figtree (body), IBM Plex Mono (labels) |
-| Build | Vite 6, terser, and manual vendor chunks |
+| Type | Fraunces (display), Figtree (body), IBM Plex Mono (labels), self-hosted through Fontsource |
+| Build | Vite 8 (Rolldown) |
+| Images | `vite-imagetools` turns each photo into AVIF, WebP, and JPEG at four widths |
 | Hosting | Vercel: a static site, `api/` serverless functions, Analytics, and Speed Insights |
 | Email | [Resend](https://resend.com) REST API, with no SDK |
 
 ## Running it locally
 
-You need Node 20 or newer.
+You need Node 22.12 or newer.
 
 ```bash
 git clone git@github.com:jnleyva816/imjoshleyva.git

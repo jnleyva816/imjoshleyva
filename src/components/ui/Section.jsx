@@ -37,6 +37,7 @@ export default function Section({ id, index, title, lede, photo, children }) {
             drift={20}
             tilt={2.5}
             caption={false}
+            sizes="240px"
           />
         ) : null}
       </div>

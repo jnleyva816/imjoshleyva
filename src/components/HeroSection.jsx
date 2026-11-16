@@ -120,6 +120,7 @@ export default function HeroSection() {
               tilt={-5}
               delay={0.5}
               caption={false}
+              sizes="176px"
             />
           ) : null}
         </div>
