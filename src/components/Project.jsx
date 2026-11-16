@@ -6,22 +6,8 @@ export default function Project({ project }) {
   const tech = project.technologies.slice(0, 5).join("  ·  ");
 
   return (
-    <article className="grid items-start gap-6 border-t border-line py-10 first:border-t-0 first:pt-0 md:grid-cols-12 md:gap-10">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="md:col-span-5"
-        aria-label={`Open details for ${project.title}`}
-      >
-        <img
-          src={project.imageUrl}
-          alt=""
-          className="aspect-[4/3] w-full rounded-xl border border-line object-cover"
-          loading="lazy"
-        />
-      </button>
-
-      <div className="md:col-span-7">
+    <article className="border-t border-line py-10 first:border-t-0 first:pt-0">
+      <div className="max-w-3xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
           {[project.year, project.status].filter(Boolean).join("  ·  ")}
         </p>

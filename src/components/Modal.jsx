@@ -84,14 +84,6 @@ export default function Modal({ isOpen, onClose, project }) {
               ) : null}
             </div>
 
-            {project.imageUrl ? (
-              <img
-                src={project.imageUrl}
-                alt=""
-                className="mt-6 aspect-[16/9] w-full rounded-xl border border-line object-cover"
-              />
-            ) : null}
-
             <p className="mt-6 leading-relaxed text-muted">
               {project.longDescription || project.description}
             </p>

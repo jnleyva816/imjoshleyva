@@ -74,7 +74,7 @@ const site = {
       id: "projects",
       index: "02",
       title: "Projects",
-      lede: "Two things I shipped and still stand behind.",
+      lede: "Things I've built and still stand behind.",
     },
     education: {
       id: "education",
