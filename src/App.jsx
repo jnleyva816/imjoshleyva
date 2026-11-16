@@ -12,6 +12,7 @@ import Skills from "./components/Skills";
 import ProjectList, { Aside } from "./components/ProjectList";
 import PhotoBreak from "./components/PhotoBreak";
 import PhotoGallery from "./components/PhotoGallery";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import DesignLab from "./components/DesignLab";
 import site from "./content/site";
@@ -30,6 +31,7 @@ const blocks = {
       <PhotoGallery />
     </>
   ),
+  contact: <Contact />,
 };
 
 function useHash() {

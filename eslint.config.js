@@ -38,4 +38,8 @@ export default [
       ],
     },
   },
+  {
+    files: ['api/**/*.js', '*.config.js'],
+    languageOptions: { globals: globals.node },
+  },
 ]

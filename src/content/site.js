@@ -12,8 +12,14 @@ const site = {
     { href: "#projects", label: "Projects" },
     { href: "#education", label: "Education" },
     { href: "#skills", label: "Skills" },
+    { href: "#contact", label: "Contact" },
     { href: "https://jnleyvaphotos.vercel.app", label: "Photography", external: true },
   ],
+  // Handled by api/contact.js, which needs RESEND_API_KEY and CONTACT_TO_EMAIL
+  // set in the Vercel project.
+  contact: {
+    endpoint: "/api/contact",
+  },
   social: [
     { href: "https://github.com/jnleyva816", label: "GitHub" },
     {
@@ -48,6 +54,7 @@ const site = {
     "skills",
     "photos:after-skills",
     "aside",
+    "contact",
   ],
   sections: {
     work: {
@@ -79,6 +86,12 @@ const site = {
       index: "05",
       title: "On the side",
       lede: "Practice problems, and a track I keep on while I work.",
+    },
+    contact: {
+      id: "contact",
+      index: "06",
+      title: "Contact",
+      lede: "A role, a project, or a question about something on this page. It comes straight to my inbox, and I reply within a couple of days.",
     },
   },
 };
