@@ -65,8 +65,11 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      console.error("contact: Resend responded", response.status, await response.text());
-      return res.status(502).json({ success: false, message: "Could not send" });
+      const detail = await response.json().catch(() => ({}));
+      console.error("contact: Resend responded", response.status, detail);
+      return res
+        .status(502)
+        .json({ success: false, message: "Could not send", reason: detail.name || `resend_${response.status}` });
     }
 
     return res.status(200).json({ success: true });
