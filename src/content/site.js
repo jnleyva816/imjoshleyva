@@ -26,8 +26,15 @@ const site = {
       href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/",
       label: "LinkedIn",
     },
-    { href: "https://leetcode.com/jleyva", label: "LeetCode" },
+    { href: "https://jnleyvaphotos.vercel.app", label: "Photography" },
   ],
+  // YouTube video ID. The uploader must allow embedding; leave empty to hide.
+  music: {
+    youtube: "WdMDgpAD4XM",
+    title: "low cortisol jazz for deep concentration",
+    artist: "SILEO",
+    note: "What's on while I work.",
+  },
   audiences: [
     {
       id: "general",
@@ -67,7 +74,7 @@ const site = {
       id: "projects",
       index: "02",
       title: "Projects",
-      lede: "Two things I shipped and still stand behind.",
+      lede: "Things I've built and still stand behind.",
     },
     education: {
       id: "education",
@@ -84,8 +91,8 @@ const site = {
     aside: {
       id: "aside",
       index: "05",
-      title: "On the side",
-      lede: "Practice problems, and a track I keep on while I work.",
+      title: "Off the clock",
+      lede: "Recent frames from my camera. The full set lives on my photography site.",
     },
     contact: {
       id: "contact",

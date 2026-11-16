@@ -1,9 +1,9 @@
 /**
  * Photos come from src/assets/photos/working.
  *
- * Without any setup, photos fill the spots below in file-name order
- * (prefix files 01-, 02-, ... to control it), and leftovers go to the
- * gallery in "On the side". To pin a photo to a spot, list its file name.
+ * Every photo in the folder runs in the "Off the clock" carousel. The first
+ * ones, in file-name order (prefix 01-, 02-, ... to control it), also fill
+ * the spots below. To pin a photo to a spot, list its file name.
  *
  * Spots, in page order:
  *   hero          1 photo, tucked against the portrait
@@ -11,7 +11,6 @@
  *   after-work    2 photos, full-width break after Work
  *   education     1 photo, beside the Education heading
  *   after-skills  1 photo, full-width break after Skills
- *   gallery       everything not used above
  */
 export const placements = {
   // hero: ["01-desk.jpg"],

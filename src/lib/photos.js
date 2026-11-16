@@ -30,10 +30,10 @@ for (const [spot, count] of spots) {
     ? placements[spot].map((name) => byName.get(name)).filter(Boolean)
     : pool.splice(0, count);
 }
-assigned.gallery = placements.gallery
-  ? placements.gallery.map((name) => byName.get(name)).filter(Boolean)
-  : pool;
-
 export function photosFor(spot) {
   return assigned[spot] ?? [];
+}
+
+export function allPhotos() {
+  return all;
 }

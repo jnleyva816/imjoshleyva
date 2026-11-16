@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -9,9 +9,10 @@ import Section from "./components/ui/Section";
 import Experience from "./components/Experience";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
-import ProjectList, { Aside } from "./components/ProjectList";
+import ProjectList from "./components/ProjectList";
 import PhotoBreak from "./components/PhotoBreak";
-import PhotoGallery from "./components/PhotoGallery";
+import PhotoCarousel from "./components/PhotoCarousel";
+import Listening from "./components/Listening";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import DesignLab from "./components/DesignLab";
@@ -24,12 +25,12 @@ const blocks = {
   education: <Education />,
   skills: <Skills />,
   aside: (
-    <>
-      <Suspense fallback={<p className="text-sm text-muted">Loading.</p>}>
-        <Aside />
-      </Suspense>
-      <PhotoGallery />
-    </>
+    <div className="space-y-14">
+      <PhotoCarousel />
+      <div className="max-w-xl">
+        <Listening />
+      </div>
+    </div>
   ),
   contact: <Contact />,
 };
