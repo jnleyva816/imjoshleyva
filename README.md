@@ -4,7 +4,7 @@
 
 Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
-[**imjoshleyva.vercel.app**](https://imjoshleyva.vercel.app) · [Photography](https://jnleyvaphotos.vercel.app) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva/)
+[**imjoshleyva.vercel.app**](https://imjoshleyva.vercel.app) · [Photography](https://jnleyvaphotos.vercel.app) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva-0b9942b6/)
 
 ![React 19](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb)
 ![Vite 8](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
@@ -25,8 +25,9 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 - **Work, projects, education, skills.** All of it is data-driven, so updating the resume means editing one file.
 - **Photos throughout.** Framed shots sit between sections, an endless carousel shows every photo in the folder, and a lightbox opens on click.
 - **Off the clock.** Golf, running, music in Ableton, and the cats and dog, plus a jazz mix that loads only when someone presses play.
-- **Contact form.** Messages go straight to my inbox through a Vercel function and Resend. It has a honeypot, an origin check, and a mailto fallback.
-- **Light and dark.** Follows the system setting by default, with a toggle in the header.
+- **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, and a mailto fallback.
+- **Light and dark.** Follows the system setting by default. The header toggle reveals the new theme in a circle using View Transitions.
+- **Lightbox.** Photos grow out of the thumbnail you click, and Prev/Next morphs between them.
 - **Motion that respects people.** Animations are tokenised, and `prefers-reduced-motion` turns them off.
 - **Design notes.** `/#studio` shows the type, border, and motion choices side by side.
 
@@ -75,6 +76,10 @@ The dev server also serves `/api/contact` through a small Vite plugin, so the co
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serves the production build |
 | `npm run lint` | ESLint (flat config) |
+| `npm test` | Unit tests for the contact API (Node's built-in test runner) |
+| `npm run test:e2e` | Playwright smoke and CSP tests against the production build, desktop and mobile |
+
+On NixOS, point Playwright at a system Chromium with `CHROME=$(command -v chromium) npm run test:e2e`.
 
 ### Environment
 
@@ -85,8 +90,18 @@ Put these in `.env.local` for local work, and in Vercel under Settings → Envir
 | `RESEND_API_KEY` | yes | Resend API key |
 | `CONTACT_TO_EMAIL` | yes | Inbox that receives messages |
 | `CONTACT_FROM_EMAIL` | no | Defaults to `Portfolio <onboarding@resend.dev>`. Set it after verifying a domain in Resend. |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | no | Global rate limit for the contact form. The `KV_REST_API_*` names from Vercel's Upstash integration work too. |
+| `VITE_TURNSTILE_SITE_KEY` | no | Shows the Cloudflare Turnstile check on the form. It's read at build time. |
+| `TURNSTILE_SECRET_KEY` | no | Makes the API require a valid Turnstile token. Set it together with the site key. |
 
 Until a domain is verified, `onboarding@resend.dev` can only deliver to the address that owns the Resend account.
+
+## Security
+
+- **Headers.** `vercel.json` sets a strict Content-Security-Policy, HSTS, `nosniff`, `X-Frame-Options: DENY`, COOP, and a Permissions-Policy that only lets the YouTube embed autoplay. `e2e/csp.spec.js` fails if the page needs something the CSP blocks.
+- **Contact form.** Same-origin check, honeypot, length limits, escaped HTML, and 5 messages per IP every 10 minutes. The limit is global with Upstash and per-instance without it. Turnstile verification is optional.
+- **Privacy.** Fonts are self-hosted, and YouTube loads from `youtube-nocookie.com` only after someone presses play.
+- **Upkeep.** Dependabot opens grouped weekly updates, and CI runs lint, unit tests, build, and Playwright on every pull request.
 
 ## Editing content
 
@@ -104,17 +119,22 @@ New photos join the carousel automatically. The first few in the list also fill 
 ## Layout
 
 ```
+.github/                CI workflow and Dependabot
 api/
-  contact.js            Vercel function: validation, honeypot, origin check, Resend call
+  contact.js            Vercel function: validation, rate limit, Turnstile, Resend call
 docs/screenshots/       README images
+e2e/                    Playwright smoke and CSP tests
+public/                 Share image, robots.txt, sitemap.xml
 src/
   App.jsx               Section order and the #studio route
-  index.css             Tokens, light and dark themes, marquee
+  index.css             Tokens, light and dark themes, marquee, View Transitions
   components/           Hero, Experience, Projects, About, Contact, PhotoCarousel, ...
   content/              Site copy and photo metadata
   data/                 Resume data
-  lib/                  Motion presets, photo loading, lightbox state
-vite.config.js          Local /api middleware and build chunks
+  lib/                  Motion presets, photo loading, lightbox, theme, View Transitions
+tests/                  Contact API unit tests
+vercel.json             Security and cache headers
+vite.config.js          Image pipeline and the local /api middleware
 ```
 
 ## Deploying
@@ -129,6 +149,6 @@ Start the dev server, then capture with headless Chromium through Puppeteer at 1
 
 <div align="center">
 
-[joshleyva816@gmail.com](mailto:joshleyva816@gmail.com) · [GitHub](https://github.com/jnleyva816) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva/) · [Photography](https://jnleyvaphotos.vercel.app)
+[joshleyva816@gmail.com](mailto:joshleyva816@gmail.com) · [GitHub](https://github.com/jnleyva816) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva-0b9942b6/) · [Photography](https://jnleyvaphotos.vercel.app)
 
 </div>

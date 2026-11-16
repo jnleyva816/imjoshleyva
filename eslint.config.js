@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ['api/**/*.js', '*.config.js'],
+    files: ['api/**/*.js', 'tests/**/*.js', 'e2e/**/*.js', '*.config.js'],
     languageOptions: { globals: globals.node },
   },
 ]
