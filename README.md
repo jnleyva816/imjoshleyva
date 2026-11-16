@@ -139,7 +139,7 @@ vite.config.js          Image pipeline and the local /api middleware
 
 ## Deploying
 
-`main` deploys to production on Vercel at [joshleyva.dev](https://joshleyva.dev), and the old `imjoshleyva.vercel.app` address redirects there. Every pull request gets a preview deployment, and previews require Vercel Authentication.
+`main` deploys to production on Vercel at [joshleyva.dev](https://joshleyva.dev). Every pull request gets a preview deployment, and previews require Vercel Authentication.
 
 ### Updating the screenshots
 
