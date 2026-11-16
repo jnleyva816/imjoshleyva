@@ -4,7 +4,7 @@
 
 Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
-[**imjoshleyva.vercel.app**](https://imjoshleyva.vercel.app) · [Photography](https://jnleyvaphotos.vercel.app) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva-0b9942b6/)
+[**joshleyva.dev**](https://joshleyva.dev) · [Photography](https://jnleyvaphotos.vercel.app) · [LinkedIn](https://www.linkedin.com/in/joshua-leyva-0b9942b6/)
 
 ![React 19](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61dafb)
 ![Vite 8](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white)
@@ -139,7 +139,7 @@ vite.config.js          Image pipeline and the local /api middleware
 
 ## Deploying
 
-`main` deploys to production on Vercel. Every pull request gets a preview deployment, and previews require Vercel Authentication.
+`main` deploys to production on Vercel at [joshleyva.dev](https://joshleyva.dev). Every pull request gets a preview deployment, and previews require Vercel Authentication.
 
 ### Updating the screenshots
 
