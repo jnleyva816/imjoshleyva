@@ -12,6 +12,7 @@ const site = {
     { href: "#projects", label: "Projects" },
     { href: "#education", label: "Education" },
     { href: "#skills", label: "Skills" },
+    { href: "#aside", label: "About" },
     { href: "#contact", label: "Contact" },
     { href: "https://jnleyvaphotos.vercel.app", label: "Photography", external: true },
   ],
@@ -28,6 +29,19 @@ const site = {
     },
     { href: "https://jnleyvaphotos.vercel.app", label: "Photography" },
   ],
+  about: {
+    paragraphs: [
+      "I live in Florida with my wife, Wren, our cats Wasabi and Sabine, and Java, a French bulldog. All three show up in a lot of my photos.",
+      "Florida means golf all year, and I'm training for races with a sub-3:30 marathon as the goal. When I'm not coding, I'm making music in Ableton Live.",
+    ],
+    facts: [
+      { label: "Training for", value: "A sub-3:30 marathon" },
+      { label: "On the course", value: "Year-round. It's Florida." },
+      { label: "Making", value: "Music in Ableton Live" },
+      { label: "Behind the camera", value: "Cars, plants, and a lot of Java, Wasabi, and Sabine" },
+      { label: "In the mug", value: "Coffee, or tea" },
+    ],
+  },
   // YouTube video ID. The uploader must allow embedding; leave empty to hide.
   music: {
     youtube: "WdMDgpAD4XM",
@@ -39,7 +53,7 @@ const site = {
     {
       id: "general",
       label: "General",
-      copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful.",
+      copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful. Outside of work, I'm on a golf course, out on a training run, or taking photos of my dog.",
     },
     {
       id: "hiring",
@@ -92,7 +106,7 @@ const site = {
       id: "aside",
       index: "05",
       title: "Off the clock",
-      lede: "Recent frames from my camera. The full set lives on my photography site.",
+      lede: "Golf, running, music, and life at home.",
     },
     contact: {
       id: "contact",
