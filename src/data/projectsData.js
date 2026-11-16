@@ -1,67 +1,50 @@
-import React from 'react';
-import portfolioImage from '../assets/portfolio.jpg';
-import jobTrackerImage from '../assets/nextmove_logo.png';
+import portfolioImage from "../assets/portfolio.jpg";
+import jobTrackerImage from "../assets/nextmove_logo.png";
 
 const projects = [
   {
     id: 1,
-    title: "Personal Portfolio Website",
-    description: "A modern, responsive portfolio website built with React and Tailwind CSS, featuring smooth animations, glassmorphism design, and optimized performance. Deployed on Vercel with continuous integration.",
+    title: "Personal site",
+    description:
+      "This page. Editorial layout, a single moss accent, and the copy kept in data files so a new job is a few lines, not a new component.",
     imageUrl: portfolioImage,
-    technologies: ["React", "Tailwind CSS", "Framer Motion", "Vite", "Vercel", "JavaScript", "HTML5", "CSS3"],
+    technologies: ["React", "Tailwind", "Vite"],
     demo: "https://imjoshleyva.vercel.app",
     github: "https://github.com/jnleyva816/imjoshleyva",
-    category: "Web Applications",
-    year: "2024",
-    featured: true,
-    status: "Live",
-    longDescription: "This portfolio website represents a culmination of modern web development practices, showcasing both technical skills and design sensibility. Built with React and Tailwind CSS, it features an extensive glassmorphism design system, smooth scroll animations powered by Framer Motion, and comprehensive responsive design that works flawlessly across all device types.",
+    category: "Web",
+    year: "2026",
+    status: "In progress",
+    longDescription:
+      "A rewrite of the old glass portfolio. Motion is a short fade. Color and type live in CSS variables. Section order and the three introductions live in one content file.",
     features: [
-      "Responsive design optimized for all devices",
-      "Smooth scroll animations and micro-interactions",
-      "Modern glassmorphism and gradient design system",
-      "Interactive project showcases with detailed modals",
-      "Performance optimized with lazy loading",
-      "SEO optimized with meta tags and structured data",
-      "Accessible design following WCAG guidelines",
-      "Custom timeline component for experience section"
-    ]
+      "Copy, navigation, and section order in src/content/site.js",
+      "Theme tokens in src/index.css",
+      "Dark mode that follows the system until you pick one",
+      "Project details in a dialog",
+    ],
   },
   {
     id: 2,
     title: "NextMove",
-    description: "A comprehensive full-stack application for tracking job applications with advanced filtering, analytics, and progress monitoring. Built with Spring Boot backend and React frontend, featuring real-time updates and data visualization.",
+    description:
+      "A job application tracker. Spring Boot and Postgres underneath, React on top, with auth, filters, and a small status dashboard.",
     imageUrl: jobTrackerImage,
-    technologies: ["React", "Spring Boot", "Java", "PostgreSQL", "REST API", "JWT", "Material-UI", "Docker"],
+    technologies: ["React", "Spring Boot", "PostgreSQL", "JWT"],
     demo: "https://job-application-tracker-docs.vercel.app",
     github: "https://github.com/jnleyva816/NextMove",
-    category: "Web Applications",
+    category: "Web",
     year: "2025",
-    featured: true,
-    status: "Completed",
-    longDescription: "NextMove is a sophisticated job application tracking system designed to help job seekers manage their application process efficiently. The application features a robust Spring Boot backend with PostgreSQL database, providing secure user authentication, comprehensive CRUD operations, and advanced analytics capabilities.",
+    status: "Shipped",
+    longDescription:
+      "NextMove is for keeping track of applications without a spreadsheet. The API is Spring Boot, the data is Postgres, and sign-in uses JWT. The interface is React.",
     features: [
-      "User authentication and authorization with JWT",
-      "CRUD operations for job applications management",
-      "Advanced filtering and search functionality",
-      "Interactive dashboard with progress analytics",
-      "Real-time status updates and notifications",
-      "Data export functionality (PDF, CSV)",
-      "Responsive design with Material-UI components",
-      "RESTful API with comprehensive documentation",
-      "Database optimization with PostgreSQL",
-      "Containerized deployment with Docker"
-    ]
+      "Sign in with JWT",
+      "Create, update, and filter applications",
+      "Status dashboard",
+      "Export to PDF and CSV",
+      "Docker for the local stack",
+    ],
   },
-  // {
-  //   title: "Project 2",
-  //   description: "This is a description of Project 2.",
-  //   imageUrl: "https://via.placeholder.com/150",
-  //   technologies: ["Vue.js", "Firebase", "Sass"],
-  //   demo: "https://project2.com",
-  //   github: "https://github.com/user/project2"
-  // },
-  // Add more projects as needed
 ];
 
 export default projects;

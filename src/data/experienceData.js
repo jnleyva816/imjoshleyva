@@ -1,44 +1,53 @@
-// src/data/experienceData.js
-import React from 'react';
-
-
 const experienceData = [
   {
-    company: 'Cryptio',
-    role: 'L2 Technical Support Engineer',
-    duration: 'July 2025 - Present',
-    description: 'Managing production environment for customer-facing issues in a fast-paced crypto accounting platform. Leveraging advanced SQL skills to maintain and optimize production databases, ensuring system reliability and data integrity. Troubleshooting complex technical issues and collaborating with engineering teams to deliver exceptional customer support.',
-    
+    company: "Cryptio",
+    role: "Senior Solutions Engineer",
+    duration: "November 2026 — Present",
+    description:
+      "Promoted from L2 support. The same production and SQL work as before, with more of it customer-facing: I explain what broke and what we changed, and own the conversation until the customer is set.",
+    tags: ["Solutions", "Customer communication", "SQL"],
+    promoted: true,
   },
   {
-    company: 'StartNoo LLC',
-    role: 'Full Stack Developer',
-    duration: 'August 2024 - December 2024',
-    description: 'Led migration of legacy WordPress site to Ruby on Rails, significantly improving performance, maintainability, and scalability. Collaborated closely with Data Analysts to architect and develop an interactive data visualization dashboard, enhancing data accessibility and decision-making capabilities for key stakeholders.',
-    
+    company: "Cryptio",
+    role: "L2 Technical Support Engineer",
+    duration: "July 2025 — October 2026",
+    description:
+      "Production support for a crypto accounting platform. I handled customer-facing issues, queried production data with SQL, and worked with engineering when a ticket needed a product fix.",
+    tags: ["SQL", "Production", "Crypto"],
   },
   {
-    company: 'OPSWAT',
-    role: 'Associate Technical Support Engineer',
-    duration: 'January 2024 - August 2024',
-    description: 'Delivered expert technical support for enterprise cybersecurity products protecting critical infrastructure. Resolved complex customer issues, improved product usability through feedback loops, and collaborated with cross-functional engineering teams to identify, document, and remediate software defects, elevating overall product quality.',
-    
+    company: "StartNoo LLC",
+    role: "Full Stack Developer",
+    duration: "August 2024 — December 2024",
+    description:
+      "Moved a legacy WordPress site onto Ruby on Rails, then built an interactive data dashboard with the analysts so stakeholders could read the numbers without a spreadsheet.",
+    tags: ["Ruby on Rails", "WordPress", "Data viz"],
   },
   {
-    company: 'OPSWAT',
-    role: 'Application Developer / QA Engineer',
-    duration: 'January 2022 - December 2023',
-    description: 'Developed and maintained mission-critical internal applications for cybersecurity operations, achieving a 20% improvement in team productivity. Designed and implemented comprehensive automated testing frameworks, reducing software defects by 30% and accelerating release cycles.',
+    company: "OPSWAT",
+    role: "Associate Technical Support Engineer",
+    duration: "January 2024 — August 2024",
+    description:
+      "Support for enterprise cybersecurity products. I worked customer issues, wrote up defects, and sent product feedback back to engineering.",
+    tags: ["Cybersecurity", "Support"],
   },
   {
-    company: 'OPSWAT',
-    role: 'Software Engineer Intern',
-    duration: 'August 2021 - December 2021',
-    description: 'Contributed to the development of enterprise cybersecurity software protecting critical infrastructure. Gained hands-on experience in software testing, debugging, and quality assurance processes within an Agile development environment.',
-   
+    company: "OPSWAT",
+    role: "Application Developer / QA Engineer",
+    duration: "January 2022 — December 2023",
+    description:
+      "Internal applications for cybersecurity operations, plus the automated tests around them. The team measured about a 20% productivity gain and about a 30% drop in defects.",
+    tags: ["Internal tools", "Test automation"],
   },
-  // Add more experiences as needed
+  {
+    company: "OPSWAT",
+    role: "Software Engineer Intern",
+    duration: "August 2021 — December 2021",
+    description:
+      "Testing, debugging, and QA on enterprise cybersecurity software, inside an Agile team.",
+    tags: ["QA", "Agile"],
+  },
 ];
 
 export default experienceData;
-

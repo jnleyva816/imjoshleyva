@@ -1,7 +1,7 @@
 function LeetCode_heatmap() {
   return (
     <>
-      <section>
+      <div>
         <img 
           src="https://leetcard.jacoblin.cool/jleyva?ext=heatmap" 
           alt="LeetCode Stats Card"
@@ -9,7 +9,7 @@ function LeetCode_heatmap() {
           loading="lazy"
           decoding="async"
         />
-      </section>
+      </div>
     </>
   );
 }

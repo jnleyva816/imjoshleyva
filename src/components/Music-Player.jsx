@@ -1,11 +1,10 @@
 // src/components/MusicPlayer.jsx
-import React from 'react';
-
 function MusicPlayer() {
   return (
     <div className="music-player flex flex-col items-center rounded-md">
       {/* Lightweight SoundCloud Embed */}
-      <iframe 
+      <iframe
+        title="Lo-fi track by Joshua Leyva"
         width="100%" 
         height="166" 
         scrolling="no" 
