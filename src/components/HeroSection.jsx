@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import profile from "../assets/profile_picture.jpg";
 import resume from "../assets/JoshuaLeyvaResume.pdf";
 import site from "../content/site";
 import { fadeUp } from "../lib/motion";
 import { Sprig } from "./ui/Marks";
+import RevealText from "./ui/RevealText";
 
 export default function HeroSection() {
   const reduce = useReducedMotion();
@@ -53,9 +54,15 @@ export default function HeroSection() {
           })}
         </div>
 
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted" role="tabpanel">
-          {audience.copy}
-        </p>
+        <div className="mt-6 min-h-[5.5rem] max-w-xl" role="tabpanel">
+          <AnimatePresence mode="wait" initial={true}>
+            <RevealText
+              key={audience.id}
+              text={audience.copy}
+              className="text-lg leading-relaxed text-muted"
+            />
+          </AnimatePresence>
+        </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <a className="btn btn-fill" href={resume} download="JoshuaLeyvaResume.pdf">

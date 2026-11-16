@@ -6,6 +6,7 @@ import Topbar from "./components/Topbar";
 import HeroSection from "./components/HeroSection";
 import Section from "./components/ui/Section";
 import Experience from "./components/Experience";
+import WorkingPhotos from "./components/WorkingPhotos";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
 import ProjectList, { Aside } from "./components/ProjectList";
@@ -14,7 +15,12 @@ import DesignLab from "./components/DesignLab";
 import site from "./content/site";
 
 const blocks = {
-  work: <Experience />,
+  work: (
+    <>
+      <WorkingPhotos />
+      <Experience />
+    </>
+  ),
   projects: <ProjectList />,
   education: <Education />,
   skills: <Skills />,
