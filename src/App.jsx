@@ -13,6 +13,7 @@ import ProjectList from "./components/ProjectList";
 import PhotoBreak from "./components/PhotoBreak";
 import PhotoCarousel from "./components/PhotoCarousel";
 import Listening from "./components/Listening";
+import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import DesignLab from "./components/DesignLab";
@@ -26,6 +27,7 @@ const blocks = {
   skills: <Skills />,
   aside: (
     <div className="space-y-14">
+      <About />
       <PhotoCarousel />
       <div className="max-w-xl">
         <Listening />
