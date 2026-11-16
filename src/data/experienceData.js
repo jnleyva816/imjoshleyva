@@ -1,10 +1,19 @@
 const experienceData = [
   {
     company: "Cryptio",
-    role: "L2 Technical Support Engineer",
-    duration: "July 2025 — Present",
+    role: "Senior Solutions Engineer",
+    duration: "2026 — Present",
     description:
-      "Production support for a crypto accounting platform. I handle customer-facing issues, query production data with SQL, and work with engineering when a ticket needs a product fix.",
+      "Promoted from L2 support. I work with customers on how Cryptio fits their accounting setup, and carry the production and SQL knowledge from support into those conversations.",
+    tags: ["Solutions", "SQL", "Crypto"],
+    promoted: true,
+  },
+  {
+    company: "Cryptio",
+    role: "L2 Technical Support Engineer",
+    duration: "July 2025 — 2026",
+    description:
+      "Production support for a crypto accounting platform. I handled customer-facing issues, queried production data with SQL, and worked with engineering when a ticket needed a product fix.",
     tags: ["SQL", "Production", "Crypto"],
   },
   {

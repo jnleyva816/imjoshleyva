@@ -6,6 +6,10 @@ import site from "../content/site";
 import { fadeUp } from "../lib/motion";
 import { Sprig } from "./ui/Marks";
 import RevealText from "./ui/RevealText";
+import Photo from "./ui/Photo";
+import { photosFor } from "../lib/photos";
+
+const heroPhoto = photosFor("hero")[0];
 
 export default function HeroSection() {
   const reduce = useReducedMotion();
@@ -109,6 +113,15 @@ export default function HeroSection() {
             width="640"
             height="800"
           />
+          {heroPhoto ? (
+            <Photo
+              photo={heroPhoto}
+              className="absolute -bottom-10 -left-4 z-10 w-32 sm:-left-12 sm:w-40 lg:w-44"
+              tilt={-5}
+              delay={0.5}
+              caption={false}
+            />
+          ) : null}
         </div>
       </motion.div>
     </section>

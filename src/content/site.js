@@ -4,7 +4,7 @@
  */
 const site = {
   name: "Joshua Leyva",
-  title: "Software developer",
+  title: "Senior Solutions Engineer at Cryptio",
   email: "joshleyva816@gmail.com",
   photography: "https://jnleyvaphotos.vercel.app",
   nav: [
@@ -26,12 +26,12 @@ const site = {
     {
       id: "general",
       label: "General",
-      copy: "I'm Josh. I work on production systems, mostly the part where something is already in a customer's hands and the fix has to be careful.",
+      copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful.",
     },
     {
       id: "hiring",
       label: "Hiring",
-      copy: "L2 technical support at Cryptio, on a crypto accounting platform. Before that, a Rails migration at StartNoo and a few years at OPSWAT across support, internal tools, and test automation.",
+      copy: "Senior Solutions Engineer at Cryptio, promoted from L2 support on its crypto accounting platform. Before that, a Rails migration at StartNoo and a few years at OPSWAT across support, internal tools, and test automation.",
     },
     {
       id: "engineering",
@@ -39,13 +39,22 @@ const site = {
       copy: "Rails, React, Java, and a lot of SQL. I like the unglamorous parts: migrations, failing tests, and queries that do not surprise anyone later.",
     },
   ],
-  sectionOrder: ["work", "projects", "education", "skills", "aside"],
+  // Keys starting with "photos:" are full-width photo breaks between sections.
+  sectionOrder: [
+    "work",
+    "photos:after-work",
+    "projects",
+    "education",
+    "skills",
+    "photos:after-skills",
+    "aside",
+  ],
   sections: {
     work: {
       id: "work",
       index: "01",
       title: "Work",
-      lede: "Production support now. Product engineering and cybersecurity tooling before that.",
+      lede: "Solutions engineering now, after production support at the same company. Product engineering and cybersecurity tooling before that.",
     },
     projects: {
       id: "projects",

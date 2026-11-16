@@ -13,7 +13,14 @@ export default function Experience() {
             <h3 className="font-display text-2xl tracking-tight text-ink md:text-[1.7rem]">
               {job.role}
             </h3>
-            <p className="mt-1 text-moss">{job.company}</p>
+            <p className="mt-1 text-moss">
+              {job.company}
+              {job.promoted ? (
+                <span className="ml-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                  Promoted
+                </span>
+              ) : null}
+            </p>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted">
               {job.description}
             </p>
