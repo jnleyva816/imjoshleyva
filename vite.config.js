@@ -13,11 +13,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Split vendor chunks for better caching
           'vendor-react': ['react', 'react-dom'],
           'vendor-motion': ['framer-motion'],
-          'vendor-icons': ['react-icons'],
-          'vendor-vercel': ['@vercel/analytics', '@vercel/speed-insights']
         }
       }
     },

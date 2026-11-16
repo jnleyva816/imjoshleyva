@@ -1,132 +1,86 @@
-// src/components/Topbar.jsx
-import React, { useState } from 'react';
-import portfolio from '/portfolio.svg';
+import { useEffect, useState } from "react";
+import site from "../content/site";
+import ThemeToggle from "./ThemeToggle";
 
-function Topbar() {
-  // State to manage mobile menu visibility
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Topbar() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Function to toggle mobile menu
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };  
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const close = () => setOpen(false);
 
   return (
-    <nav className="fixed top-0 w-full z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-700 shadow-lg transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          {/* Logo Section */}
-          <div className="flex-shrink-0 flex items-center">
-            <a href="#" className="text-xl font-bold text-slate-800 dark:text-slate-200">
-              <img src={portfolio} alt="Portfolio" className="h-8 w-8" /> 
-            </a>
-          </div>
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex space-x-8 items-center">
-            <a
-              href="#"
-              className="text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-            >
-              Home
-            </a>
-            <a
-              href="#experience"
-              className="text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-            >
-              Experience
-            </a>
-            <a
-              href="#projects"
-              className="text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-            >
-              Projects
-            </a>
-            <a
-              href="https://jnleyvaphotos.vercel.app"
-              className="text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Photography
-            </a>
+    <header
+      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors duration-200 ${
+        open
+          ? "border-line bg-paper"
+          : scrolled
+            ? "border-line bg-paper/90 backdrop-blur-md"
+            : "border-transparent bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+        <a href="#top" className="font-display text-lg tracking-tight text-ink">
+          {site.name}
+        </a>
 
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex items-center lg:hidden">
-            <button
-              onClick={toggleMobileMenu}
-              className="text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 p-2 rounded-md transition-colors duration-200"
-              aria-label="Toggle menu"
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
+          {site.nav.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="text-sm text-muted transition-colors hover:text-ink"
+              {...(item.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
             >
-              {/* Hamburger Icon */}
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                {isMobileMenuOpen ? (
-                  // Close Icon
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  // Hamburger Icon
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
+              {item.label}
+            </a>
+          ))}
+          <ThemeToggle />
+        </nav>
+
+        <button
+          type="button"
+          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted md:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <a
-              href="#"
-              className="block text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-            >
-              Home
-            </a>
-            <a
-              href="#experience"
-              className="block text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-            >
-              Experience
-            </a>
-            <a
-              href="#projects"
-              className="block text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-            >
-              Projects
-            </a>
-            <a
-              href="https://jnleyvaphotos.vercel.app"
-              className="block text-slate-700 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Photography
-            </a>
+      {open ? (
+        <nav
+          id="mobile-nav"
+          className="border-t border-line bg-paper px-5 py-4 md:hidden"
+          aria-label="Mobile"
+        >
+          <div className="flex flex-col gap-3">
+            {site.nav.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={close}
+                className="text-base text-ink"
+                {...(item.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {item.label}
+              </a>
+            ))}
+            <ThemeToggle className="w-fit pt-2" />
           </div>
-        </div>
-      )}
-    </nav>
+        </nav>
+      ) : null}
+    </header>
   );
 }
-
-export default Topbar;
-

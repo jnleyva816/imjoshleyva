@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext();
 
@@ -29,12 +29,9 @@ export const ThemeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Apply theme to document
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle("dark", isDarkMode);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", isDarkMode ? "#101412" : "#f4f0e8");
   }, [isDarkMode]);
 
   // Listen for system theme changes
