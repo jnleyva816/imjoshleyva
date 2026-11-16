@@ -175,7 +175,7 @@ export default function DesignLab() {
               <li>React and Vite. No framework migration.</li>
               <li>Tailwind v4, now pointed at CSS variables.</li>
               <li>Framer Motion, limited to the fade above.</li>
-              <li>The existing resume, photos, LeetCode card, and SoundCloud embed.</li>
+              <li>The existing resume and photos.</li>
             </ul>
           </div>
           <div>

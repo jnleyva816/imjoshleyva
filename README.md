@@ -24,8 +24,8 @@
 - **Skills Section**: Categorized display of technical skills with corresponding icons.
 - **Experience Section**: Detailed overview of professional experiences with roles, companies, durations, and descriptions.
 - **Responsive Layout**: Adaptable design ensuring optimal viewing on devices of all sizes.
-- **LeetCode Heatmap**: Visual representation of coding activity and problem-solving skills.
-- **Music Player**: Integrated music player allowing visitors to enjoy background tunes.
+- **Photo Carousel**: Endless loop of every photo in `src/assets/photos/working/`.
+- **Music Player**: Self-hosted track that plays only when a visitor presses play.
 - **Consistent Styling**: Cohesive design using Tailwind CSS for a modern and clean aesthetic.
 
 ## Demo
@@ -112,8 +112,8 @@ imjoshleyva/
 │   │   ├── HeroSection.jsx
 │   │   ├── Skills.jsx
 │   │   ├── Experience.jsx
-│   │   ├── LeetCode_heatmap.jsx
-│   │   ├── MusicPlayer.jsx
+│   │   ├── Listening.jsx
+│   │   ├── PhotoCarousel.jsx
 │   │   └── TopBar.jsx
 │   ├── data/
 │   │   └── experienceData.js
@@ -164,7 +164,7 @@ Joshua N. Leyva
 Email: [joshleyva816@gmail.com](mailto:joshleyva816@gmail.com)  
 GitHub: [jnleyva816](https://github.com/jnleyva816)  
 LinkedIn: [linkedin.com/in/joshua-leyva](https://www.linkedin.com/in/joshua-leyva/)  
-LeetCode: [leetcode.com/jleyva](https://leetcode.com/jleyva)  
+Photography: [jnleyvaphotos.vercel.app](https://jnleyvaphotos.vercel.app)  
 
 Feel free to reach out for collaborations, questions, or feedback!
 

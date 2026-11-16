@@ -26,8 +26,16 @@ const site = {
       href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/",
       label: "LinkedIn",
     },
-    { href: "https://leetcode.com/jleyva", label: "LeetCode" },
+    { href: "https://jnleyvaphotos.vercel.app", label: "Photography" },
   ],
+  // Self-hosted track in public/audio/. Leave src empty to hide the player.
+  music: {
+    src: "",
+    title: "",
+    artist: "",
+    note: "Low-cortisol jazz for working. It stays off until you press play.",
+    credit: null,
+  },
   audiences: [
     {
       id: "general",
@@ -84,8 +92,8 @@ const site = {
     aside: {
       id: "aside",
       index: "05",
-      title: "On the side",
-      lede: "Practice problems, and a track I keep on while I work.",
+      title: "Off the clock",
+      lede: "Recent frames from my camera. The full set lives on my photography site.",
     },
     contact: {
       id: "contact",
