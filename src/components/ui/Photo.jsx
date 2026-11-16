@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ease } from "../../lib/motion";
 import { usePhotoViewer } from "../../lib/photoViewer";
+import Picture from "./Picture";
 
 /**
  * A framed photo shown uncropped. `drift` is how many pixels it travels
@@ -17,6 +18,7 @@ export default function Photo({
   tilt = 0,
   delay = 0,
   caption = true,
+  sizes = "(min-width: 768px) 720px, 100vw",
 }) {
   const reduce = useReducedMotion();
   const open = usePhotoViewer();
@@ -38,16 +40,19 @@ export default function Photo({
       >
         <motion.button
           type="button"
-          onClick={() => open(group, Math.max(0, group.indexOf(photo)))}
+          onClick={(event) =>
+            open(group, Math.max(0, group.indexOf(photo)), event.currentTarget.querySelector("img"))
+          }
           className="block w-full cursor-zoom-in"
           aria-label={photo.caption ? `Open photo: ${photo.caption}` : "Open photo"}
           whileHover={reduce ? undefined : { y: -4 }}
           transition={{ duration: 0.3, ease }}
         >
-          <img
-            src={photo.src}
-            alt={photo.caption}
+          <Picture
+            photo={photo}
+            sizes={sizes}
             loading="lazy"
+            decoding="async"
             className={`block h-auto w-full object-contain drop-shadow-[0_10px_14px_rgba(27,25,22,0.16)] ${imgClassName}`}
           />
         </motion.button>

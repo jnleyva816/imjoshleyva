@@ -1,8 +1,14 @@
 import { allPhotos } from "../lib/photos";
 import { usePhotoViewer } from "../lib/photoViewer";
 import site from "../content/site";
+import Picture from "./ui/Picture";
 
 const SECONDS_PER_PHOTO = 6;
+
+function widthAt(photo, desktopHeight, mobileHeight) {
+  const ratio = photo.width / photo.height;
+  return `(min-width: 768px) ${Math.round(desktopHeight * ratio)}px, ${Math.round(mobileHeight * ratio)}px`;
+}
 
 function Strip({ photos, hidden, onOpen }) {
   return (
@@ -12,13 +18,13 @@ function Strip({ photos, hidden, onOpen }) {
           <button
             type="button"
             tabIndex={hidden ? -1 : undefined}
-            onClick={() => onOpen(index)}
+            onClick={(event) => onOpen(index, event.currentTarget.querySelector("img"))}
             className="block cursor-zoom-in"
             aria-label={photo.caption ? `Open photo: ${photo.caption}` : "Open photo"}
           >
-            <img
-              src={photo.src}
-              alt={photo.caption}
+            <Picture
+              photo={photo}
+              sizes={widthAt(photo, 288, 224)}
               loading="lazy"
               decoding="async"
               className="h-56 w-auto max-w-none drop-shadow-[0_10px_14px_rgba(27,25,22,0.16)] md:h-72"
@@ -35,7 +41,7 @@ export default function PhotoCarousel() {
   const photos = allPhotos();
   if (photos.length === 0) return null;
 
-  const onOpen = (index) => open(photos, index);
+  const onOpen = (index, from) => open(photos, index, from);
 
   return (
     <div>

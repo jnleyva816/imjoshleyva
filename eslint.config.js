@@ -17,7 +17,7 @@ export default [
         sourceType: 'module',
       },
     },
-    settings: { react: { version: '18.3' } },
+    settings: { react: { version: 'detect' } },
     plugins: {
       react,
       'react-hooks': reactHooks,
@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ['api/**/*.js', '*.config.js'],
+    files: ['api/**/*.js', 'tests/**/*.js', 'e2e/**/*.js', '*.config.js'],
     languageOptions: { globals: globals.node },
   },
 ]

@@ -1,14 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-const ThemeContext = createContext();
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
+import { useEffect, useLayoutEffect, useState } from "react";
+import { ThemeContext } from "../lib/theme";
+import { withTransition } from "../lib/viewTransition";
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -20,15 +12,28 @@ export const ThemeProvider = ({ children }) => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  const toggleTheme = () => {
-    setIsDarkMode(prev => {
-      const newMode = !prev;
-      localStorage.setItem('darkMode', JSON.stringify(newMode));
-      return newMode;
-    });
+  // `origin` is the {x, y} the new theme spreads out from.
+  const toggleTheme = (origin) => {
+    const root = document.documentElement;
+    withTransition(
+      () =>
+        setIsDarkMode((prev) => {
+          const newMode = !prev;
+          localStorage.setItem('darkMode', JSON.stringify(newMode));
+          return newMode;
+        }),
+      {
+        kind: "theme",
+        before: () => {
+          root.style.setProperty("--vt-x", `${origin?.x ?? window.innerWidth}px`);
+          root.style.setProperty("--vt-y", `${origin?.y ?? 0}px`);
+        },
+      },
+    );
   };
 
-  useEffect(() => {
+  // Layout effect so the class lands inside the View Transition's update.
+  useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", isDarkMode ? "#101412" : "#f4f0e8");
@@ -59,4 +64,4 @@ export const ThemeProvider = ({ children }) => {
       {children}
     </ThemeContext.Provider>
   );
-}; 
+};

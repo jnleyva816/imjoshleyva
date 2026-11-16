@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import site from "../content/site";
 import { ease } from "../lib/motion";
+import Turnstile from "./ui/Turnstile";
+
+const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 const field =
   "mt-2 block w-full rounded-md border border-line bg-raised px-3.5 py-3 text-base text-ink placeholder:text-muted/70 transition-colors focus:border-moss focus:outline-none";
@@ -10,6 +13,8 @@ const label = "font-mono text-[11px] uppercase tracking-[0.16em] text-muted";
 export default function Contact() {
   const reduce = useReducedMotion();
   const [status, setStatus] = useState("idle");
+  const [problem, setProblem] = useState("");
+  const challenge = useRef(null);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -27,13 +32,22 @@ export default function Contact() {
         method: "POST",
         signal: AbortSignal.timeout(20000),
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ name: data.name, email: data.email, message: data.message }),
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          token: data["cf-turnstile-response"],
+        }),
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok || String(body.success) === "false") throw new Error(body.message);
+      if (!res.ok || String(body.success) === "false") {
+        throw new Error(res.status === 429 ? "busy" : "failed");
+      }
       form.reset();
       setStatus("sent");
-    } catch {
+    } catch (error) {
+      challenge.current?.reset();
+      setProblem(error.message === "busy" ? "That's a lot of messages in a short time." : "That didn't go through.");
       setStatus("error");
     }
   }
@@ -102,13 +116,14 @@ export default function Contact() {
               aria-hidden="true"
               className="hidden"
             />
+            {turnstileSiteKey ? <Turnstile siteKey={turnstileSiteKey} ref={challenge} /> : null}
             <div className="flex flex-wrap items-center gap-4">
               <button type="submit" className="btn btn-fill" disabled={status === "sending"}>
                 {status === "sending" ? "Sending…" : "Send message"}
               </button>
               {status === "error" ? (
                 <p role="alert" className="text-sm text-muted">
-                  That didn't go through. Email me at{" "}
+                  {problem} Email me at{" "}
                   <a className="text-link" href={`mailto:${site.email}`}>
                     {site.email}
                   </a>

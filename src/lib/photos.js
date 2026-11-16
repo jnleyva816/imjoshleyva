@@ -2,7 +2,11 @@ import { captions, placements } from "../content/photos";
 
 const files = import.meta.glob(
   "../assets/photos/working/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP}",
-  { eager: true, import: "default" },
+  {
+    eager: true,
+    import: "default",
+    query: { w: "480;960;1600;2000", format: "avif;webp;jpg", as: "picture" },
+  },
 );
 
 const spots = [
@@ -15,9 +19,16 @@ const spots = [
 
 const all = Object.entries(files)
   .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-  .map(([path, src]) => {
+  .map(([path, picture]) => {
     const name = path.split("/").pop();
-    return { name, src, caption: captions[name] ?? "" };
+    return {
+      name,
+      src: picture.img.src,
+      width: picture.img.w,
+      height: picture.img.h,
+      sources: picture.sources,
+      caption: captions[name] ?? "",
+    };
   });
 
 const byName = new Map(all.map((photo) => [photo.name, photo]));
