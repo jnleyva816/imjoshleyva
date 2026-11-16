@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://imjoshleyva.vercel.app/sitemap.xml
+Sitemap: https://joshleyva.dev/sitemap.xml
