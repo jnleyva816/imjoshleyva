@@ -28,13 +28,12 @@ const site = {
     },
     { href: "https://jnleyvaphotos.vercel.app", label: "Photography" },
   ],
-  // Self-hosted track in public/audio/. Leave src empty to hide the player.
+  // YouTube video ID. The uploader must allow embedding; leave empty to hide.
   music: {
-    src: "",
-    title: "",
-    artist: "",
-    note: "Low-cortisol jazz for working. It stays off until you press play.",
-    credit: null,
+    youtube: "WdMDgpAD4XM",
+    title: "low cortisol jazz for deep concentration",
+    artist: "SILEO",
+    note: "What's on while I work.",
   },
   audiences: [
     {

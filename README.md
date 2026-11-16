@@ -25,7 +25,7 @@
 - **Experience Section**: Detailed overview of professional experiences with roles, companies, durations, and descriptions.
 - **Responsive Layout**: Adaptable design ensuring optimal viewing on devices of all sizes.
 - **Photo Carousel**: Endless loop of every photo in `src/assets/photos/working/`.
-- **Music Player**: Self-hosted track that plays only when a visitor presses play.
+- **Listening**: Embedded YouTube jazz mix that loads only when a visitor presses play.
 - **Consistent Styling**: Cohesive design using Tailwind CSS for a modern and clean aesthetic.
 
 ## Demo
