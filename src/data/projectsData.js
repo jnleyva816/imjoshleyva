@@ -10,14 +10,6 @@ const projects = [
     category: "Web",
     year: "2026",
     status: "In progress",
-    longDescription:
-      "A rewrite of the old glass portfolio. Motion is a short fade. Color and type live in CSS variables. Section order and the three introductions live in one content file.",
-    features: [
-      "Copy, navigation, and section order in src/content/site.js",
-      "Theme tokens in src/index.css",
-      "Dark mode that follows the system until you pick one",
-      "Project details in a dialog",
-    ],
   },
 ];
 
