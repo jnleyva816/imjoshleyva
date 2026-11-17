@@ -23,7 +23,7 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 - **An intro for each kind of visitor.** General, Hiring, and Engineering tabs change the hero copy.
 - **Work, projects, education, skills.** All of it is data-driven, so updating the resume means editing one file.
-- **Photos throughout.** Framed shots sit between sections, an endless carousel shows every photo in the folder, and a lightbox opens on click.
+- **Photos throughout.** Framed shots sit between sections, an endless carousel shows every photo in the folder (it drifts on its own, and you can swipe or drag it), and a lightbox opens on click.
 - **Off the clock.** Golf, running, music in Ableton, and the cats and dog, plus a jazz mix that loads only when someone presses play.
 - **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, and a mailto fallback.
 - **Light and dark.** Follows the system setting by default. The header toggle reveals the new theme in a circle using View Transitions.
@@ -78,6 +78,7 @@ The dev server also serves `/api/contact` through a small Vite plugin, so the co
 | `npm run lint` | ESLint (flat config) |
 | `npm test` | Unit tests for the contact API (Node's built-in test runner) |
 | `npm run test:e2e` | Playwright smoke and CSP tests against the production build, desktop and mobile |
+| `npx @lhci/cli autorun` | Lighthouse against the production build. CI fails below 90 for performance and best practices, and below 95 for accessibility and SEO (`lighthouserc.json`). |
 
 On NixOS, point Playwright at a system Chromium with `CHROME=$(command -v chromium) npm run test:e2e`.
 
@@ -101,7 +102,7 @@ Until a domain is verified, `onboarding@resend.dev` can only deliver to the addr
 - **Headers.** `vercel.json` sets a strict Content-Security-Policy, HSTS, `nosniff`, `X-Frame-Options: DENY`, COOP, and a Permissions-Policy that only lets the YouTube embed autoplay. `e2e/csp.spec.js` fails if the page needs something the CSP blocks.
 - **Contact form.** Same-origin check, honeypot, length limits, escaped HTML, and 5 messages per IP every 10 minutes. The limit is global with Upstash and per-instance without it. Turnstile verification is optional.
 - **Privacy.** Fonts are self-hosted, and YouTube loads from `youtube-nocookie.com` only after someone presses play.
-- **Upkeep.** Dependabot opens grouped weekly updates, and CI runs lint, unit tests, build, and Playwright on every pull request.
+- **Upkeep.** Dependabot opens grouped weekly updates, and CI runs lint, unit tests, build, Playwright, and a Lighthouse check on every pull request.
 
 ## Editing content
 
@@ -124,7 +125,7 @@ api/
   contact.js            Vercel function: validation, rate limit, Turnstile, Resend call
 docs/screenshots/       README images
 e2e/                    Playwright smoke and CSP tests
-public/                 Share image, robots.txt, sitemap.xml
+public/                 Share image, 404 page, theme-init.js, robots.txt, sitemap.xml
 src/
   App.jsx               Section order and the #studio route
   index.css             Tokens, light and dark themes, marquee, View Transitions

@@ -25,8 +25,14 @@ test("home page renders without errors", async ({ page }) => {
 
 test("photos are served as responsive AVIF", async ({ page }) => {
   await page.goto("/");
-  const avif = page.locator("picture source[type='image/avif']").first();
-  await expect(avif).toHaveAttribute("srcset", /480w/);
+  await expect(page.locator("picture source[type='image/avif'][srcset*='480w']").first()).toBeAttached();
+});
+
+test("the portrait is high priority and modern-format", async ({ page }) => {
+  await page.goto("/");
+  const portrait = page.getByRole("img", { name: "Joshua Leyva" });
+  await expect(portrait).toHaveAttribute("fetchpriority", "high");
+  await expect(portrait.locator("xpath=preceding-sibling::source[@type='image/avif']")).toHaveCount(1);
 });
 
 test("lightbox opens and closes", async ({ page }) => {
@@ -37,6 +43,43 @@ test("lightbox opens and closes", async ({ page }) => {
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
+});
+
+test("dark visitors get the dark theme before the app loads", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.route("**/assets/index-*.js", (route) => route.abort());
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await expect(page.locator("meta[name='theme-color']")).toHaveAttribute("content", "#101412");
+});
+
+test("a saved light choice beats a dark system setting", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("darkMode", "false"));
+  await page.route("**/assets/index-*.js", (route) => route.abort());
+  await page.goto("/");
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+});
+
+test("carousel drifts on its own and can be dragged", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const carousel = page.getByRole("region", { name: /photo carousel/i });
+  await carousel.scrollIntoViewIfNeeded();
+  const left = () => carousel.evaluate((node) => node.scrollLeft);
+
+  const before = await left();
+  await expect.poll(left, { timeout: 5000 }).toBeGreaterThan(before + 20);
+
+  if (isMobile) return; // touch uses native scrolling, which Playwright can't drag
+  const box = await carousel.boundingBox();
+  const y = box.y + box.height / 2;
+  const start = await left();
+  await page.mouse.move(box.x + box.width / 2, y);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2 - 300, y, { steps: 8 });
+  await page.mouse.up();
+  expect(Math.abs((await left()) - start)).toBeGreaterThan(200);
+  await expect(page.getByRole("dialog")).toBeHidden();
 });
 
 test("theme toggle switches to dark", async ({ page, isMobile }) => {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import profile from "../assets/profile_picture.jpg";
+import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
+import Picture from "./ui/Picture";
 import resume from "../assets/JoshuaLeyvaResume.pdf";
 import site from "../content/site";
 import { fadeUp } from "../lib/motion";
@@ -106,12 +107,14 @@ export default function HeroSection() {
       >
         <div className="relative mx-auto w-full max-w-sm">
           <Sprig className="pointer-events-none absolute -left-14 -top-8 h-52 w-28 text-moss opacity-50" />
-          <img
-            src={profile}
-            alt="Joshua Leyva"
-            className="relative aspect-[4/5] w-full rounded-2xl border border-line object-cover shadow-[0_24px_50px_-32px_rgba(27,25,22,0.55)]"
+          <Picture
+            photo={{ src: profile.img.src, sources: profile.sources, caption: "Joshua Leyva" }}
+            sizes="(min-width: 1024px) 384px, (min-width: 640px) 384px, 90vw"
+            fetchPriority="high"
+            decoding="async"
             width="640"
             height="800"
+            className="relative aspect-[4/5] w-full rounded-2xl border border-line object-cover shadow-[0_24px_50px_-32px_rgba(27,25,22,0.55)]"
           />
           {heroPhoto ? (
             <Photo
