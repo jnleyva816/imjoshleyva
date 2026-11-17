@@ -45,7 +45,9 @@ export default function photoExif({ dir }) {
       const entries = {};
       for (const name of (await fs.readdir(folder)).sort()) {
         if (!/\.(jpe?g|tiff?|heic|png|webp|avif)$/i.test(name)) continue;
-        const tags = await exifr.parse(path.join(folder, name), { pick: PICK }).catch(() => null);
+        // A Buffer, not a path: exifr leaves its file handles open, which Node 26 rejects.
+        const file = await fs.readFile(path.join(folder, name));
+        const tags = await exifr.parse(file, { pick: PICK }).catch(() => null);
         const described = tags && describeExif(tags);
         if (described) entries[name] = described;
       }
