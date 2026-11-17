@@ -76,6 +76,7 @@ The dev server also serves `/api/contact` through a small Vite plugin, so the co
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serves the production build |
 | `npm run lint` | ESLint (flat config) |
+| `npm run resume` | Rebuilds `src/assets/JoshuaLeyvaResume.pdf` from the same job, education, and skills data the site uses, plus `src/content/resume.js`. Needs Chromium (`CHROME=$(command -v chromium)` on NixOS). |
 | `npm test` | Unit tests for the contact API (Node's built-in test runner) |
 | `npm run test:e2e` | Playwright smoke and CSP tests against the production build, desktop and mobile |
 | `npx @lhci/cli autorun` | Lighthouse against the production build. CI fails below 90 for performance and best practices, and below 95 for accessibility and SEO (`lighthouserc.json`). |
