@@ -1,65 +1,12 @@
+import { clientIp, rateLimit, sameOrigin } from "./_lib/guard.js";
+
 const RESEND_URL = "https://api.resend.com/emails";
 const TURNSTILE_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LIMITS = { name: 120, email: 200, message: 5000 };
 const RATE = { max: 5, windowSeconds: 600 };
 
-// Per-instance fallback when Redis isn't configured. Warm instances are
-// reused, so this still slows a script down, but it isn't a global limit.
-const recent = new Map();
-
-function clientIp(req) {
-  const forwarded = req.headers["x-forwarded-for"];
-  return (
-    (typeof forwarded === "string" && forwarded.split(",")[0].trim()) ||
-    req.headers["x-real-ip"] ||
-    req.socket?.remoteAddress ||
-    "unknown"
-  );
-}
-
-async function countInRedis(key) {
-  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-  if (!url || !token) return null;
-  try {
-    const response = await fetch(`${url}/pipeline`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify([
-        ["INCR", key],
-        ["EXPIRE", key, RATE.windowSeconds, "NX"],
-      ]),
-      signal: AbortSignal.timeout(3000),
-    });
-    if (!response.ok) throw new Error(`upstash_${response.status}`);
-    const [incr] = await response.json();
-    return Number(incr.result);
-  } catch (error) {
-    console.error("contact: rate limit store unavailable", error);
-    return null;
-  }
-}
-
-function countInMemory(key) {
-  const now = Date.now();
-  if (recent.size > 1000) {
-    for (const [k, v] of recent) if (v.resetAt <= now) recent.delete(k);
-  }
-  const entry = recent.get(key);
-  if (!entry || entry.resetAt <= now) {
-    recent.set(key, { count: 1, resetAt: now + RATE.windowSeconds * 1000 });
-    return 1;
-  }
-  entry.count += 1;
-  return entry.count;
-}
-
-async function overLimit(ip) {
-  const key = `contact:${ip}`;
-  const count = (await countInRedis(key)) ?? countInMemory(key);
-  return count > RATE.max;
-}
+const overLimit = rateLimit("contact", RATE);
 
 async function passesTurnstile(token, ip) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
@@ -107,16 +54,6 @@ function escapeHtml(value) {
 
 function clean(value, max) {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
-}
-
-function sameOrigin(req) {
-  const origin = req.headers.origin;
-  if (!origin) return true;
-  try {
-    return new URL(origin).host === req.headers.host;
-  } catch {
-    return false;
-  }
 }
 
 export default async function handler(req, res) {

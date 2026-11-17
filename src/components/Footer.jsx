@@ -25,7 +25,7 @@ export default function Footer() {
           </a>
         </div>
         <div className="space-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:text-right">
-          <p>© {year}</p>
+          <p suppressHydrationWarning>© {year}</p>
           <p>
             Plants by{" "}
             <a

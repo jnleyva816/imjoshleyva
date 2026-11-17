@@ -89,6 +89,20 @@ function Lightbox({ photos, index, onClose, onStep }) {
           </button>
         </span>
       </div>
+      {photo.exif ? (
+        <p
+          className="mt-3 flex max-w-3xl flex-wrap justify-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted/80"
+          aria-label="Camera settings"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {[photo.exif.camera, photo.exif.lens, ...photo.exif.settings].filter(Boolean).map((part, i) => (
+            <span key={part}>
+              {i > 0 ? <span aria-hidden="true" className="mr-3">·</span> : null}
+              {part}
+            </span>
+          ))}
+        </p>
+      ) : null}
     </m.div>
   );
 }

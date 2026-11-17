@@ -9,7 +9,10 @@ export default function Project({ project }) {
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
           {[project.year, project.status].filter(Boolean).join("  ·  ")}
         </p>
-        <h3 className="mt-2 font-display text-3xl tracking-tight text-ink">{project.title}</h3>
+        <h3
+          className="mt-2 w-fit font-display text-3xl tracking-tight text-ink"
+          style={project.slug ? { viewTransitionName: `project-${project.slug}` } : undefined}
+        >{project.title}</h3>
         <p className="mt-3 max-w-xl leading-relaxed text-muted">{project.description}</p>
         <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
           {tech}

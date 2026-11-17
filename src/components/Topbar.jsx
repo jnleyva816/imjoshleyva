@@ -3,11 +3,12 @@ import site from "../content/site";
 import useActiveSection from "../lib/useActiveSection";
 import { homeHref, onHome } from "../lib/paths";
 import ThemeToggle from "./ThemeToggle";
-import { openCommandMenu, shortcutLabel } from "../lib/commandMenu";
+import { openCommandMenu, useShortcutLabel } from "../lib/commandMenu";
 
 export default function Topbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const shortcutLabel = useShortcutLabel();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -51,7 +52,7 @@ export default function Topbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 border-b transition-colors duration-200 ${
+      className={`vt-header fixed inset-x-0 top-0 z-40 border-b transition-colors duration-200 ${
         open
           ? "border-line bg-paper"
           : scrolled

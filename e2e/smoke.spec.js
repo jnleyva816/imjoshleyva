@@ -250,9 +250,35 @@ test("each project with a case study gets a page", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Personal site");
 });
 
-test("an unknown project says so", async ({ page }) => {
-  await page.goto("/projects/nope");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("No such project");
+test("an unknown project is a real 404", async ({ request }) => {
+  const response = await request.get("/projects/nope");
+  expect(response.status()).toBe(404);
+});
+
+test("pages arrive pre-rendered with their own title, preview, and schema", async ({ page }) => {
+  await page.route("**/*.js", (route) => route.abort());
+  for (const [path, title, heading] of [
+    ["/", "Joshua Leyva · Senior Solutions Engineer", "Joshua Leyva"],
+    ["/resume", "Résumé · Joshua Leyva", "Joshua N. Leyva"],
+    ["/projects/tcg-inventory", "TCG inventory · Joshua Leyva", "TCG inventory"],
+  ]) {
+    await page.goto(path);
+    await expect(page).toHaveTitle(title);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://joshleyva.dev${path}`);
+    const image = await page.locator('meta[property="og:image"]').getAttribute("content");
+    expect((await page.request.get(new URL(image).pathname)).ok()).toBe(true);
+    const schema = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+    expect(schema["@graph"].length).toBeGreaterThan(1);
+  }
+});
+
+test("llms.txt describes the site in plain text", async ({ request }) => {
+  const response = await request.get("/llms.txt");
+  expect(response.ok()).toBe(true);
+  const text = await response.text();
+  expect(text).toContain("# Joshua Leyva");
+  expect(text).toContain("## Projects");
 });
 
 test("nav links from a subpage go back to the home sections", async ({ page, isMobile }) => {
@@ -323,4 +349,35 @@ test("the lately block shows posts and running when they exist", async ({ page }
   await page.locator("#aside").scrollIntoViewIfNeeded();
   await expect(page.getByRole("link", { name: "First post" })).toBeVisible();
   await expect(page.getByText("142")).toBeVisible();
+});
+
+test("the command menu can answer questions when the assistant is on", async ({ page }) => {
+  let asked;
+  await page.route("**/api/ask", (route) => {
+    if (route.request().method() === "GET") return route.fulfill({ json: { configured: true } });
+    asked = route.request().postDataJSON();
+    return route.fulfill({ json: { answer: "Josh studied computer science at Florida Poly." } });
+  });
+  await page.goto("/");
+  await expect(page.locator('button[aria-label="Open command menu"]')).toBeAttached();
+  await page.keyboard.press("Control+k");
+  const input = page.getByRole("combobox");
+  await expect(input).toHaveAttribute("placeholder", /ask anything/);
+  await input.fill("where did he study");
+  await expect(page.getByRole("option", { name: /Ask about Josh/ })).toBeVisible();
+  await input.press("Enter");
+  await expect(page.getByText("Josh studied computer science at Florida Poly.")).toBeVisible();
+  expect(asked).toEqual({ question: "where did he study" });
+  await input.fill("resume");
+  await expect(page.getByRole("option", { name: "Download résumé (PDF)" })).toBeVisible();
+});
+
+test("the assistant stays hidden until it is configured", async ({ page }) => {
+  await page.route("**/api/ask", (route) => route.fulfill({ json: { configured: false } }));
+  await page.goto("/");
+  await expect(page.locator('button[aria-label="Open command menu"]')).toBeAttached();
+  await page.keyboard.press("Control+k");
+  await page.getByRole("combobox").fill("where did he study");
+  await expect(page.getByText(/Nothing matches/)).toBeVisible();
+  await expect(page.getByRole("option", { name: /Ask about Josh/ })).toHaveCount(0);
 });

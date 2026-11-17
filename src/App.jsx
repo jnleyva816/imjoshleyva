@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useSyncExternalStore } from "react";
 import Shell from "./components/Shell";
 import HeroSection from "./components/HeroSection";
 import Section from "./components/ui/Section";
@@ -35,17 +35,13 @@ const blocks = {
   contact: <Contact />,
 };
 
-function useHash() {
-  const [hash, setHash] = useState(() => window.location.hash);
-
-  useEffect(() => {
-    const onHash = () => setHash(window.location.hash);
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-
-  return hash;
+function subscribeToHash(onChange) {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
 }
+
+// "" while hydrating, since the pre-rendered HTML is always the home page.
+const useHash = () => useSyncExternalStore(subscribeToHash, () => window.location.hash, () => "");
 
 function renderBlock(key) {
   if (key.startsWith("photos:")) {

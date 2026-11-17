@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { imagetools } from 'vite-imagetools'
+import photoExif from './scripts/photo-exif.js'
 
 // Serves api/*.js during `vite dev` the way Vercel does in production.
 // Reads RESEND_API_KEY and friends from .env.local.
@@ -14,7 +15,7 @@ function localApi() {
 
       server.middlewares.use('/api', async (req, res, next) => {
         const name = req.url.split('?')[0].replace(/^\/+|\/+$/g, '')
-        if (!['contact', 'writing', 'running'].includes(name)) return next()
+        if (!['contact', 'writing', 'running', 'ask', 'csp-report'].includes(name)) return next()
         const chunks = []
         for await (const chunk of req) chunks.push(chunk)
         try {
@@ -37,46 +38,52 @@ function localApi() {
   }
 }
 
-// The same rewrites vercel.json does, so /resume and /projects/<slug> work
-// under `vite dev` and `vite preview` (which the tests and Lighthouse use).
-const pages = [
-  [/^\/resume\/?(\?.*)?$/, '/resume.html'],
-  [/^\/projects\/[\w-]+\/?(\?.*)?$/, '/project.html'],
-]
+// Clean URLs the way Vercel serves them (cleanUrls in vercel.json). Under
+// `vite dev` every project shares the project.html template; the build
+// pre-renders one file per project, which `vite preview` serves.
+const resumePage = /^\/resume\/?(\?.*)?$/
+const projectPage = /^\/projects\/([\w-]+)\/?(\?.*)?$/
 
 function pageRewrites() {
-  const rewrite = (req, _res, next) => {
-    const match = pages.find(([pattern]) => pattern.test(req.url))
-    if (match) req.url = match[1]
+  const rewrite = (projectFile) => (req, _res, next) => {
+    if (resumePage.test(req.url)) req.url = '/resume.html'
+    const project = req.url.match(projectPage)
+    if (project) req.url = projectFile(project[1])
     next()
   }
   return {
     name: 'page-rewrites',
     configureServer(server) {
-      server.middlewares.use(rewrite)
+      server.middlewares.use(rewrite(() => '/project.html'))
     },
     configurePreviewServer(server) {
-      server.middlewares.use(rewrite)
+      server.middlewares.use(rewrite((slug) => `/projects/${slug}.html`))
     },
   }
 }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
+  // No index.html fallback: unknown paths 404 like they do on Vercel.
+  appType: 'mpa',
   plugins: [
     react(),
     tailwindcss(),
     imagetools({ removeMetadata: true }),
+    photoExif({ dir: 'src/assets/photos/working' }),
     localApi(),
     pageRewrites(),
   ],
-  build: {
-    rollupOptions: {
-      input: {
-        main: 'index.html',
-        resume: 'resume.html',
-        project: 'project.html',
+  // The SSR build (see "build" in package.json) only needs src/entry-server.jsx.
+  build: isSsrBuild
+    ? { copyPublicDir: false }
+    : {
+        rollupOptions: {
+          input: {
+            main: 'index.html',
+            resume: 'resume.html',
+            project: 'project.html',
+          },
+        },
       },
-    },
-  },
-})
+}))

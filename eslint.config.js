@@ -5,7 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist', '.vite', 'node_modules'] },
+  { ignores: ['dist', '.ssr', '.vite', 'node_modules'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -39,7 +39,12 @@ export default [
     },
   },
   {
-    files: ['api/**/*.js', 'tests/**/*.js', 'e2e/**/*.js', '*.config.js'],
+    files: ['api/**/*.js', 'tests/**/*.js', 'e2e/**/*.js', 'scripts/**/*.{js,mjs}', '*.config.js'],
     languageOptions: { globals: globals.node },
+  },
+  {
+    // Build-time entry for scripts/prerender.mjs; never hot-reloaded.
+    files: ['src/entry-server.jsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
   },
 ]
