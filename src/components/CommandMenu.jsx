@@ -69,14 +69,44 @@ function useCommands(toggleTheme, isDarkMode, setNote) {
   );
 }
 
+// "resume" finds "Résumé".
+const fold = (text) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
 const matches = (command, query) => {
   if (!query) return true;
-  const haystack = `${command.label} ${command.group} ${command.keywords ?? ""}`.toLowerCase();
-  return query
-    .toLowerCase()
+  const haystack = fold(`${command.label} ${command.group} ${command.keywords ?? ""}`);
+  return fold(query)
     .split(/\s+/)
     .every((word) => haystack.includes(word));
 };
+
+// null until the menu first opens, then whether /api/ask has a model behind it.
+function useAskReady(isOpen) {
+  const [ready, setReady] = useState(null);
+  useEffect(() => {
+    if (!isOpen || ready !== null) return;
+    fetch("/api/ask")
+      .then((response) => (response.ok ? response.json() : { configured: false }))
+      .then((data) => setReady(data.configured === true))
+      .catch(() => setReady(false));
+  }, [isOpen, ready]);
+  return ready === true;
+}
+
+async function fetchAnswer(question) {
+  try {
+    const response = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (response.ok && data.answer) return { status: "done", text: data.answer };
+    return { status: "error", text: data.message || "Couldn't get an answer right now." };
+  } catch {
+    return { status: "error", text: "Couldn't reach the site. Check your connection." };
+  }
+}
 
 export default function CommandMenu({ startOpen = false }) {
   const reduce = useReducedMotion();
@@ -89,8 +119,21 @@ export default function CommandMenu({ startOpen = false }) {
   const list = useRef(null);
   const returnFocus = useRef(startOpen ? document.activeElement : null);
 
+  const [answer, setAnswer] = useState(null);
+  const askReady = useAskReady(isOpen);
   const commands = useCommands(toggleTheme, isDarkMode, setNote);
-  const results = commands.filter((command) => matches(command, query));
+  const question = query.trim();
+  const ask = async () => {
+    setAnswer({ question, status: "loading", text: "" });
+    const result = await fetchAnswer(question);
+    setAnswer((current) => (current?.question === question ? { question, ...result } : current));
+  };
+  const results = [
+    ...commands.filter((command) => matches(command, query)),
+    ...(askReady && question.length >= 3
+      ? [{ group: "Ask", label: `Ask about Josh: “${question}”`, hint: "AI", keep: true, run: ask }]
+      : []),
+  ];
   const current = Math.min(active, Math.max(results.length - 1, 0));
 
   const show = useCallback(() => {
@@ -98,6 +141,7 @@ export default function CommandMenu({ startOpen = false }) {
     setQuery("");
     setActive(0);
     setNote("");
+    setAnswer(null);
     setOpen(true);
   }, []);
 
@@ -185,9 +229,10 @@ export default function CommandMenu({ startOpen = false }) {
                   setQuery(event.target.value);
                   setActive(0);
                   setNote("");
+                  setAnswer(null);
                 }}
                 onKeyDown={onKeyDown}
-                placeholder="Jump to a section, copy my email, switch theme…"
+                placeholder={askReady ? "Jump somewhere, or ask anything about me…" : "Jump to a section, copy my email, switch theme…"}
                 className="h-14 w-full bg-transparent text-base text-ink placeholder:text-muted/70 focus:outline-none"
                 role="combobox"
                 aria-expanded="true"
@@ -202,7 +247,32 @@ export default function CommandMenu({ startOpen = false }) {
               </kbd>
             </div>
 
-            <ul ref={list} id="command-list" role="listbox" aria-label="Commands" className="max-h-[50vh] overflow-y-auto p-2">
+            {answer ? (
+              <div className="max-h-[50vh] overflow-y-auto px-5 py-4" aria-live="polite" aria-busy={answer.status === "loading"}>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">You asked</p>
+                <p className="mt-1 text-[0.95rem] text-ink">{answer.question}</p>
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-moss">Answer</p>
+                {answer.status === "loading" ? (
+                  <p className="mt-1 text-[0.95rem] text-muted">
+                    <span className="live-dot mr-2 inline-block size-1.5 rounded-full bg-moss align-middle" aria-hidden="true" />
+                    Reading the site…
+                  </p>
+                ) : (
+                  <p className={`mt-1 whitespace-pre-line text-[0.95rem] leading-relaxed ${answer.status === "error" ? "text-muted" : "text-ink"}`}>
+                    {answer.text}
+                  </p>
+                )}
+                <p className="mt-4 text-xs text-muted">
+                  Written by an AI from what's on this site, so it can be wrong. For anything important,{" "}
+                  <a className="text-link" href={`mailto:${site.email}`}>
+                    email me
+                  </a>
+                  .
+                </p>
+              </div>
+            ) : null}
+
+            <ul ref={list} id="command-list" hidden={Boolean(answer)} role="listbox" aria-label="Commands" className="max-h-[50vh] overflow-y-auto p-2">
               {results.length === 0 ? (
                 <li className="px-3 py-6 text-center text-sm text-muted">Nothing matches “{query}”.</li>
               ) : null}

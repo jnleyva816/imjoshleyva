@@ -286,6 +286,44 @@
   }
 }
 
+/* Hero entrance in CSS, so the pre-rendered HTML animates before any JS loads. */
+.rise {
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0ms) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* Page to page: the header stays put and a project's title morphs into its case study. */
+@view-transition {
+  navigation: auto;
+}
+
+.vt-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(*) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 /* View Transitions: see src/lib/viewTransition.js */
 html.vt-theme::view-transition-old(root),
 html.vt-theme::view-transition-new(root) {

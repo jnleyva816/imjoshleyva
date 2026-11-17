@@ -1,3 +1,4 @@
+import exif from "virtual:photo-exif";
 import { alts, captions, placements } from "../content/photos";
 
 const files = import.meta.glob(
@@ -29,6 +30,7 @@ const all = Object.entries(files)
       sources: picture.sources,
       caption: captions[name] ?? "",
       alt: alts[name] ?? captions[name] ?? "",
+      exif: exif[name] ?? null,
     };
   });
 

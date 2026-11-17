@@ -1,4 +1,3 @@
-import { m, useReducedMotion } from "framer-motion";
 import Shell from "./Shell";
 import pdf from "../assets/JoshuaLeyvaResume.pdf";
 import experience from "../data/experienceData";
@@ -7,7 +6,6 @@ import skills from "../data/skillsData";
 import projects from "../data/projectsData";
 import resume from "../content/resume";
 import site from "../content/site";
-import { blurIn } from "../lib/motion";
 import { projectHref } from "../lib/paths";
 import { byCompany, short, span } from "../lib/resumeData";
 
@@ -35,13 +33,15 @@ const caseStudyFor = (name) =>
   projects.find((project) => project.caseStudy && project.title.toLowerCase() === name.toLowerCase());
 
 function Resume() {
-  const reduce = useReducedMotion();
 
   return (
     <article className="pb-16 pt-8 lg:pt-16">
-      <m.header variants={blurIn(reduce)} initial="hidden" animate="visible">
+      <header className="rise">
         <p className={label}>Résumé</p>
-        <h1 className="mt-4 font-display text-[clamp(2.8rem,7vw,5rem)] leading-[0.95] tracking-[-0.035em] text-ink">
+        <h1
+          className="mt-4 w-fit font-display text-[clamp(2.8rem,7vw,5rem)] leading-[0.95] tracking-[-0.035em] text-ink"
+          style={{ viewTransitionName: "site-name" }}
+        >
           {resume.name}
         </h1>
         <p className="mt-3 text-xl text-moss">{resume.headline}</p>
@@ -66,7 +66,7 @@ function Resume() {
           </button>
         </div>
         <p className="mt-10 max-w-2xl text-lg leading-relaxed text-muted">{resume.summary}</p>
-      </m.header>
+      </header>
 
       <div className="mt-12">
         <Part title="Experience">

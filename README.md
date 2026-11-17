@@ -38,6 +38,12 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 - **Accessible by default.** Every photo has alt text (`alts` in `src/content/photos.js`), the nav marks the section you are reading, and Lighthouse accessibility is 100.
 - **Installable and printable.** A favicon that follows dark mode, an Apple touch icon and web manifest, and a print view with no controls or photos and link URLs spelled out.
 - **Design notes.** `/#studio` shows the type, border, and motion choices side by side.
+- **Pre-rendered pages.** The build renders every page to HTML, so text and photos paint before any JavaScript loads and the site reads fine with JavaScript off. React then hydrates it.
+- **Page-to-page motion.** Cross-document View Transitions keep the header still and morph a project's title into its case study heading. Hovering a link prerenders the next page (Speculation Rules), so most clicks open instantly.
+- **Link previews.** Each page has its own title, description, preview image (`public/og/`, from `npm run og`), and schema.org data (Person, ProfilePage, SoftwareSourceCode, breadcrumbs).
+- **For language models.** `/llms.txt` is the whole site as plain text, built from the same data.
+- **Ask about me.** Type a question into the ⌘K menu and an AI answers from the site's content only. It stays hidden until an API key is set (see Environment).
+- **Camera details.** The lightbox shows camera, lens, and exposure read from each photo's EXIF at build time, for photos exported with their metadata.
 
 <table>
   <tr>
@@ -57,7 +63,7 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 | Layer | Choice |
 | --- | --- |
-| UI | React 19, Framer Motion, and View Transitions for the lightbox and theme switch |
+| UI | React 19 (pre-rendered at build time, then hydrated), Framer Motion, and View Transitions for pages, the lightbox, and the theme switch |
 | Styling | Tailwind CSS v4 with CSS-variable design tokens (`@theme inline`) |
 | Type | Fraunces (display), Figtree (body), IBM Plex Mono (labels), self-hosted through Fontsource |
 | Build | Vite 8 (Rolldown) |
@@ -76,15 +82,16 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-The dev server also serves `/api/contact`, `/api/writing`, and `/api/running` through a small Vite plugin, so they work locally if the env vars below are set. `/resume` and `/projects/<slug>` are rewritten to their HTML pages in dev, preview, and on Vercel.
+The dev server also serves the `api/` functions through a small Vite plugin, so they work locally if the env vars below are set. In dev every page renders in the browser; `npm run build` pre-renders `/`, `/resume`, and one file per case study, and Vercel serves them at clean URLs. Unknown paths get the 404 page.
 
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Vite dev server with the local API |
-| `npm run build` | Production build into `dist/` |
+| `npm run build` | Production build into `dist/`, then a server build of `src/entry-server.jsx` that `scripts/prerender.mjs` uses to write each page's HTML, `llms.txt`, and `sitemap.xml` |
 | `npm run preview` | Serves the production build |
 | `npm run lint` | ESLint (flat config) |
 | `npm run resume` | Rebuilds `src/assets/JoshuaLeyvaResume.pdf` from the same job, education, and skills data the site uses, plus `src/content/resume.js`. Needs Chromium (`CHROME=$(command -v chromium)` on NixOS). |
+| `npm run og` | Rebuilds the link-preview images in `public/og/` for the résumé and case studies. Needs Chromium like `npm run resume`. |
 | `npm test` | Unit tests for the API functions (Node's built-in test runner) |
 | `npm run test:e2e` | Playwright smoke and CSP tests against the production build, desktop and mobile |
 | `npx @lhci/cli autorun` | Lighthouse against the production build. CI fails below 90 for performance and best practices, and below 95 for accessibility and SEO (`lighthouserc.json`). |
@@ -103,7 +110,9 @@ Put these in `.env.local` for local work, and in Vercel under Settings → Envir
 | `CONTACT_AUTOREPLY` | no | `true` sends senders a short fixed "got your message" reply. Needs `CONTACT_FROM_EMAIL` on a verified domain. |
 | `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN` | no | Running totals in About. With Upstash set, a rotated refresh token is kept there. |
 | `SUBSTACK_FEED_URL` | no | Defaults to `https://joshualeyva.substack.com/feed`. |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | no | Global rate limit for the contact form. The `KV_REST_API_*` names from Vercel's Upstash integration work too. |
+| `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` | no | Turns on "Ask about me" in the ⌘K menu. Anthropic wins if both are set. 10 questions per visitor an hour and 300 a day in total. |
+| `ASK_MODEL` | no | Overrides the model: `claude-haiku-4-5` (Anthropic) or `gpt-5-mini` (OpenAI) by default. |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | no | Global rate limits for the contact form, the assistant, and CSP reports. The `KV_REST_API_*` names from Vercel's Upstash integration work too. |
 | `VITE_TURNSTILE_SITE_KEY` | no | Shows the Cloudflare Turnstile check on the form. It's read at build time. |
 | `TURNSTILE_SECRET_KEY` | no | Makes the API require a valid Turnstile token. Set it together with the site key. |
 
@@ -112,6 +121,7 @@ Until a domain is verified, `onboarding@resend.dev` can only deliver to the addr
 ## Security
 
 - **Headers.** `vercel.json` sets a strict Content-Security-Policy, HSTS, `nosniff`, `X-Frame-Options: DENY`, COOP, and a Permissions-Policy that only lets the YouTube embed autoplay. `e2e/csp.spec.js` fails if the page needs something the CSP blocks.
+- **Trusted Types and reports.** Trusted Types are required in report-only mode; `src/lib/trustedTypes.js` lets only Vercel's and Turnstile's scripts through, and the tests run with them enforced. Violations post to `api/csp-report.js` and show up in the Vercel logs. Once the logs stay quiet, `require-trusted-types-for` can move into the enforced policy.
 - **Contact form.** Same-origin check, honeypot, length limits, escaped HTML, and 5 messages per IP every 10 minutes. The limit is global with Upstash and per-instance without it. Turnstile verification is optional.
 - **Privacy.** Fonts are self-hosted, and YouTube loads from `youtube-nocookie.com` only after someone presses play.
 - **Upkeep.** Dependabot opens grouped weekly updates, and CI runs lint, unit tests, build, Playwright, and a Lighthouse check on every pull request.
@@ -138,22 +148,27 @@ api/
   contact.js            Vercel function: validation, rate limit, Turnstile, Resend call, auto-reply
   writing.js            Latest Substack posts, cached at the edge
   running.js            Strava running totals, cached at the edge
+  ask.js                "Ask about me": answers from site content, rate limited
+  csp-report.js         Receives CSP and Trusted Types violation reports
+  _lib/guard.js         Shared rate limit, client IP, and same-origin check
 docs/screenshots/       README images
 e2e/                    Playwright smoke and CSP tests
-index.html, resume.html, project.html   One HTML page per route
-public/                 Share image, favicon and app icons, manifest, 404 page, theme-init.js, robots.txt, sitemap.xml
+index.html, resume.html, project.html   HTML templates; the build fills them in per page
+public/                 Share images, favicon and app icons, manifest, 404 page, theme-init.js, robots.txt, speculation rules
+scripts/                Pre-render, résumé PDF, preview images, EXIF plugin
 src/
   App.jsx               Home: section order and the #studio route
   pages/                Entry points for /resume and /projects/<slug>
+  entry-server.jsx      Renders a page to HTML for the pre-render step
   components/Shell.jsx  Theme, wallpaper, header, footer, and ⌘K around every page
   index.css             Tokens, light and dark themes, marquee, View Transitions
   components/           Hero, Experience, Projects, About, Contact, PhotoCarousel, ...
   content/              Site copy and photo metadata
   data/                 Resume data
-  lib/                  Motion presets, photo loading, lightbox, theme, View Transitions
+  lib/                  Motion presets, photo loading, lightbox, theme, View Transitions, SEO data
 tests/                  API unit tests
-vercel.json             Security and cache headers, page rewrites
-vite.config.js          Image pipeline, pages, the local /api middleware, and rewrites
+vercel.json             Security, reporting, and cache headers; clean URLs
+vite.config.js          Image pipeline, EXIF, pages, the local /api middleware, and clean URLs
 ```
 
 ## Deploying

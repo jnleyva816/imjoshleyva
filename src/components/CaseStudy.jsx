@@ -1,5 +1,5 @@
 import { m, useReducedMotion } from "framer-motion";
-import { blurIn, fadeUp } from "../lib/motion";
+import { fadeUp } from "../lib/motion";
 import { projectHref } from "../lib/paths";
 
 const label = "font-mono text-[11px] uppercase tracking-[0.16em] text-muted";
@@ -40,7 +40,6 @@ const Points = ({ items }) => (
 );
 
 export default function CaseStudy({ project, others }) {
-  const reduce = useReducedMotion();
   const study = project.caseStudy;
 
   return (
@@ -49,15 +48,18 @@ export default function CaseStudy({ project, others }) {
         ← All projects
       </a>
 
-      <m.header className="mt-10 max-w-3xl" variants={blurIn(reduce)} initial="hidden" animate="visible">
+      <header className="rise mt-10 max-w-3xl">
         <p className={label}>
           {[study.timeline, project.status].filter(Boolean).join("  ·  ")}
         </p>
-        <h1 className="mt-4 font-display text-[clamp(2.8rem,7vw,5rem)] leading-[0.95] tracking-[-0.035em] text-ink">
+        <h1
+          className="mt-4 w-fit font-display text-[clamp(2.8rem,7vw,5rem)] leading-[0.95] tracking-[-0.035em] text-ink"
+          style={{ viewTransitionName: `project-${project.slug}` }}
+        >
           {project.title}
         </h1>
         <p className="mt-6 text-xl leading-relaxed text-muted">{study.summary}</p>
-      </m.header>
+      </header>
 
       <dl className="mt-10 grid max-w-3xl gap-6 sm:grid-cols-3">
         <div>

@@ -1,67 +1,53 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { ThemeContext } from "../lib/theme";
 import { withTransition } from "../lib/viewTransition";
 
+// public/theme-init.js sets the "dark" class before first paint, so the class
+// on <html> is the source of truth and React just follows it.
+const root = () => document.documentElement;
+const readDark = () => root().classList.contains("dark");
+
+function subscribe(onChange) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(root(), { attributes: true, attributeFilter: ["class"] });
+  return () => observer.disconnect();
+}
+
+function applyTheme(dark) {
+  root().classList.toggle("dark", dark);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#101412" : "#f4f0e8");
+}
+
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check localStorage first, then system preference
-    const saved = localStorage.getItem('darkMode');
-    if (saved !== null) {
-      return JSON.parse(saved);
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  const isDarkMode = useSyncExternalStore(subscribe, readDark, () => false);
 
   // `origin` is the {x, y} the new theme spreads out from.
   const toggleTheme = (origin) => {
-    const root = document.documentElement;
     withTransition(
-      () =>
-        setIsDarkMode((prev) => {
-          const newMode = !prev;
-          localStorage.setItem('darkMode', JSON.stringify(newMode));
-          return newMode;
-        }),
+      () => {
+        const next = !readDark();
+        localStorage.setItem("darkMode", JSON.stringify(next));
+        applyTheme(next);
+      },
       {
         kind: "theme",
         before: () => {
-          root.style.setProperty("--vt-x", `${origin?.x ?? window.innerWidth}px`);
-          root.style.setProperty("--vt-y", `${origin?.y ?? 0}px`);
+          root().style.setProperty("--vt-x", `${origin?.x ?? window.innerWidth}px`);
+          root().style.setProperty("--vt-y", `${origin?.y ?? 0}px`);
         },
       },
     );
   };
 
-  // Layout effect so the class lands inside the View Transition's update.
-  useLayoutEffect(() => {
-    document.documentElement.classList.toggle("dark", isDarkMode);
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", isDarkMode ? "#101412" : "#f4f0e8");
-  }, [isDarkMode]);
-
-  // Listen for system theme changes
+  // Follow the OS setting until the visitor picks a theme themselves.
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => {
-      // Only auto-switch if user hasn't manually set a preference
-      const saved = localStorage.getItem('darkMode');
-      if (saved === null) {
-        setIsDarkMode(e.matches);
-      }
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (event) => {
+      if (localStorage.getItem("darkMode") === null) applyTheme(event.matches);
     };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const value = {
-    isDarkMode,
-    toggleTheme,
-  };
-
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>{children}</ThemeContext.Provider>;
 };

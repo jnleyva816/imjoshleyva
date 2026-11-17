@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { AnimatePresence, m, useReducedMotion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
 import Picture from "./ui/Picture";
 import site from "../content/site";
-import { fadeUp } from "../lib/motion";
 import { Sprig } from "./ui/Marks";
 import RevealText from "./ui/RevealText";
 import Photo from "./ui/Photo";
@@ -13,24 +12,21 @@ import { photosFor } from "../lib/photos";
 const heroPhoto = photosFor("hero")[0];
 
 export default function HeroSection() {
-  const reduce = useReducedMotion();
   const [audienceId, setAudienceId] = useState(site.audiences[0].id);
   const audience =
     site.audiences.find((item) => item.id === audienceId) ?? site.audiences[0];
 
   return (
     <section className="grid items-end gap-12 pb-16 pt-8 lg:grid-cols-12 lg:gap-16 lg:pb-24 lg:pt-16">
-      <m.div
-        className="lg:col-span-7"
-        variants={fadeUp(reduce)}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className="rise lg:col-span-7">
         <p className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
           <span>{site.title}</span>
           <LocalTime />
         </p>
-        <h1 className="mt-4 font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.92] tracking-[-0.035em] text-ink">
+        <h1
+          className="mt-4 w-fit font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.92] tracking-[-0.035em] text-ink"
+          style={{ viewTransitionName: "site-name" }}
+        >
           {site.name}
         </h1>
 
@@ -61,7 +57,7 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-6 min-h-[5.5rem] max-w-xl" role="tabpanel">
-          <AnimatePresence mode="wait" initial={true}>
+          <AnimatePresence mode="wait" initial={false}>
             <RevealText
               key={audience.id}
               text={audience.copy}
@@ -110,14 +106,9 @@ export default function HeroSection() {
             ) : null}
           </p>
         ) : null}
-      </m.div>
+      </div>
 
-      <m.div
-        className="lg:col-span-5"
-        variants={fadeUp(reduce)}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className="rise lg:col-span-5" style={{ "--rise-delay": "120ms" }}>
         <div className="relative mx-auto w-full max-w-sm">
           <Sprig className="pointer-events-none absolute -left-14 -top-8 h-52 w-28 text-moss opacity-50" />
           <Picture
@@ -140,7 +131,7 @@ export default function HeroSection() {
             />
           ) : null}
         </div>
-      </m.div>
+      </div>
     </section>
   );
 }
