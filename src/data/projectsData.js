@@ -1,5 +1,16 @@
 const projects = [
   {
+    id: 2,
+    title: "TCG inventory",
+    description:
+      "Inventory manager for my own Pokémon card collection. Scan a card's barcode to adjust stock, search instantly even with typos, print shelf labels, and keep everything in sync with Odoo.",
+    technologies: ["Python", "FastAPI", "React", "Odoo", "Docker"],
+    github: "https://github.com/jnleyva816/Odoo_TCG",
+    category: "Web",
+    year: "2026",
+    status: "Personal use",
+  },
+  {
     id: 1,
     title: "Personal site",
     description:
