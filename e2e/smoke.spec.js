@@ -23,6 +23,16 @@ test("home page renders without errors", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("the page never scrolls sideways", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  const { scrollWidth, innerWidth } = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    innerWidth: window.innerWidth,
+  }));
+  expect(scrollWidth).toBeLessThanOrEqual(innerWidth);
+});
+
 test("photos are served as responsive AVIF", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("picture source[type='image/avif'][srcset*='480w']").first()).toBeAttached();

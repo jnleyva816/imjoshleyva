@@ -27,6 +27,8 @@ const site = {
       href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/",
       label: "LinkedIn",
     },
+    { href: "https://www.strava.com/athletes/147050581", label: "Strava" },
+    { href: "https://substack.com/@joshualeyva", label: "Substack" },
     { href: "https://jnleyvaphotos.vercel.app", label: "Photography" },
   ],
   about: {
@@ -36,8 +38,10 @@ const site = {
     ],
     facts: [
       { label: "Training for", value: "A sub-3:30 marathon" },
+      { label: "Training log", value: "My runs on Strava", href: "https://www.strava.com/athletes/147050581" },
       { label: "On the course", value: "Year-round. It's Florida." },
       { label: "Making", value: "Music in Ableton Live" },
+      { label: "Writing", value: "My Substack", href: "https://substack.com/@joshualeyva" },
       { label: "Behind the camera", value: "Cars, plants, and a lot of Java, Wasabi, and Sabine" },
       { label: "In the mug", value: "Coffee, or tea" },
     ],

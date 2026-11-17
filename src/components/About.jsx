@@ -16,7 +16,15 @@ export default function About() {
           {facts.map((fact) => (
             <div key={fact.label}>
               <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">{fact.label}</dt>
-              <dd className="mt-1 text-ink">{fact.value}</dd>
+              <dd className="mt-1 text-ink">
+                {fact.href ? (
+                  <a className="text-link" href={fact.href} target="_blank" rel="noopener noreferrer">
+                    {fact.value} ↗
+                  </a>
+                ) : (
+                  fact.value
+                )}
+              </dd>
             </div>
           ))}
         </dl>

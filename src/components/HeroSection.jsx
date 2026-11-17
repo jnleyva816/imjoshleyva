@@ -78,11 +78,11 @@ export default function HeroSection() {
           </a>
         </div>
 
-        <p className="mt-8 text-sm text-muted">
+        <p className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted sm:gap-x-0">
           {site.social.map((item, index) => (
             <span key={item.label}>
               {index > 0 ? (
-                <span className="mx-3 text-muted" aria-hidden="true">
+                <span className="mx-3 hidden text-muted sm:inline" aria-hidden="true">
                   ·
                 </span>
               ) : null}
