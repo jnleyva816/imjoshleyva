@@ -73,7 +73,7 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 ## Running it locally
 
-You need Node 22.12 or newer.
+You need Node 22 (pinned in `package.json` so Vercel builds on the same version as CI).
 
 ```bash
 git clone git@github.com:jnleyva816/imjoshleyva.git
