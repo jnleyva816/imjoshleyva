@@ -2,12 +2,12 @@ import { useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
 import Picture from "./ui/Picture";
-import resume from "../assets/JoshuaLeyvaResume.pdf";
 import site from "../content/site";
 import { fadeUp } from "../lib/motion";
 import { Sprig } from "./ui/Marks";
 import RevealText from "./ui/RevealText";
 import Photo from "./ui/Photo";
+import LocalTime from "./ui/LocalTime";
 import { photosFor } from "../lib/photos";
 
 const heroPhoto = photosFor("hero")[0];
@@ -26,8 +26,9 @@ export default function HeroSection() {
         initial="hidden"
         animate="visible"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-          {site.title}
+        <p className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+          <span>{site.title}</span>
+          <LocalTime />
         </p>
         <h1 className="mt-4 font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.92] tracking-[-0.035em] text-ink">
           {site.name}
@@ -70,7 +71,7 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a className="btn btn-fill" href={resume} download="JoshuaLeyvaResume.pdf">
+          <a className="btn btn-fill" href="/resume">
             Resume
           </a>
           <a className="btn btn-quiet" href={`mailto:${site.email}`}>
@@ -97,6 +98,18 @@ export default function HeroSection() {
             </span>
           ))}
         </p>
+
+        {site.now?.text ? (
+          <p className="mt-8 max-w-xl border-l-2 border-moss/40 pl-4 text-[0.95rem] leading-relaxed text-muted">
+            <span className="mr-2 font-mono text-[11px] uppercase tracking-[0.16em] text-moss">Now</span>
+            {site.now.text}
+            {site.now.updated ? (
+              <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted/80">
+                {site.now.updated}
+              </span>
+            ) : null}
+          </p>
+        ) : null}
       </m.div>
 
       <m.div

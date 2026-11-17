@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import site from "../content/site";
 import useActiveSection from "../lib/useActiveSection";
+import { homeHref, onHome } from "../lib/paths";
 import ThemeToggle from "./ThemeToggle";
+import { openCommandMenu, shortcutLabel } from "../lib/commandMenu";
 
 export default function Topbar() {
   const [open, setOpen] = useState(false);
@@ -58,7 +60,7 @@ export default function Topbar() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a href="#top" className="font-display text-lg tracking-tight text-ink">
+        <a href={onHome() ? "#top" : "/"} className="font-display text-lg tracking-tight text-ink">
           {site.name}
         </a>
 
@@ -71,7 +73,7 @@ export default function Topbar() {
           {site.nav.map((item) => (
             <a
               key={item.label}
-              href={item.href}
+              href={homeHref(item.href)}
               aria-current={isCurrent(item) ? "location" : undefined}
               className={`pb-0.5 text-sm transition-colors hover:text-ink ${
                 isCurrent(item) ? "text-ink" : "text-muted"
@@ -83,6 +85,15 @@ export default function Topbar() {
               {item.label}
             </a>
           ))}
+          <button
+            type="button"
+            onClick={openCommandMenu}
+            aria-label="Open command menu"
+            aria-keyshortcuts="Control+K Meta+K"
+            className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted transition-colors hover:border-moss hover:text-ink"
+          >
+            {shortcutLabel}
+          </button>
           <ThemeToggle />
         </nav>
 
@@ -108,7 +119,7 @@ export default function Topbar() {
             {site.nav.map((item) => (
               <a
                 key={item.label}
-                href={item.href}
+                href={homeHref(item.href)}
                 onClick={close}
                 aria-current={isCurrent(item) ? "location" : undefined}
                 className={`w-fit border-b text-base text-ink ${
@@ -121,6 +132,16 @@ export default function Topbar() {
                 {item.label}
               </a>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                openCommandMenu();
+              }}
+              className="w-fit text-left text-base text-ink"
+            >
+              Quick menu
+            </button>
             <ThemeToggle className="w-fit pt-2" />
           </div>
         </nav>

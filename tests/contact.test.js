@@ -87,3 +87,33 @@ test("rate limits a single address", async () => {
   assert.deepEqual(codes.slice(0, 5), [500, 500, 500, 500, 500]);
   assert.equal(codes[5], 429);
 });
+
+test("sends a fixed auto-reply only when switched on", async (t) => {
+  const sent = [];
+  const realFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = realFetch;
+    delete process.env.CONTACT_AUTOREPLY;
+    delete process.env.CONTACT_FROM_EMAIL;
+    delete process.env.CONTACT_TO_EMAIL;
+  });
+  globalThis.fetch = async (url, options) => {
+    sent.push(JSON.parse(options.body));
+    return Response.json({ id: "x" });
+  };
+  Object.assign(process.env, { RESEND_API_KEY: "k", CONTACT_TO_EMAIL: "me@example.com" });
+  const body = { name: "<b>Spam</b>", email: "them@example.com", message: "Buy things at evil.example now" };
+
+  assert.equal((await send({ body })).statusCode, 200);
+  assert.equal(sent.length, 1, "no auto-reply without CONTACT_AUTOREPLY");
+
+  sent.length = 0;
+  Object.assign(process.env, { CONTACT_AUTOREPLY: "true", CONTACT_FROM_EMAIL: "Josh <hi@joshleyva.dev>" });
+  assert.equal((await send({ body })).statusCode, 200);
+  assert.equal(sent.length, 2);
+  const reply = sent[1];
+  assert.deepEqual(reply.to, ["them@example.com"]);
+  assert.equal(reply.reply_to, "me@example.com");
+  assert.ok(!JSON.stringify(reply).includes("Spam"));
+  assert.ok(!JSON.stringify(reply).includes("evil.example"));
+});

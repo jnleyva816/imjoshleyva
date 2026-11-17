@@ -1,3 +1,5 @@
+import { projectHref } from "../lib/paths";
+
 export default function Project({ project }) {
   const tech = project.technologies.slice(0, 5).join("  ·  ");
 
@@ -12,10 +14,15 @@ export default function Project({ project }) {
         <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
           {tech}
         </p>
-        {project.demo || project.github ? (
+        {project.caseStudy || project.demo || project.github ? (
           <div className="mt-6 flex flex-wrap gap-3">
+            {project.caseStudy ? (
+              <a className="btn btn-fill" href={projectHref(project)}>
+                Case study
+              </a>
+            ) : null}
             {project.demo ? (
-              <a className="btn btn-fill" href={project.demo} target="_blank" rel="noopener noreferrer">
+              <a className={`btn ${project.caseStudy ? "btn-quiet" : "btn-fill"}`} href={project.demo} target="_blank" rel="noopener noreferrer">
                 Live
               </a>
             ) : null}

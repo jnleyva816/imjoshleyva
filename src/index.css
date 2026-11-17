@@ -212,8 +212,14 @@
   height: 100%;
   object-fit: cover;
   transform-origin: 60% 40%;
+  opacity: 0;
+  transition: opacity 1.4s ease;
   animation: breathe 60s ease-in-out infinite alternate;
   will-change: transform;
+}
+
+.wallpaper-img.is-shown {
+  opacity: 1;
 }
 
 @keyframes breathe {
@@ -233,6 +239,27 @@
 @media (prefers-reduced-motion: reduce) {
   .nav-bar {
     transition-duration: 0ms;
+  }
+}
+
+/* The dot next to the local time: a slow, quiet pulse. */
+.live-dot {
+  animation: live 2.8s ease-in-out infinite;
+}
+
+@keyframes live {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--moss) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
   }
 }
 
@@ -298,6 +325,7 @@ html.vt-photo::view-transition-new(lightbox-photo) {
   .wallpaper-img {
     animation: none;
     transform: none;
+    transition: none;
   }
 
   ::view-transition-group(*),
