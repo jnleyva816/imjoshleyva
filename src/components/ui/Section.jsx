@@ -1,5 +1,5 @@
 import { m, useReducedMotion } from "framer-motion";
-import { fadeUp } from "../../lib/motion";
+import { blurIn, fadeUp } from "../../lib/motion";
 import Photo from "./Photo";
 
 export default function Section({ id, index, title, lede, photo, children }) {
@@ -19,7 +19,7 @@ export default function Section({ id, index, title, lede, photo, children }) {
           photo ? "grid items-end gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16" : ""
         }`}
       >
-        <div className="max-w-2xl">
+        <m.div className="max-w-2xl" variants={blurIn(reduce)}>
           <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
             {index}
           </p>
@@ -29,7 +29,7 @@ export default function Section({ id, index, title, lede, photo, children }) {
           {lede ? (
             <p className="mt-4 text-lg leading-relaxed text-muted">{lede}</p>
           ) : null}
-        </div>
+        </m.div>
         {photo ? (
           <Photo
             photo={photo}

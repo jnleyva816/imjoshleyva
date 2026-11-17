@@ -23,9 +23,20 @@ export default function Footer() {
             Photography
           </a>
         </div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-          © {year}
-        </p>
+        <div className="space-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:text-right">
+          <p>© {year}</p>
+          <p>
+            Plants by{" "}
+            <a
+              className="text-link"
+              href="https://unsplash.com/photos/ph7QQq63lCs"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Natalie Kovach
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

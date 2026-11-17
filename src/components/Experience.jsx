@@ -6,7 +6,7 @@ export default function Experience() {
       {experienceData.map((job) => (
         <article
           key={`${job.company}-${job.role}-${job.duration}`}
-          className="grid gap-3 border-t border-line py-8 first:border-t-0 first:pt-0 md:grid-cols-[11rem_1fr] md:gap-10"
+          className="spotlight grid gap-3 border-t border-line py-8 first:border-t-0 first:pt-0 md:grid-cols-[11rem_1fr] md:gap-10"
         >
           <p className="font-mono text-xs leading-6 text-muted">{job.duration}</p>
           <div>

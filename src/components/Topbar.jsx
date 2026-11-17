@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import site from "../content/site";
 import useActiveSection from "../lib/useActiveSection";
 import ThemeToggle from "./ThemeToggle";
@@ -18,6 +18,32 @@ export default function Topbar() {
     site.nav.filter((item) => item.href.startsWith("#")).map((item) => item.href.slice(1)),
   );
   const isCurrent = (item) => item.href === `#${active}`;
+  const navRef = useRef(null);
+  const barRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    const bar = barRef.current;
+    if (!nav || !bar) return undefined;
+
+    const place = () => {
+      const link = nav.querySelector('a[aria-current="location"]');
+      if (!link) {
+        bar.style.opacity = "0";
+        return;
+      }
+      const appearing = bar.style.opacity !== "1";
+      bar.style.transitionProperty = appearing ? "opacity" : "transform, width, opacity";
+      bar.style.transform = `translateX(${link.offsetLeft}px)`;
+      bar.style.width = `${link.offsetWidth}px`;
+      bar.style.top = `${link.offsetTop + link.offsetHeight}px`;
+      bar.style.opacity = "1";
+    };
+
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [active]);
 
   const close = () => setOpen(false);
 
@@ -36,14 +62,19 @@ export default function Topbar() {
           {site.name}
         </a>
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
+        <nav ref={navRef} className="relative hidden items-center gap-7 md:flex" aria-label="Primary">
+          <span
+            ref={barRef}
+            aria-hidden="true"
+            className="nav-bar pointer-events-none absolute left-0 h-px bg-moss opacity-0"
+          />
           {site.nav.map((item) => (
             <a
               key={item.label}
               href={item.href}
               aria-current={isCurrent(item) ? "location" : undefined}
-              className={`border-b pb-0.5 text-sm transition-colors hover:text-ink ${
-                isCurrent(item) ? "border-moss text-ink" : "border-transparent text-muted"
+              className={`pb-0.5 text-sm transition-colors hover:text-ink ${
+                isCurrent(item) ? "text-ink" : "text-muted"
               }`}
               {...(item.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
@@ -65,6 +96,7 @@ export default function Topbar() {
           {open ? "Close" : "Menu"}
         </button>
       </div>
+      <div aria-hidden="true" className="scroll-progress absolute inset-x-0 bottom-[-1px] h-px bg-moss/60" />
 
       {open ? (
         <nav

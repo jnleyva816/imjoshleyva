@@ -17,3 +17,20 @@ export function fadeUp(reduce) {
     },
   };
 }
+
+/** Comes into focus: a short blur-to-sharp, used for headings. */
+export function blurIn(reduce) {
+  if (reduce) {
+    return { hidden: {}, visible: {} };
+  }
+
+  return {
+    hidden: { opacity: 0, filter: "blur(8px)", y: 6 },
+    visible: {
+      opacity: 1,
+      filter: "blur(0px)",
+      y: 0,
+      transition: { duration: 0.8, ease },
+    },
+  };
+}
