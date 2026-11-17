@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="/portfolio.svg" />
+    <title>Page not found · Joshua Leyva</title>
+    <style>
+      :root {
+        --paper: #f4f0e8;
+        --ink: #1b1916;
+        --muted: #4f4a42;
+        --moss: #2c4a3c;
+        --moss-fill: #2c4a3c;
+        --on-moss: #f6f3ec;
+        --line: rgba(27, 25, 22, 0.14);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #101412;
+          --ink: #f0ebe3;
+          --muted: #b7b1a6;
+          --moss: #c9dac8;
+          --moss-fill: #d7e6d6;
+          --on-moss: #132018;
+          --line: rgba(240, 235, 227, 0.14);
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1.5rem;
+        background: var(--paper);
+        color: var(--ink);
+        font: 17px/1.6 "Figtree", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      }
+      main { width: 100%; max-width: 34rem; }
+      .label {
+        margin: 0 0 1rem;
+        font: 11px/1 ui-monospace, "IBM Plex Mono", monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        margin: 0;
+        font: 500 clamp(2.6rem, 9vw, 4rem)/1.05 "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+        letter-spacing: -0.02em;
+      }
+      p { margin: 1.25rem 0 0; color: var(--muted); }
+      a.btn {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.7rem 0.95rem;
+        border-radius: 0.375rem;
+        background: var(--moss-fill);
+        color: var(--on-moss);
+        font-size: 0.925rem;
+        line-height: 1;
+        text-decoration: none;
+      }
+      a.btn:hover { opacity: 0.9; }
+      a:focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
+      hr { margin: 3rem 0 0; border: 0; border-top: 1px solid var(--line); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="label">404</p>
+      <h1>That page isn't here.</h1>
+      <p>The link may be old, or the address may have a typo. Everything I've put online is on the home page.</p>
+      <a class="btn" href="/">Back to the home page</a>
+      <hr />
+    </main>
+  </body>
+</html>

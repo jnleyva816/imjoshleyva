@@ -135,34 +135,10 @@
     mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
   }
 
-  .marquee-track {
-    animation: marquee var(--marquee-duration, 60s) linear infinite;
-  }
-
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track {
-    animation-play-state: paused;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .marquee {
-      overflow-x: auto;
       mask-image: none;
     }
-
-    .marquee-track {
-      animation: none;
-    }
-
-    .marquee-track > [aria-hidden] {
-      display: none;
-    }
-  }
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
   }
 }
 
