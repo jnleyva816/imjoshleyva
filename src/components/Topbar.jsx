@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import site from "../content/site";
+import useActiveSection from "../lib/useActiveSection";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Topbar() {
@@ -12,6 +13,11 @@ export default function Topbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const active = useActiveSection(
+    site.nav.filter((item) => item.href.startsWith("#")).map((item) => item.href.slice(1)),
+  );
+  const isCurrent = (item) => item.href === `#${active}`;
 
   const close = () => setOpen(false);
 
@@ -35,7 +41,10 @@ export default function Topbar() {
             <a
               key={item.label}
               href={item.href}
-              className="text-sm text-muted transition-colors hover:text-ink"
+              aria-current={isCurrent(item) ? "location" : undefined}
+              className={`border-b pb-0.5 text-sm transition-colors hover:text-ink ${
+                isCurrent(item) ? "border-moss text-ink" : "border-transparent text-muted"
+              }`}
               {...(item.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
@@ -69,7 +78,10 @@ export default function Topbar() {
                 key={item.label}
                 href={item.href}
                 onClick={close}
-                className="text-base text-ink"
+                aria-current={isCurrent(item) ? "location" : undefined}
+                className={`w-fit border-b text-base text-ink ${
+                  isCurrent(item) ? "border-moss" : "border-transparent"
+                }`}
                 {...(item.external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}

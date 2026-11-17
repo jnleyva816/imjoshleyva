@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import site from "../content/site";
 import { ease } from "../lib/motion";
 import Turnstile from "./ui/Turnstile";
@@ -7,14 +7,56 @@ import Turnstile from "./ui/Turnstile";
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 const field =
-  "mt-2 block w-full rounded-md border border-line bg-raised px-3.5 py-3 text-base text-ink placeholder:text-muted/70 transition-colors focus:border-moss focus:outline-none";
+  "mt-2 block w-full rounded-md border border-line bg-raised px-3.5 py-3 text-base text-ink placeholder:text-muted/70 transition-colors focus:border-moss focus:outline-none aria-[invalid=true]:border-ink";
 const label = "font-mono text-[11px] uppercase tracking-[0.16em] text-muted";
+
+function check({ name = "", email = "", message = "" }) {
+  const errors = {};
+  if (!name.trim()) errors.name = "Tell me your name.";
+  if (!email.trim()) errors.email = "I need an email to reply to.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    errors.email = "That email doesn't look right.";
+  }
+  if (message.trim().length < 10) errors.message = "Say a bit more, at least 10 characters.";
+  return errors;
+}
+
+function Field({ id, text, error, children }) {
+  return (
+    <div className="block">
+      <label htmlFor={id} className={label}>
+        {text}
+      </label>
+      {children}
+      {error ? (
+        <p id={`${id}-error`} className="mt-2 text-sm text-ink">
+          <span aria-hidden="true" className="mr-1.5 text-moss">
+            ↑
+          </span>
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
 export default function Contact() {
   const reduce = useReducedMotion();
   const [status, setStatus] = useState("idle");
   const [problem, setProblem] = useState("");
+  const [errors, setErrors] = useState({});
   const challenge = useRef(null);
+
+  const clear = (event) => {
+    const { name } = event.target;
+    if (errors[name]) setErrors((current) => ({ ...current, [name]: undefined }));
+  };
+  const aria = (name) => ({
+    id: `contact-${name}`,
+    "aria-invalid": errors[name] ? true : undefined,
+    "aria-describedby": errors[name] ? `contact-${name}-error` : undefined,
+    onInput: clear,
+  });
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -23,6 +65,14 @@ export default function Contact() {
 
     if (data._honey) {
       setStatus("sent");
+      return;
+    }
+
+    const found = check(data);
+    setErrors(found);
+    const first = Object.keys(found)[0];
+    if (first) {
+      form.elements[first]?.focus();
       return;
     }
 
@@ -65,7 +115,7 @@ export default function Contact() {
     <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_16rem] md:gap-16">
       <AnimatePresence mode="wait" initial={false}>
         {status === "sent" ? (
-          <motion.div
+          <m.div
             key="sent"
             {...swap}
             role="status"
@@ -78,16 +128,28 @@ export default function Contact() {
             <button type="button" className="btn btn-quiet mt-6" onClick={() => setStatus("idle")}>
               Send another
             </button>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.form key="form" {...swap} onSubmit={onSubmit} className="grid gap-6">
+          <m.form
+            key="form"
+            {...swap}
+            onSubmit={onSubmit}
+            noValidate
+            aria-busy={status === "sending"}
+            className="grid gap-6"
+          >
             <div className="grid gap-6 sm:grid-cols-2">
-              <label className="block">
-                <span className={label}>Name</span>
-                <input className={field} name="name" autoComplete="name" required maxLength={120} />
-              </label>
-              <label className="block">
-                <span className={label}>Email</span>
+              <Field id="contact-name" text="Name" error={errors.name}>
+                <input
+                  className={field}
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={120}
+                  {...aria("name")}
+                />
+              </Field>
+              <Field id="contact-email" text="Email" error={errors.email}>
                 <input
                   className={field}
                   type="email"
@@ -95,19 +157,19 @@ export default function Contact() {
                   autoComplete="email"
                   required
                   maxLength={200}
+                  {...aria("email")}
                 />
-              </label>
+              </Field>
             </div>
-            <label className="block">
-              <span className={label}>Message</span>
+            <Field id="contact-message" text="Message" error={errors.message}>
               <textarea
                 className={`${field} min-h-40 resize-y`}
                 name="message"
                 required
-                minLength={10}
                 maxLength={5000}
+                {...aria("message")}
               />
-            </label>
+            </Field>
             <input
               type="text"
               name="_honey"
@@ -131,7 +193,7 @@ export default function Contact() {
                 </p>
               ) : null}
             </div>
-          </motion.form>
+          </m.form>
         )}
       </AnimatePresence>
 

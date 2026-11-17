@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ease } from "../../lib/motion";
 import { usePhotoViewer } from "../../lib/photoViewer";
 import Picture from "./Picture";
@@ -29,22 +29,23 @@ export default function Photo({
   });
   const y = useTransform(scrollYProgress, [0, 1], [drift, -drift]);
   const moving = !reduce && drift !== 0;
+  const label = photo.caption || photo.alt;
 
   return (
-    <motion.div ref={ref} className={className} style={moving ? { y } : undefined}>
-      <motion.figure
+    <m.div ref={ref} className={className} style={moving ? { y } : undefined}>
+      <m.figure
         initial={reduce ? false : { opacity: 0, y: 20, rotate: tilt * 0.4 }}
         whileInView={{ opacity: 1, y: 0, rotate: tilt }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, ease, delay }}
       >
-        <motion.button
+        <m.button
           type="button"
           onClick={(event) =>
             open(group, Math.max(0, group.indexOf(photo)), event.currentTarget.querySelector("img"))
           }
           className="block w-full cursor-zoom-in"
-          aria-label={photo.caption ? `Open photo: ${photo.caption}` : "Open photo"}
+          aria-label={label ? `Open photo: ${label}` : "Open photo"}
           whileHover={reduce ? undefined : { y: -4 }}
           transition={{ duration: 0.3, ease }}
         >
@@ -55,11 +56,11 @@ export default function Photo({
             decoding="async"
             className={`block h-auto w-full object-contain drop-shadow-[0_10px_14px_rgba(27,25,22,0.16)] ${imgClassName}`}
           />
-        </motion.button>
+        </m.button>
         {caption && photo.caption ? (
           <figcaption className="mt-3 text-sm text-muted">{photo.caption}</figcaption>
         ) : null}
-      </motion.figure>
-    </motion.div>
+      </m.figure>
+    </m.div>
   );
 }

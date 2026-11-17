@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { ease } from "../../lib/motion";
 
 const container = {
@@ -26,23 +26,23 @@ export default function RevealText({ text, className = "", ...rest }) {
   const words = text.split(" ");
 
   return (
-    <motion.p
+    <m.p
       className={className}
-      aria-label={text}
       variants={container}
       initial="hidden"
       animate="visible"
       exit="exit"
       {...rest}
     >
+      <span className="sr-only">{text}</span>
       {words.map((item, index) => (
         <span key={`${item}-${index}`} aria-hidden="true">
-          <motion.span className="inline-block" variants={word}>
+          <m.span className="inline-block" variants={word}>
             {item}
-          </motion.span>
+          </m.span>
           {index < words.length - 1 ? " " : null}
         </span>
       ))}
-    </motion.p>
+    </m.p>
   );
 }

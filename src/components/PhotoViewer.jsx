@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { ease } from "../lib/motion";
 import { PhotoViewerContext } from "../lib/photoViewer";
 import { canTransition, withTransition } from "../lib/viewTransition";
@@ -39,11 +39,11 @@ function Lightbox({ photos, index, onClose, onStep }) {
   );
 
   return (
-    <motion.div
+    <m.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper/95 p-4 backdrop-blur-sm sm:p-10"
       role="dialog"
       aria-modal="true"
-      aria-label={photo.caption || "Photo"}
+      aria-label={photo.caption || photo.alt || "Photo"}
       initial={fade ? { opacity: 0 } : false}
       animate={{ opacity: 1 }}
       exit={fade ? { opacity: 0 } : undefined}
@@ -51,7 +51,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
     >
       {fade ? (
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={photo.src}
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -59,7 +59,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
             transition={{ duration: 0.3, ease }}
           >
             {image}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       ) : (
         image
@@ -89,7 +89,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
           </button>
         </span>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 

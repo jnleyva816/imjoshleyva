@@ -99,3 +99,84 @@ test("theme toggle switches to dark", async ({ page, isMobile }) => {
   await page.getByRole("button", { name: "Switch to dark mode" }).locator("visible=true").first().click();
   await expect(page.locator("html")).toHaveClass(/dark/);
 });
+
+test("every photo has a description for screen readers", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  const missing = await page.evaluate(() =>
+    // Decorative images (like the video cover) may keep alt="" because their
+    // button is labelled; everything else needs real text.
+    [...document.querySelectorAll("main img")]
+      .filter((img) => !img.src.includes("ytimg.com"))
+      .filter((img) => !img.hasAttribute("alt") || img.alt.trim() === "")
+      .map((img) => img.currentSrc || img.src),
+  );
+  expect(missing).toEqual([]);
+});
+
+test("no element carries an aria-label it cannot support", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  const bad = await page.evaluate(() =>
+    [...document.querySelectorAll("p[aria-label], span[aria-label]:not([role])")].map((el) => el.outerHTML.slice(0, 80)),
+  );
+  expect(bad).toEqual([]);
+});
+
+test("the nav marks the section you are reading", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the desktop nav is hidden on phones");
+  await page.goto("/");
+  await expect(page.locator('nav[aria-label="Primary"] [aria-current]')).toHaveCount(0);
+  await page.locator("#education").scrollIntoViewIfNeeded();
+  await page.evaluate(() => document.getElementById("education").scrollIntoView({ behavior: "instant" }));
+  await expect(page.locator('nav[aria-label="Primary"] a[aria-current="location"]')).toHaveText("Education");
+});
+
+test("the contact form explains what is wrong next to the field", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  let sent = false;
+  await page.route("**/api/contact", (route) => {
+    sent = true;
+    return route.fulfill({ status: 200, json: { success: true } });
+  });
+  await page.getByRole("button", { name: "Send message" }).click();
+  await expect(page.locator("#contact-name-error")).toBeVisible();
+  await expect(page.locator("#contact-email-error")).toBeVisible();
+  await expect(page.locator("#contact-message-error")).toBeVisible();
+  await expect(page.locator("#contact-name")).toBeFocused();
+  await expect(page.locator("#contact-name")).toHaveAttribute("aria-invalid", "true");
+
+  await page.locator("#contact-name").fill("Ada");
+  await expect(page.locator("#contact-name-error")).toHaveCount(0);
+
+  await page.locator("#contact-email").fill("not-an-email");
+  await page.locator("#contact-message").fill("Hello there, nice site.");
+  await page.getByRole("button", { name: "Send message" }).click();
+  await expect(page.locator("#contact-email-error")).toHaveText(/doesn't look right/);
+  expect(sent).toBe(false);
+
+  await page.locator("#contact-email").fill("ada@example.com");
+  await page.getByRole("button", { name: "Send message" }).click();
+  await expect(page.getByText("Thanks, it's on its way.")).toBeVisible();
+});
+
+test("icons and manifest are served", async ({ request }) => {
+  for (const path of ["/favicon.svg", "/apple-touch-icon.png", "/icon-192.png", "/icon-512.png"]) {
+    const res = await request.get(path);
+    expect(res.ok(), path).toBe(true);
+  }
+  const manifest = await (await request.get("/manifest.webmanifest")).json();
+  expect(manifest.name).toBe("Joshua Leyva");
+  expect(manifest.icons.length).toBeGreaterThan(1);
+});
+
+test("print view drops controls and photos", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("header")).toBeHidden();
+  await expect(page.locator("form")).toBeHidden();
+  await expect(page.locator("figure").first()).toBeHidden();
+  await expect(page.getByRole("heading", { level: 1, name: "Joshua Leyva" })).toBeVisible();
+});

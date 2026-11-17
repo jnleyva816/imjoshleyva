@@ -25,10 +25,12 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 - **Work, projects, education, skills.** All of it is data-driven, so updating the resume means editing one file.
 - **Photos throughout.** Framed shots sit between sections, an endless carousel shows every photo in the folder (it drifts on its own, and you can swipe or drag it), and a lightbox opens on click.
 - **Off the clock.** Golf, running, music in Ableton, and the cats and dog, plus a jazz mix that loads only when someone presses play.
-- **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, and a mailto fallback.
+- **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, inline field errors, and a mailto fallback.
 - **Light and dark.** Follows the system setting by default. The header toggle reveals the new theme in a circle using View Transitions.
 - **Lightbox.** Photos grow out of the thumbnail you click, and Prev/Next morphs between them.
 - **Motion that respects people.** Animations are tokenised, and `prefers-reduced-motion` turns them off.
+- **Accessible by default.** Every photo has alt text (`alts` in `src/content/photos.js`), the nav marks the section you are reading, and Lighthouse accessibility is 100.
+- **Installable and printable.** A favicon that follows dark mode, an Apple touch icon and web manifest, and a print view with no controls or photos and link URLs spelled out.
 - **Design notes.** `/#studio` shows the type, border, and motion choices side by side.
 
 <table>
@@ -126,7 +128,7 @@ api/
   contact.js            Vercel function: validation, rate limit, Turnstile, Resend call
 docs/screenshots/       README images
 e2e/                    Playwright smoke and CSP tests
-public/                 Share image, 404 page, theme-init.js, robots.txt, sitemap.xml
+public/                 Share image, favicon and app icons, manifest, 404 page, theme-init.js, robots.txt, sitemap.xml
 src/
   App.jsx               Section order and the #studio route
   index.css             Tokens, light and dark themes, marquee, View Transitions

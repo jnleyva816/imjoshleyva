@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { fadeUp } from "../../lib/motion";
 import Photo from "./Photo";
 
@@ -6,7 +6,7 @@ export default function Section({ id, index, title, lede, photo, children }) {
   const reduce = useReducedMotion();
 
   return (
-    <motion.section
+    <m.section
       id={id}
       className="border-t border-line py-16 md:py-24"
       variants={fadeUp(reduce)}
@@ -42,6 +42,6 @@ export default function Section({ id, index, title, lede, photo, children }) {
         ) : null}
       </div>
       {children}
-    </motion.section>
+    </m.section>
   );
 }

@@ -1,4 +1,4 @@
-import { captions, placements } from "../content/photos";
+import { alts, captions, placements } from "../content/photos";
 
 const files = import.meta.glob(
   "../assets/photos/working/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP}",
@@ -28,6 +28,7 @@ const all = Object.entries(files)
       height: picture.img.h,
       sources: picture.sources,
       caption: captions[name] ?? "",
+      alt: alts[name] ?? captions[name] ?? "",
     };
   });
 

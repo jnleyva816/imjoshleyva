@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ease } from "../lib/motion";
 import { Sprig } from "./ui/Marks";
 
@@ -30,7 +30,7 @@ function QuietMove() {
       <button type="button" className="btn btn-quiet" onClick={() => setRun((value) => value + 1)}>
         Replay
       </button>
-      <motion.p
+      <m.p
         key={run}
         className="mt-4 font-display text-4xl tracking-tight text-ink"
         initial={{ opacity: 0, y: 12 }}
@@ -38,7 +38,7 @@ function QuietMove() {
         transition={{ duration: 0.55, ease }}
       >
         {sentence}
-      </motion.p>
+      </m.p>
       <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
         One fade, twelve pixels, just over half a second. It runs once as you scroll. Nothing bounces, pulses, or spins.
       </p>
