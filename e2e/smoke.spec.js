@@ -161,7 +161,10 @@ test("the contact form explains what is wrong next to the field", async ({ page 
   await expect(page.getByText("Thanks, it's on its way.")).toBeVisible();
 });
 
-test("icons and manifest are served", async ({ request }) => {
+test("icons and manifest are served and linked", async ({ request, page }) => {
+  await page.goto("/");
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute("href", "/apple-touch-icon.png");
+  await expect(page.locator('link[rel="manifest"]')).toHaveAttribute("href", "/manifest.webmanifest");
   for (const path of ["/favicon.svg", "/apple-touch-icon.png", "/icon-192.png", "/icon-512.png"]) {
     const res = await request.get(path);
     expect(res.ok(), path).toBe(true);
