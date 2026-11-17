@@ -34,10 +34,20 @@ export default function Photo({
   return (
     <m.div ref={ref} className={className} style={moving ? { y } : undefined}>
       <m.figure
-        initial={reduce ? false : { opacity: 0, y: 20, rotate: tilt * 0.4 }}
-        whileInView={{ opacity: 1, y: 0, rotate: tilt }}
+        initial={
+          reduce
+            ? false
+            : { opacity: 0, y: 20, rotate: tilt * 0.4, clipPath: "inset(100% -12% -12% -12%)" }
+        }
+        whileInView={{ opacity: 1, y: 0, rotate: tilt, clipPath: "inset(-12% -12% -12% -12%)" }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.8, ease, delay }}
+        transition={{
+          duration: 0.8,
+          ease,
+          delay,
+          clipPath: { duration: 1.1, ease, delay },
+          opacity: { duration: 0.4, delay },
+        }}
       >
         <m.button
           type="button"

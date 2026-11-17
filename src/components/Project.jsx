@@ -2,7 +2,7 @@ export default function Project({ project }) {
   const tech = project.technologies.slice(0, 5).join("  ·  ");
 
   return (
-    <article className="border-t border-line py-10 first:border-t-0 first:pt-0">
+    <article className="spotlight border-t border-line py-10 first:border-t-0 first:pt-0">
       <div className="max-w-3xl">
         <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
           {[project.year, project.status].filter(Boolean).join("  ·  ")}

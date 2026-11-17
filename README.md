@@ -28,6 +28,8 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 - **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, inline field errors, and a mailto fallback.
 - **Light and dark.** Follows the system setting by default. The header toggle reveals the new theme in a circle using View Transitions.
 - **Lightbox.** Photos grow out of the thumbnail you click, and Prev/Next morphs between them.
+- **Plants behind the paper.** A monstera wallpaper (photo by Natalie Kovach on Unsplash) sits fixed behind a translucent page and slowly breathes. The veil strength is `--veil` in `src/index.css`.
+- **Subtle motion.** Headings come into focus, photos unmask as they enter, the nav underline glides to the section you are reading, a hairline under the header tracks reading progress, link underlines draw in, and work and project rows glow under the cursor.
 - **Motion that respects people.** Animations are tokenised, and `prefers-reduced-motion` turns them off.
 - **Accessible by default.** Every photo has alt text (`alts` in `src/content/photos.js`), the nav marks the section you are reading, and Lighthouse accessibility is 100.
 - **Installable and printable.** A favicon that follows dark mode, an Apple touch icon and web manifest, and a print view with no controls or photos and link URLs spelled out.

@@ -16,8 +16,10 @@ import Listening from "./components/Listening";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import Wallpaper from "./components/Wallpaper";
 import site from "./content/site";
 import { photosFor } from "./lib/photos";
+import { trackSpotlight } from "./lib/spotlight";
 
 const DesignLab = lazy(() => import("./components/DesignLab"));
 
@@ -76,11 +78,14 @@ function renderBlock(key) {
 export default function App() {
   const studio = useHash() === "#studio";
 
+  useEffect(() => trackSpotlight(), []);
+
   return (
     <LazyMotion features={domAnimation} strict>
       <ThemeProvider>
         <PhotoViewer>
-          <div id="top" className="min-h-screen bg-paper text-ink">
+          <Wallpaper />
+          <div id="top" className="veil min-h-screen text-ink">
             <a
               href="#content"
               className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-raised focus:px-3 focus:py-2"

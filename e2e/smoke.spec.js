@@ -183,3 +183,42 @@ test("print view drops controls and photos", async ({ page }) => {
   await expect(page.locator("figure").first()).toBeHidden();
   await expect(page.getByRole("heading", { level: 1, name: "Joshua Leyva" })).toBeVisible();
 });
+
+test("the plant wallpaper sits behind a translucent page", async ({ page }) => {
+  await page.goto("/");
+  const wallpaper = page.locator(".wallpaper");
+  await expect(wallpaper).toHaveAttribute("aria-hidden", "true");
+  await expect(wallpaper.locator("img")).toHaveAttribute("alt", "");
+  const { position, veil } = await page.evaluate(() => ({
+    position: getComputedStyle(document.querySelector(".wallpaper")).position,
+    veil: getComputedStyle(document.getElementById("top")).backgroundColor,
+  }));
+  expect(position).toBe("fixed");
+  expect(veil).not.toMatch(/^rgb\(/);
+});
+
+test("the nav underline follows the section you are reading", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the desktop nav is hidden on phones");
+  await page.goto("/");
+  const bar = page.locator(".nav-bar");
+  await page.evaluate(() => document.getElementById("projects").scrollIntoView({ behavior: "instant" }));
+  await expect(bar).toHaveCSS("opacity", "1");
+  const link = page.locator('nav[aria-label="Primary"] a', { hasText: "Projects" });
+  await expect
+    .poll(async () => {
+      const [b, l] = await Promise.all([bar.boundingBox(), link.boundingBox()]);
+      return Math.abs(b.x - l.x) < 2 && Math.abs(b.width - l.width) < 2;
+    })
+    .toBe(true);
+});
+
+test("work rows glow where the cursor is", async ({ page, isMobile }) => {
+  test.skip(isMobile, "no hover on touch screens");
+  await page.goto("/");
+  const row = page.locator("#work article.spotlight").first();
+  await row.scrollIntoViewIfNeeded();
+  const box = await row.boundingBox();
+  await page.mouse.move(box.x + 100, box.y + 30);
+  await page.mouse.move(box.x + 120, box.y + 40);
+  await expect.poll(() => row.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+});
