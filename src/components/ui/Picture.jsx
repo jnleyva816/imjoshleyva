@@ -19,7 +19,7 @@ export default function Picture({ photo, sizes, className = "", ...props }) {
         src={photo.src}
         width={photo.width}
         height={photo.height}
-        alt={photo.caption}
+        alt={photo.alt ?? photo.caption ?? ""}
         className={className}
         {...props}
       />

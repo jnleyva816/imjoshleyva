@@ -18,14 +18,16 @@ function widthAt(photo, desktopHeight, mobileHeight) {
 function Strip({ photos, hidden, onOpen }) {
   return (
     <ul className="flex shrink-0 items-center gap-6 pr-6 md:gap-8 md:pr-8" aria-hidden={hidden || undefined}>
-      {photos.map((photo, index) => (
+      {photos.map((photo, index) => {
+        const label = photo.caption || photo.alt;
+        return (
         <li key={photo.name} className="shrink-0">
           <button
             type="button"
             tabIndex={hidden ? -1 : undefined}
             onClick={(event) => onOpen(index, event.currentTarget.querySelector("img"))}
             className="block cursor-zoom-in"
-            aria-label={photo.caption ? `Open photo: ${photo.caption}` : "Open photo"}
+            aria-label={label ? `Open photo: ${label}` : "Open photo"}
           >
             <Picture
               photo={photo}
@@ -37,7 +39,8 @@ function Strip({ photos, hidden, onOpen }) {
             />
           </button>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 }

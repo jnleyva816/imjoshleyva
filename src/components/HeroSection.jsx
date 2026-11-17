@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
 import Picture from "./ui/Picture";
 import resume from "../assets/JoshuaLeyvaResume.pdf";
@@ -20,7 +20,7 @@ export default function HeroSection() {
 
   return (
     <section className="grid items-end gap-12 pb-16 pt-8 lg:grid-cols-12 lg:gap-16 lg:pb-24 lg:pt-16">
-      <motion.div
+      <m.div
         className="lg:col-span-7"
         variants={fadeUp(reduce)}
         initial="hidden"
@@ -97,9 +97,9 @@ export default function HeroSection() {
             </span>
           ))}
         </p>
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         className="lg:col-span-5"
         variants={fadeUp(reduce)}
         initial="hidden"
@@ -108,7 +108,7 @@ export default function HeroSection() {
         <div className="relative mx-auto w-full max-w-sm">
           <Sprig className="pointer-events-none absolute -left-14 -top-8 h-52 w-28 text-moss opacity-50" />
           <Picture
-            photo={{ src: profile.img.src, sources: profile.sources, caption: "Joshua Leyva" }}
+            photo={{ src: profile.img.src, sources: profile.sources, caption: "Joshua Leyva", alt: "Portrait of Joshua Leyva" }}
             sizes="(min-width: 1024px) 384px, (min-width: 640px) 384px, 90vw"
             fetchPriority="high"
             decoding="async"
@@ -127,7 +127,7 @@ export default function HeroSection() {
             />
           ) : null}
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

@@ -184,3 +184,58 @@ html.vt-photo::view-transition-new(lightbox-photo) {
     animation: none !important;
   }
 }
+
+/* Print: plain, light, link URLs spelled out, no controls or photos. */
+@media print {
+  :root,
+  :root.dark {
+    --paper: #fff;
+    --raised: #fff;
+    --ink: #111;
+    --muted: #333;
+    --moss: #111;
+    --line: #ccc;
+    color-scheme: light;
+  }
+
+  body {
+    font-size: 11pt;
+    background: #fff;
+  }
+
+  header,
+  form,
+  iframe,
+  figure,
+  .btn,
+  [aria-label^="Photo carousel"] {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0;
+  }
+
+  main * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  li,
+  article {
+    break-inside: avoid;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+    word-break: break-all;
+  }
+}

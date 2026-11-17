@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
+import Telemetry from "./components/Telemetry";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { domAnimation, LazyMotion } from "framer-motion";
 import { ThemeProvider } from "./components/ThemeProvider";
 import PhotoViewer from "./components/PhotoViewer";
 import Topbar from "./components/Topbar";
@@ -16,9 +16,10 @@ import Listening from "./components/Listening";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import DesignLab from "./components/DesignLab";
 import site from "./content/site";
 import { photosFor } from "./lib/photos";
+
+const DesignLab = lazy(() => import("./components/DesignLab"));
 
 const blocks = {
   work: <Experience />,
@@ -76,31 +77,34 @@ export default function App() {
   const studio = useHash() === "#studio";
 
   return (
-    <ThemeProvider>
-      <PhotoViewer>
-        <div id="top" className="min-h-screen bg-paper text-ink">
-          <a
-            href="#content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-raised focus:px-3 focus:py-2"
-          >
-            Skip to content
-          </a>
-          <Topbar />
-          <main id="content" className="mx-auto max-w-6xl px-5 pt-20 sm:px-8">
-            {studio ? (
-              <DesignLab />
-            ) : (
-              <>
-                <HeroSection />
-                {site.sectionOrder.map(renderBlock)}
-              </>
-            )}
-          </main>
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </div>
-      </PhotoViewer>
-    </ThemeProvider>
+    <LazyMotion features={domAnimation} strict>
+      <ThemeProvider>
+        <PhotoViewer>
+          <div id="top" className="min-h-screen bg-paper text-ink">
+            <a
+              href="#content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-raised focus:px-3 focus:py-2"
+            >
+              Skip to content
+            </a>
+            <Topbar />
+            <main id="content" className="mx-auto max-w-6xl px-5 pt-20 sm:px-8">
+              {studio ? (
+                <Suspense fallback={null}>
+                  <DesignLab />
+                </Suspense>
+              ) : (
+                <>
+                  <HeroSection />
+                  {site.sectionOrder.map(renderBlock)}
+                </>
+              )}
+            </main>
+            <Footer />
+            <Telemetry />
+          </div>
+        </PhotoViewer>
+      </ThemeProvider>
+    </LazyMotion>
   );
 }
