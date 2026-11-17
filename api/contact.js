@@ -80,6 +80,27 @@ async function passesTurnstile(token, ip) {
   }
 }
 
+const AUTOREPLY = {
+  subject: "Got your message",
+  text: "Hi,\n\nThanks for writing through joshleyva.dev. Your message reached me, and I usually reply within a couple of days.\n\nJosh",
+};
+
+// Fixed wording on purpose: nothing the sender typed goes into a message
+// addressed to whatever email they entered.
+async function sendAutoreply({ apiKey, from, to, replyTo }) {
+  try {
+    const response = await fetch(RESEND_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from, to: [to], reply_to: replyTo, ...AUTOREPLY }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) console.error("contact: auto-reply failed", response.status);
+  } catch (error) {
+    console.error("contact: auto-reply failed", error);
+  }
+}
+
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
@@ -158,6 +179,11 @@ export default async function handler(req, res) {
       return res
         .status(502)
         .json({ success: false, message: "Could not send", reason: detail.name || `resend_${response.status}` });
+    }
+
+    // Needs a verified sending domain; Resend's shared sender only reaches the account owner.
+    if (process.env.CONTACT_AUTOREPLY === "true" && process.env.CONTACT_FROM_EMAIL) {
+      await sendAutoreply({ apiKey, from, to: email, replyTo: to });
     }
 
     return res.status(200).json({ success: true });

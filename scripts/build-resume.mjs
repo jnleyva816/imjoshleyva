@@ -14,6 +14,7 @@ import experience from "../src/data/experienceData.js";
 import education from "../src/data/educationData.js";
 import skills from "../src/data/skillsData.js";
 import resume from "../src/content/resume.js";
+import { byCompany, short, span as dates } from "../src/lib/resumeData.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "src/assets/JoshuaLeyvaResume.pdf");
@@ -21,28 +22,9 @@ const output = path.join(root, "src/assets/JoshuaLeyvaResume.pdf");
 const esc = (value) =>
   String(value).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
-const MONTHS = {
-  January: "Jan", February: "Feb", March: "Mar", April: "Apr", May: "May", June: "Jun",
-  July: "Jul", August: "Aug", September: "Sep", October: "Oct", November: "Nov", December: "Dec",
-};
-const short = (text) =>
-  text.replace(/\b[A-Z][a-z]+\b/g, (word) => MONTHS[word] ?? word).replace(/\s*—\s*/g, " – ");
-
 const font = (pkg, file) => pathToFileURL(path.join(root, "node_modules", pkg, "files", file)).href;
 
-// Consecutive entries at one company become a single block with several roles.
-const companies = [];
-for (const job of experience) {
-  const last = companies.at(-1);
-  if (last && last.company === job.company) last.roles.push(job);
-  else companies.push({ company: job.company, roles: [job] });
-}
-
-const dates = (roles) => {
-  const first = short(roles.at(-1).duration).split(" – ")[0];
-  const end = short(roles[0].duration).split(" – ")[1];
-  return `${first} – ${end}`;
-};
+const companies = byCompany(experience);
 
 const experienceHtml = companies
   .map(

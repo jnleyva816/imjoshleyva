@@ -8,9 +8,10 @@ test("home page renders without errors", async ({ page }) => {
       errors.push(message.text());
     }
   });
-  // Analytics and Speed Insights only exist on Vercel.
+  // Analytics, Speed Insights, and the api/ functions only exist on Vercel.
   page.on("response", (res) => {
-    if (res.status() >= 400 && !new URL(res.url()).pathname.startsWith("/_vercel/")) {
+    const { pathname } = new URL(res.url());
+    if (res.status() >= 400 && !pathname.startsWith("/_vercel/") && !pathname.startsWith("/api/")) {
       errors.push(`${res.status()} ${res.url()}`);
     }
   });
@@ -221,4 +222,105 @@ test("work rows glow where the cursor is", async ({ page, isMobile }) => {
   await page.mouse.move(box.x + 100, box.y + 30);
   await page.mouse.move(box.x + 120, box.y + 40);
   await expect.poll(() => row.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+});
+
+test("the résumé has its own page with the PDF one click away", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/resume");
+  await expect(page).toHaveTitle(/Résumé/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Joshua N. Leyva");
+  await expect(page.getByRole("heading", { name: "Cryptio" })).toBeVisible();
+  const pdf = page.getByRole("link", { name: "Download PDF" });
+  await expect(pdf).toHaveAttribute("download", "JoshuaLeyvaResume.pdf");
+  const res = await page.request.get(await pdf.getAttribute("href"));
+  expect(res.headers()["content-type"]).toContain("pdf");
+  expect(errors).toEqual([]);
+});
+
+test("each project with a case study gets a page", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#projects").scrollIntoViewIfNeeded();
+  await page.getByRole("link", { name: "Case study" }).first().click();
+  await expect(page).toHaveURL(/\/projects\/tcg-inventory$/);
+  await expect(page).toHaveTitle("TCG inventory · Joshua Leyva");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("TCG inventory");
+  await expect(page.getByRole("heading", { name: "How it works" })).toBeVisible();
+  await page.getByRole("link", { name: /Personal site →/ }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Personal site");
+});
+
+test("an unknown project says so", async ({ page }) => {
+  await page.goto("/projects/nope");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("No such project");
+});
+
+test("nav links from a subpage go back to the home sections", async ({ page, isMobile }) => {
+  test.skip(isMobile, "desktop nav");
+  await page.goto("/resume");
+  await page.locator('nav[aria-label="Primary"]').getByRole("link", { name: "Skills" }).click();
+  await expect(page).toHaveURL(/\/#skills$/);
+  await expect(page.locator("#skills")).toBeInViewport();
+});
+
+test("the command menu opens with the keyboard and runs commands", async ({ page, isMobile }) => {
+  test.skip(isMobile, "keyboard shortcut");
+  await page.goto("/");
+  await expect(page.getByRole("button", { name: "Open command menu" })).toBeVisible();
+  await page.keyboard.press("Control+k");
+  const dialog = page.getByRole("dialog", { name: "Command menu" });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole("combobox")).toBeFocused();
+
+  await page.keyboard.type("dark");
+  await expect(page.getByRole("option")).toHaveCount(1);
+  await page.keyboard.press("Enter");
+  await expect(dialog).toBeHidden();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+
+  await page.keyboard.press("Control+k");
+  await page.keyboard.type("educ");
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#education")).toBeInViewport();
+
+  await page.keyboard.press("Control+k");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+});
+
+test("the command menu can be opened from the mobile menu", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile menu");
+  await page.goto("/");
+  await page.getByRole("button", { name: /menu/i }).click();
+  await page.getByRole("button", { name: "Quick menu" }).click();
+  await expect(page.getByRole("dialog", { name: "Command menu" })).toBeVisible();
+  await page.getByRole("option", { name: /Résumé/ }).click();
+  await expect(page).toHaveURL(/\/resume$/);
+});
+
+test("the hero shows local time and a now note", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("header + main time, main time").first()).toHaveText(/\d{1,2}:\d{2}\s?[AP]M in Florida/);
+  await expect(page.getByText("Now", { exact: true })).toBeVisible();
+});
+
+test("the lately block stays hidden when there is nothing to show", async ({ page }) => {
+  await page.route("**/api/writing", (route) => route.fulfill({ json: { posts: [] } }));
+  await page.route("**/api/running", (route) => route.fulfill({ json: { configured: false } }));
+  await page.goto("/");
+  await page.locator("#aside").scrollIntoViewIfNeeded();
+  await expect(page.getByText("Latest writing")).toHaveCount(0);
+});
+
+test("the lately block shows posts and running when they exist", async ({ page }) => {
+  await page.route("**/api/writing", (route) =>
+    route.fulfill({ json: { posts: [{ title: "First post", url: "https://joshualeyva.substack.com/p/one", date: "2026-11-16T00:00:00.000Z" }] } }),
+  );
+  await page.route("**/api/running", (route) =>
+    route.fulfill({ json: { configured: true, recent: { runs: 18, miles: 142, hours: 21 }, year: { runs: 160, miles: 1200, hours: 170 } } }),
+  );
+  await page.goto("/");
+  await page.locator("#aside").scrollIntoViewIfNeeded();
+  await expect(page.getByRole("link", { name: "First post" })).toBeVisible();
+  await expect(page.getByText("142")).toBeVisible();
 });

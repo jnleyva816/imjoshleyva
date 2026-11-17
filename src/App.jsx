@@ -1,9 +1,5 @@
-import Telemetry from "./components/Telemetry";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { domAnimation, LazyMotion } from "framer-motion";
-import { ThemeProvider } from "./components/ThemeProvider";
-import PhotoViewer from "./components/PhotoViewer";
-import Topbar from "./components/Topbar";
+import Shell from "./components/Shell";
 import HeroSection from "./components/HeroSection";
 import Section from "./components/ui/Section";
 import Experience from "./components/Experience";
@@ -14,12 +10,10 @@ import PhotoBreak from "./components/PhotoBreak";
 import PhotoCarousel from "./components/PhotoCarousel";
 import Listening from "./components/Listening";
 import About from "./components/About";
+import Lately from "./components/Lately";
 import Contact from "./components/Contact";
-import Footer from "./components/Footer";
-import Wallpaper from "./components/Wallpaper";
 import site from "./content/site";
 import { photosFor } from "./lib/photos";
-import { trackSpotlight } from "./lib/spotlight";
 
 const DesignLab = lazy(() => import("./components/DesignLab"));
 
@@ -31,6 +25,7 @@ const blocks = {
   aside: (
     <div className="space-y-14">
       <About />
+      <Lately />
       <PhotoCarousel />
       <div className="max-w-xl">
         <Listening />
@@ -75,41 +70,35 @@ function renderBlock(key) {
   );
 }
 
+// The browser tries to jump to /#skills before React has drawn #skills, so
+// arriving from another page with a hash would otherwise land at the top.
+function useScrollToHashOnLoad() {
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id || id === "studio") return undefined;
+    const frame = requestAnimationFrame(() =>
+      document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, []);
+}
+
 export default function App() {
   const studio = useHash() === "#studio";
-
-  useEffect(() => trackSpotlight(), []);
+  useScrollToHashOnLoad();
 
   return (
-    <LazyMotion features={domAnimation} strict>
-      <ThemeProvider>
-        <PhotoViewer>
-          <Wallpaper />
-          <div id="top" className="veil min-h-screen text-ink">
-            <a
-              href="#content"
-              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-raised focus:px-3 focus:py-2"
-            >
-              Skip to content
-            </a>
-            <Topbar />
-            <main id="content" className="mx-auto max-w-6xl px-5 pt-20 sm:px-8">
-              {studio ? (
-                <Suspense fallback={null}>
-                  <DesignLab />
-                </Suspense>
-              ) : (
-                <>
-                  <HeroSection />
-                  {site.sectionOrder.map(renderBlock)}
-                </>
-              )}
-            </main>
-            <Footer />
-            <Telemetry />
-          </div>
-        </PhotoViewer>
-      </ThemeProvider>
-    </LazyMotion>
+    <Shell>
+      {studio ? (
+        <Suspense fallback={null}>
+          <DesignLab />
+        </Suspense>
+      ) : (
+        <>
+          <HeroSection />
+          {site.sectionOrder.map(renderBlock)}
+        </>
+      )}
+    </Shell>
   );
 }

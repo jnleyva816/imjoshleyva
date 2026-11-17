@@ -6,6 +6,13 @@ const site = {
   name: "Joshua Leyva",
   title: "Senior Solutions Engineer at Cryptio",
   email: "joshleyva816@gmail.com",
+  // Shown next to the title as a live clock.
+  timeZone: { id: "America/New_York", place: "Florida" },
+  // A line or two about what you're up to. Update `updated` when you edit it.
+  now: {
+    text: "Settling into the solutions engineer role at Cryptio and building mileage toward a sub-3:30 marathon.",
+    updated: "November 2026",
+  },
   photography: "https://jnleyvaphotos.vercel.app",
   nav: [
     { href: "#work", label: "Work" },

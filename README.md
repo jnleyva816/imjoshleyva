@@ -23,6 +23,10 @@ Senior Solutions Engineer at Cryptio. This is the source for my personal site.
 
 - **An intro for each kind of visitor.** General, Hiring, and Engineering tabs change the hero copy.
 - **Work, projects, education, skills.** All of it is data-driven, so updating the resume means editing one file.
+- **Case studies.** Projects with a `caseStudy` in `src/data/projectsData.js` get their own page at `/projects/<slug>`: why, what it does, how it works, decisions, and what's next.
+- **Résumé page.** `/resume` is the résumé as a web page that reads well on a phone, with the PDF one click away.
+- **Command menu.** Ctrl K or ⌘K (or the button in the header) jumps to sections and pages, copies the email, switches the theme, and opens links. It downloads only when first opened.
+- **A little live.** The hero shows my local time and a "Now" line (`now` in `src/content/site.js`). The About section shows my latest Substack posts and Strava running totals once there's something to show.
 - **Photos throughout.** Framed shots sit between sections, an endless carousel shows every photo in the folder (it drifts on its own, and you can swipe or drag it), and a lightbox opens on click.
 - **Off the clock.** Golf, running, music in Ableton, and the cats and dog, plus a jazz mix that loads only when someone presses play.
 - **Contact form.** Messages go straight to my inbox through a Vercel function and Resend, with rate limiting, optional Turnstile, inline field errors, and a mailto fallback.
@@ -72,7 +76,7 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-The dev server also serves `/api/contact` through a small Vite plugin, so the contact form works locally if the env vars below are set.
+The dev server also serves `/api/contact`, `/api/writing`, and `/api/running` through a small Vite plugin, so they work locally if the env vars below are set. `/resume` and `/projects/<slug>` are rewritten to their HTML pages in dev, preview, and on Vercel.
 
 | Script | What it does |
 | --- | --- |
@@ -81,7 +85,7 @@ The dev server also serves `/api/contact` through a small Vite plugin, so the co
 | `npm run preview` | Serves the production build |
 | `npm run lint` | ESLint (flat config) |
 | `npm run resume` | Rebuilds `src/assets/JoshuaLeyvaResume.pdf` from the same job, education, and skills data the site uses, plus `src/content/resume.js`. Needs Chromium (`CHROME=$(command -v chromium)` on NixOS). |
-| `npm test` | Unit tests for the contact API (Node's built-in test runner) |
+| `npm test` | Unit tests for the API functions (Node's built-in test runner) |
 | `npm run test:e2e` | Playwright smoke and CSP tests against the production build, desktop and mobile |
 | `npx @lhci/cli autorun` | Lighthouse against the production build. CI fails below 90 for performance and best practices, and below 95 for accessibility and SEO (`lighthouserc.json`). |
 
@@ -96,6 +100,9 @@ Put these in `.env.local` for local work, and in Vercel under Settings → Envir
 | `RESEND_API_KEY` | yes | Resend API key |
 | `CONTACT_TO_EMAIL` | yes | Inbox that receives messages |
 | `CONTACT_FROM_EMAIL` | no | Defaults to `Portfolio <onboarding@resend.dev>`. Set it after verifying a domain in Resend. |
+| `CONTACT_AUTOREPLY` | no | `true` sends senders a short fixed "got your message" reply. Needs `CONTACT_FROM_EMAIL` on a verified domain. |
+| `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_REFRESH_TOKEN` | no | Running totals in About. With Upstash set, a rotated refresh token is kept there. |
+| `SUBSTACK_FEED_URL` | no | Defaults to `https://joshualeyva.substack.com/feed`. |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | no | Global rate limit for the contact form. The `KV_REST_API_*` names from Vercel's Upstash integration work too. |
 | `VITE_TURNSTILE_SITE_KEY` | no | Shows the Cloudflare Turnstile check on the form. It's read at build time. |
 | `TURNSTILE_SECRET_KEY` | no | Makes the API require a valid Turnstile token. Set it together with the site key. |
@@ -116,7 +123,8 @@ Almost everything is plain data. You shouldn't need to touch components.
 | What | Where |
 | --- | --- |
 | Hero intros, nav, section titles and order, About, music, social links | `src/content/site.js` |
-| Jobs, projects, education, skills | `src/data/*.js` |
+| Jobs, projects and case studies, education, skills | `src/data/*.js` |
+| The "Now" line and the clock's time zone | `now` and `timeZone` in `src/content/site.js` |
 | Photos | Drop JPEGs into `src/assets/photos/working/`. Captions and order go in `src/content/photos.js`. |
 | Portrait | `src/assets/profile_picture.jpg` |
 
@@ -127,20 +135,25 @@ New photos join the carousel automatically. The first few in the list also fill 
 ```
 .github/                CI workflow and Dependabot
 api/
-  contact.js            Vercel function: validation, rate limit, Turnstile, Resend call
+  contact.js            Vercel function: validation, rate limit, Turnstile, Resend call, auto-reply
+  writing.js            Latest Substack posts, cached at the edge
+  running.js            Strava running totals, cached at the edge
 docs/screenshots/       README images
 e2e/                    Playwright smoke and CSP tests
+index.html, resume.html, project.html   One HTML page per route
 public/                 Share image, favicon and app icons, manifest, 404 page, theme-init.js, robots.txt, sitemap.xml
 src/
-  App.jsx               Section order and the #studio route
+  App.jsx               Home: section order and the #studio route
+  pages/                Entry points for /resume and /projects/<slug>
+  components/Shell.jsx  Theme, wallpaper, header, footer, and ⌘K around every page
   index.css             Tokens, light and dark themes, marquee, View Transitions
   components/           Hero, Experience, Projects, About, Contact, PhotoCarousel, ...
   content/              Site copy and photo metadata
   data/                 Resume data
   lib/                  Motion presets, photo loading, lightbox, theme, View Transitions
-tests/                  Contact API unit tests
-vercel.json             Security and cache headers
-vite.config.js          Image pipeline and the local /api middleware
+tests/                  API unit tests
+vercel.json             Security and cache headers, page rewrites
+vite.config.js          Image pipeline, pages, the local /api middleware, and rewrites
 ```
 
 ## Deploying
