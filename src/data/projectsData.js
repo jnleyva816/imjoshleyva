@@ -12,6 +12,56 @@
  */
 const projects = [
   {
+    id: 3,
+    slug: "folio",
+    title: "Folio",
+    description:
+      "Digital photo zines. Collect photos on a private board, sequence them into a full-bleed zine, and publish it. Each card flips over to show the camera settings or the Fujifilm film recipe behind the shot.",
+    technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Stripe"],
+    github: "https://github.com/jnleyva816/Digital-Zine",
+    category: "Web",
+    year: "2026",
+    status: "In progress",
+    caseStudy: {
+      timeline: "November 2026 – present",
+      role: "Solo: product, design, full stack",
+      summary:
+        "A place to turn a camera roll into a photo zine. Creators gather photos on a Vision Board, arrange them into pages, and publish a zine anyone can read, with the settings behind every photo one tap away.",
+      why: [
+        "I shoot Fujifilm, and half the fun is the film recipe: the in-camera settings that give a photo its look. Sharing photos online usually strips that away. I wanted a format where the photo and the recipe travel together.",
+        "Zines are a good fit. They are small, sequenced, and personal, and a digital one can be published in minutes instead of printed.",
+      ],
+      features: [
+        "A private Vision Board for collecting photos before they go anywhere",
+        "A zine editor for sequencing photos into full-bleed pages",
+        "A public page for each zine, where every card flips to show its EXIF or Fujifilm recipe",
+        "Recipes read straight from Fujifilm maker notes in the photo file",
+        "PDF export of a published zine on the Pro plan",
+        "Upload limits and board storage shown up front, before anything fails",
+      ],
+      how: [
+        "Next.js 15 with the App Router and React 19, PostgreSQL through Prisma, and Auth.js for sign-in.",
+        "Uploads go straight to S3-compatible storage through presigned URLs. A pg-boss worker turns each one into AVIF copies with sharp, then deletes the original.",
+        "PDFs are rendered server-side with @react-pdf/renderer. Pro billing runs on Stripe subscriptions, with sales tax from Stripe Tax.",
+      ],
+      decisions: [
+        {
+          title: "Test-driven from the first commit",
+          text: "Every feature starts with a failing test: Vitest for units, components, and API routes against a real Postgres, and Playwright for the browser. CI runs all of it on every pull request.",
+        },
+        {
+          title: "Read the recipe from the file",
+          text: "Fujifilm stores film simulation, grain, dynamic range, and white balance in its maker notes. Parsing those means creators don't retype settings their camera already recorded.",
+        },
+        {
+          title: "Keep only what gets shown",
+          text: "Originals are converted to AVIF and dropped, which keeps storage costs predictable and lets quotas stay generous.",
+        },
+      ],
+      next: ["Multiple boards per creator", "A public launch"],
+    },
+  },
+  {
     id: 2,
     slug: "tcg-inventory",
     title: "TCG inventory",
