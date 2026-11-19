@@ -15,7 +15,7 @@ function localApi() {
 
       server.middlewares.use('/api', async (req, res, next) => {
         const name = req.url.split('?')[0].replace(/^\/+|\/+$/g, '')
-        if (!['contact', 'writing', 'running', 'ask', 'csp-report'].includes(name)) return next()
+        if (!['contact', 'writing', 'running', 'csp-report'].includes(name)) return next()
         const chunks = []
         for await (const chunk of req) chunks.push(chunk)
         try {

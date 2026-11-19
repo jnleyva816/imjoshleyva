@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useSyncExternalStore } from "react";
+import { useEffect } from "react";
 import Shell from "./components/Shell";
 import HeroSection from "./components/HeroSection";
 import Section from "./components/ui/Section";
@@ -14,8 +14,6 @@ import Lately from "./components/Lately";
 import Contact from "./components/Contact";
 import site from "./content/site";
 import { photosFor } from "./lib/photos";
-
-const DesignLab = lazy(() => import("./components/DesignLab"));
 
 const blocks = {
   work: <Experience />,
@@ -34,14 +32,6 @@ const blocks = {
   ),
   contact: <Contact />,
 };
-
-function subscribeToHash(onChange) {
-  window.addEventListener("hashchange", onChange);
-  return () => window.removeEventListener("hashchange", onChange);
-}
-
-// "" while hydrating, since the pre-rendered HTML is always the home page.
-const useHash = () => useSyncExternalStore(subscribeToHash, () => window.location.hash, () => "");
 
 function renderBlock(key) {
   if (key.startsWith("photos:")) {
@@ -71,7 +61,7 @@ function renderBlock(key) {
 function useScrollToHashOnLoad() {
   useEffect(() => {
     const id = decodeURIComponent(window.location.hash.slice(1));
-    if (!id || id === "studio") return undefined;
+    if (!id) return undefined;
     const frame = requestAnimationFrame(() =>
       document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" }),
     );
@@ -80,21 +70,12 @@ function useScrollToHashOnLoad() {
 }
 
 export default function App() {
-  const studio = useHash() === "#studio";
   useScrollToHashOnLoad();
 
   return (
     <Shell>
-      {studio ? (
-        <Suspense fallback={null}>
-          <DesignLab />
-        </Suspense>
-      ) : (
-        <>
-          <HeroSection />
-          {site.sectionOrder.map(renderBlock)}
-        </>
-      )}
+      <HeroSection />
+      {site.sectionOrder.map(renderBlock)}
     </Shell>
   );
 }

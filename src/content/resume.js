@@ -29,11 +29,6 @@ const resume = {
       link: "joshleyva.dev",
       text: "React, Tailwind, and Vite, with a Vercel function and Resend for the contact form. CI runs lint, unit, browser, and Lighthouse checks.",
     },
-    {
-      name: "Google Maps Lead Scraper",
-      link: "",
-      text: "Rust tool that scrapes Google Maps for keywords and extracts business information for lead generation, with automated email generation and sending.",
-    },
   ],
   educationNote: "Dean's List, multiple semesters. Top 10% of the class. Capstone recognized for outstanding achievement. Innovation award for best AI project.",
 };

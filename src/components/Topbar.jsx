@@ -23,6 +23,20 @@ export default function Topbar() {
   const isCurrent = (item) => item.href === `#${active}`;
   const navRef = useRef(null);
   const barRef = useRef(null);
+  const menuButton = useRef(null);
+  const mobileNav = useRef(null);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    mobileNav.current?.querySelector("a, button")?.focus();
+    const onKey = (event) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      menuButton.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   useLayoutEffect(() => {
     const nav = navRef.current;
@@ -99,6 +113,7 @@ export default function Topbar() {
         </nav>
 
         <button
+          ref={menuButton}
           type="button"
           className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted md:hidden"
           aria-expanded={open}
@@ -113,6 +128,7 @@ export default function Topbar() {
       {open ? (
         <nav
           id="mobile-nav"
+          ref={mobileNav}
           className="border-t border-line bg-paper px-5 py-4 md:hidden"
           aria-label="Mobile"
         >

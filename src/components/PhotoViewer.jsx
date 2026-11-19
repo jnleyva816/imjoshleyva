@@ -12,9 +12,26 @@ function Lightbox({ photos, index, onClose, onStep }) {
   const photo = photos[index];
   const many = photos.length > 1;
   const fade = !canTransition && !reduce;
+  const dialog = useRef(null);
+  const closeButton = useRef(null);
+
+  // Move focus into the dialog while it's open and give it back on close.
+  useEffect(() => {
+    const previous = document.activeElement;
+    closeButton.current?.focus({ preventScroll: true });
+    return () => previous?.focus?.({ preventScroll: true });
+  }, []);
 
   useEffect(() => {
     const onKey = (event) => {
+      if (event.key === "Tab") {
+        const buttons = [...(dialog.current?.querySelectorAll("button") ?? [])];
+        if (!buttons.length) return;
+        const at = buttons.indexOf(document.activeElement);
+        const next = event.shiftKey ? (at <= 0 ? buttons.length - 1 : at - 1) : (at + 1) % buttons.length;
+        event.preventDefault();
+        buttons[next].focus();
+      }
       if (event.key === "Escape") onClose();
       if (many && event.key === "ArrowRight") onStep(1);
       if (many && event.key === "ArrowLeft") onStep(-1);
@@ -41,6 +58,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
   return (
     <m.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper/95 p-4 backdrop-blur-sm sm:p-10"
+      ref={dialog}
       role="dialog"
       aria-modal="true"
       aria-label={photo.caption || photo.alt || "Photo"}
@@ -84,7 +102,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
               Next
             </button>
           ) : null}
-          <button type="button" className="hover:text-ink" onClick={onClose}>
+          <button ref={closeButton} type="button" className="hover:text-ink" onClick={onClose}>
             Close
           </button>
         </span>

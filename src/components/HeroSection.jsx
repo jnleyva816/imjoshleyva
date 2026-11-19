@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
 import Picture from "./ui/Picture";
@@ -15,6 +15,23 @@ export default function HeroSection() {
   const [audienceId, setAudienceId] = useState(site.audiences[0].id);
   const audience =
     site.audiences.find((item) => item.id === audienceId) ?? site.audiences[0];
+  const tabs = useRef(null);
+
+  // Arrow keys, Home, and End move between tabs, as the ARIA tabs pattern expects.
+  const onTabKey = (event) => {
+    const ids = site.audiences.map((item) => item.id);
+    const at = ids.indexOf(audience.id);
+    const next = {
+      ArrowRight: (at + 1) % ids.length,
+      ArrowLeft: (at - 1 + ids.length) % ids.length,
+      Home: 0,
+      End: ids.length - 1,
+    }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    setAudienceId(ids[next]);
+    tabs.current?.querySelectorAll('[role="tab"]')[next]?.focus();
+  };
 
   return (
     <section className="grid items-end gap-12 pb-16 pt-8 lg:grid-cols-12 lg:gap-16 lg:pb-24 lg:pt-16">
@@ -34,6 +51,8 @@ export default function HeroSection() {
           className="mt-8 flex flex-wrap gap-x-5 gap-y-2"
           role="tablist"
           aria-label="Introduction"
+          ref={tabs}
+          onKeyDown={onTabKey}
         >
           {site.audiences.map((item) => {
             const active = item.id === audience.id;
@@ -42,7 +61,10 @@ export default function HeroSection() {
                 key={item.id}
                 type="button"
                 role="tab"
+                id={`intro-tab-${item.id}`}
                 aria-selected={active}
+                aria-controls="intro-panel"
+                tabIndex={active ? 0 : -1}
                 onClick={() => setAudienceId(item.id)}
                 className={`border-b pb-1 text-sm transition-colors ${
                   active
@@ -56,7 +78,12 @@ export default function HeroSection() {
           })}
         </div>
 
-        <div className="mt-6 min-h-[5.5rem] max-w-xl" role="tabpanel">
+        <div
+          className="mt-6 min-h-[5.5rem] max-w-xl"
+          role="tabpanel"
+          id="intro-panel"
+          aria-labelledby={`intro-tab-${audience.id}`}
+        >
           <AnimatePresence mode="wait" initial={false}>
             <RevealText
               key={audience.id}

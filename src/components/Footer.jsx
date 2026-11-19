@@ -1,5 +1,5 @@
 import site from "../content/site";
-import { homeHref, onHome } from "../lib/paths";
+import { onHome } from "../lib/paths";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -16,9 +16,6 @@ export default function Footer() {
         <div className="flex gap-5 text-sm text-muted">
           <a className="hover:text-ink" href={onHome() ? "#top" : "/"}>
             Site
-          </a>
-          <a className="hover:text-ink" href={homeHref("#studio")}>
-            Design notes
           </a>
           <a className="hover:text-ink" href={site.photography} target="_blank" rel="noopener noreferrer">
             Photography

@@ -211,25 +211,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform-origin: 60% 40%;
   opacity: 0;
   transition: opacity 1.4s ease;
-  animation: breathe 60s ease-in-out infinite alternate;
-  will-change: transform;
 }
 
 .wallpaper-img.is-shown {
   opacity: 1;
 }
 
-@keyframes breathe {
-  from {
-    transform: scale(1.03);
-  }
-  to {
-    transform: scale(1.09) translate3d(-1%, -1.2%, 0);
-  }
-}
 
 .nav-bar {
   transition-duration: 450ms;
@@ -361,8 +350,6 @@ html.vt-photo::view-transition-new(lightbox-photo) {
 
 @media (prefers-reduced-motion: reduce) {
   .wallpaper-img {
-    animation: none;
-    transform: none;
     transition: none;
   }
 

@@ -49,11 +49,42 @@ test("the portrait is high priority and modern-format", async ({ page }) => {
 test("lightbox opens and closes", async ({ page }) => {
   await page.goto("/");
   await page.locator("#aside").scrollIntoViewIfNeeded();
-  await page.getByRole("button", { name: /open photo/i }).first().click();
+  const thumbnail = page.getByRole("button", { name: /open photo/i }).first();
+  await thumbnail.click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
+});
+
+test("the lightbox keeps keyboard focus inside and returns it on close", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#aside").scrollIntoViewIfNeeded();
+  const thumbnail = page.getByRole("button", { name: /open photo/i }).first();
+  await thumbnail.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("button", { name: "Close" })).toBeFocused();
+  for (let i = 0; i < 5; i += 1) {
+    await page.keyboard.press("Tab");
+    expect(await dialog.evaluate((node) => node.contains(document.activeElement))).toBe(true);
+  }
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(thumbnail).toBeFocused();
+});
+
+test("the intro tabs open on Hiring and move with the arrow keys", async ({ page }) => {
+  await page.goto("/");
+  const hiring = page.getByRole("tab", { name: "Hiring" });
+  await expect(hiring).toHaveAttribute("aria-selected", "true");
+  await hiring.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Engineering" })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "Engineering" })).toHaveAttribute("aria-selected", "true");
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tab", { name: "General" })).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", "intro-tab-general");
 });
 
 test("dark visitors get the dark theme before the app loads", async ({ page }) => {
@@ -324,6 +355,17 @@ test("the command menu can be opened from the mobile menu", async ({ page, isMob
   await expect(page).toHaveURL(/\/resume$/);
 });
 
+test("Escape closes the mobile menu and returns focus to its button", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile menu");
+  await page.goto("/");
+  const button = page.getByRole("button", { name: /menu/i });
+  await button.click();
+  await expect(page.locator("#mobile-nav a").first()).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#mobile-nav")).toHaveCount(0);
+  await expect(button).toBeFocused();
+});
+
 test("the hero shows local time and a now note", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("header + main time, main time").first()).toHaveText(/\d{1,2}:\d{2}\s?[AP]M in Florida/);
@@ -349,35 +391,4 @@ test("the lately block shows posts and running when they exist", async ({ page }
   await page.locator("#aside").scrollIntoViewIfNeeded();
   await expect(page.getByRole("link", { name: "First post" })).toBeVisible();
   await expect(page.getByText("142")).toBeVisible();
-});
-
-test("the command menu can answer questions when the assistant is on", async ({ page }) => {
-  let asked;
-  await page.route("**/api/ask", (route) => {
-    if (route.request().method() === "GET") return route.fulfill({ json: { configured: true } });
-    asked = route.request().postDataJSON();
-    return route.fulfill({ json: { answer: "Josh studied computer science at Florida Poly." } });
-  });
-  await page.goto("/");
-  await expect(page.locator('button[aria-label="Open command menu"]')).toBeAttached();
-  await page.keyboard.press("Control+k");
-  const input = page.getByRole("combobox");
-  await expect(input).toHaveAttribute("placeholder", /ask anything/);
-  await input.fill("where did he study");
-  await expect(page.getByRole("option", { name: /Ask about Josh/ })).toBeVisible();
-  await input.press("Enter");
-  await expect(page.getByText("Josh studied computer science at Florida Poly.")).toBeVisible();
-  expect(asked).toEqual({ question: "where did he study" });
-  await input.fill("resume");
-  await expect(page.getByRole("option", { name: "Download résumé (PDF)" })).toBeVisible();
-});
-
-test("the assistant stays hidden until it is configured", async ({ page }) => {
-  await page.route("**/api/ask", (route) => route.fulfill({ json: { configured: false } }));
-  await page.goto("/");
-  await expect(page.locator('button[aria-label="Open command menu"]')).toBeAttached();
-  await page.keyboard.press("Control+k");
-  await page.getByRole("combobox").fill("where did he study");
-  await expect(page.getByText(/Nothing matches/)).toBeVisible();
-  await expect(page.getByRole("option", { name: /Ask about Josh/ })).toHaveCount(0);
 });
