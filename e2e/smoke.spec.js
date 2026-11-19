@@ -242,9 +242,9 @@ test("each project with a case study gets a page", async ({ page }) => {
   await page.goto("/");
   await page.locator("#projects").scrollIntoViewIfNeeded();
   await page.getByRole("link", { name: "Case study" }).first().click();
-  await expect(page).toHaveURL(/\/projects\/tcg-inventory$/);
-  await expect(page).toHaveTitle("TCG inventory · Joshua Leyva");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("TCG inventory");
+  await expect(page).toHaveURL(/\/projects\/folio$/);
+  await expect(page).toHaveTitle("Folio · Joshua Leyva");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Folio");
   await expect(page.getByRole("heading", { name: "How it works" })).toBeVisible();
   await page.getByRole("link", { name: /Personal site →/ }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Personal site");
