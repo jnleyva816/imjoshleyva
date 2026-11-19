@@ -40,7 +40,7 @@ const site = {
   ],
   about: {
     paragraphs: [
-      "I live in Florida with my wife, Wren, our cats Wasabi and Sabine, and Java, a French bulldog. All three show up in a lot of my photos.",
+      "I live in Florida with my wife, two cats, and a French bulldog. The pets show up in a lot of my photos.",
       "Florida means golf all year, and I'm training for races with a sub-3:30 marathon as the goal. When I'm not coding, I'm making music in Ableton Live.",
     ],
     facts: [
@@ -49,7 +49,7 @@ const site = {
       { label: "On the course", value: "Year-round. It's Florida." },
       { label: "Making", value: "Music in Ableton Live" },
       { label: "Writing", value: "My Substack", href: "https://substack.com/@joshualeyva" },
-      { label: "Behind the camera", value: "Cars, plants, and a lot of Java, Wasabi, and Sabine" },
+      { label: "Behind the camera", value: "Cars, plants, and a lot of the pets" },
       { label: "In the mug", value: "Coffee, or tea" },
     ],
   },
@@ -62,11 +62,6 @@ const site = {
   },
   audiences: [
     {
-      id: "general",
-      label: "General",
-      copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful. Outside of work, I'm on a golf course, out on a training run, or taking photos of my dog.",
-    },
-    {
       id: "hiring",
       label: "Hiring",
       copy: "Senior Solutions Engineer at Cryptio, promoted from L2 support on its crypto accounting platform. Before that, a Rails migration at StartNoo and a few years at OPSWAT across support, internal tools, and test automation.",
@@ -75,6 +70,11 @@ const site = {
       id: "engineering",
       label: "Engineering",
       copy: "Rails, React, Java, and a lot of SQL. I like the unglamorous parts: migrations, failing tests, and queries that do not surprise anyone later.",
+    },
+    {
+      id: "general",
+      label: "General",
+      copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful. Outside of work, I'm on a golf course, out on a training run, or taking photos of my dog.",
     },
   ],
   // Keys starting with "photos:" are full-width photo breaks between sections.

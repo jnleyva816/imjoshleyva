@@ -26,7 +26,11 @@ export const ThemeProvider = ({ children }) => {
     withTransition(
       () => {
         const next = !readDark();
-        localStorage.setItem("darkMode", JSON.stringify(next));
+        try {
+          localStorage.setItem("darkMode", JSON.stringify(next));
+        } catch {
+          /* storage can be blocked; the theme still switches for this visit */
+        }
         applyTheme(next);
       },
       {
@@ -43,7 +47,13 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (event) => {
-      if (localStorage.getItem("darkMode") === null) applyTheme(event.matches);
+      let saved = null;
+      try {
+        saved = localStorage.getItem("darkMode");
+      } catch {
+        /* blocked storage: keep following the OS */
+      }
+      if (saved === null) applyTheme(event.matches);
     };
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);

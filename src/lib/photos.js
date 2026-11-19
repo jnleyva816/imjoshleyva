@@ -6,7 +6,7 @@ const files = import.meta.glob(
   {
     eager: true,
     import: "default",
-    query: { w: "480;960;1600;2000", format: "avif;webp;jpg", as: "picture" },
+    query: { w: "480;960;1600", format: "avif;webp;jpg", as: "picture" },
   },
 );
 

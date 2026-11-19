@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
 import fs from "node:fs";
 
-// `vite preview` doesn't send vercel.json headers, so apply the CSP to our own documents here.
-const { headers } = JSON.parse(fs.readFileSync("vercel.json", "utf8")).headers[0];
-const csp = headers.find((header) => header.key === "Content-Security-Policy").value;
+// `vite preview` doesn't send vercel.json headers, so apply the production CSP
+// (the rule for the joshleyva.dev host) to our own documents here.
+const rules = JSON.parse(fs.readFileSync("vercel.json", "utf8")).headers;
+const production = rules.find((rule) => rule.has?.some((condition) => condition.value === "joshleyva.dev"));
+const csp = production.headers.find((header) => header.key === "Content-Security-Policy").value;
 
 test("the Content-Security-Policy allows everything the page uses", async ({ page, baseURL }) => {
   await page.route("**/*", async (route) => {
@@ -26,25 +28,24 @@ test("the Content-Security-Policy allows everything the page uses", async ({ pag
   await page.goto("/");
   await page.getByRole("button", { name: /^Play / }).click();
   await expect(page.locator("iframe[src*='youtube-nocookie.com']")).toBeAttached();
-
-  await page.goto("/#studio");
   await page.waitForLoadState("networkidle");
 
   expect(violations).toEqual([]);
 });
 
-// Production only reports Trusted Types violations for now; the site itself
-// should already pass with them enforced.
+test("production enforces Trusted Types and drops the preview-only hosts", () => {
+  expect(csp).toContain("require-trusted-types-for 'script'");
+  expect(csp).not.toMatch(/vercel\.live|pusher\.com|fonts\.googleapis/);
+});
+
 test("our pages work with Trusted Types enforced", async ({ page, baseURL }) => {
-  const reportOnly = headers.find((header) => header.key === "Content-Security-Policy-Report-Only").value;
-  const enforced = `${csp}; ${reportOnly.split(";").filter((part) => !/report-(uri|to)/.test(part)).join(";")}`;
   await page.route("**/*", async (route) => {
     const request = route.request();
     if (request.resourceType() !== "document" || !request.url().startsWith(baseURL)) {
       return route.continue();
     }
     const response = await route.fetch();
-    await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": enforced } });
+    await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp } });
   });
 
   const violations = [];
@@ -64,7 +65,6 @@ test("our pages work with Trusted Types enforced", async ({ page, baseURL }) => 
   await page.keyboard.press("Escape");
   await page.goto("/resume");
   await page.goto("/projects/tcg-inventory");
-  await page.goto("/#studio");
   await page.waitForLoadState("networkidle");
 
   expect(violations).toEqual([]);

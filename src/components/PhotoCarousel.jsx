@@ -63,6 +63,7 @@ function useAutoScroll(ref, { count, enabled }) {
     let resumeAt = 0;
     let last = performance.now();
     let frame = 0;
+    let visible = false;
 
     const measure = () => {
       const was = stripWidth;
@@ -94,8 +95,23 @@ function useAutoScroll(ref, { count, enabled }) {
         node.scrollLeft = position;
       }
       wrap();
+      frame = visible ? requestAnimationFrame(tick) : 0;
+    };
+
+    // Only animate while the strip is on screen; off screen the loop stops.
+    const start = () => {
+      if (frame || !visible) return;
+      last = performance.now();
       frame = requestAnimationFrame(tick);
     };
+    const visibility = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) start();
+      else {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    });
 
     // Anything that moves the strip other than this loop: remember where it is.
     const onScroll = () => {
@@ -148,7 +164,7 @@ function useAutoScroll(ref, { count, enabled }) {
     const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(first);
     measure();
-    frame = requestAnimationFrame(tick);
+    visibility.observe(node);
 
     node.addEventListener("scroll", onScroll, { passive: true });
     node.addEventListener("wheel", hold, { passive: true });
@@ -165,6 +181,7 @@ function useAutoScroll(ref, { count, enabled }) {
 
     return () => {
       cancelAnimationFrame(frame);
+      visibility.disconnect();
       resizeObserver.disconnect();
       node.removeEventListener("scroll", onScroll);
       node.removeEventListener("wheel", hold);

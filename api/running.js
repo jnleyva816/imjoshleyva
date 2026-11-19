@@ -35,11 +35,14 @@ async function storeRefreshToken(value) {
   const store = redis();
   if (!store) return;
   try {
-    await fetch(`${store.url}/set/strava:refresh/${encodeURIComponent(value)}`, {
+    // The token goes in the body, not the URL, so it stays out of request logs.
+    const response = await fetch(store.url, {
       method: "POST",
-      headers: { Authorization: `Bearer ${store.token}` },
+      headers: { Authorization: `Bearer ${store.token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(["SET", "strava:refresh", value]),
       signal: AbortSignal.timeout(3000),
     });
+    if (!response.ok) throw new Error(`upstash_${response.status}`);
   } catch (error) {
     console.error("running: could not store refresh token", error);
   }

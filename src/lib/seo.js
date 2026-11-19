@@ -1,7 +1,7 @@
 /**
  * What each built page says about itself: title, description, preview image,
  * and schema.org data. scripts/prerender.mjs bakes it into the HTML, and the
- * same content becomes /llms.txt and the "Ask" assistant's source material.
+ * same content becomes /llms.txt.
  *
  * Imports keep their .js extensions because api/ask.js loads this in plain Node.
  */
@@ -147,8 +147,7 @@ export function pages() {
 const list = (items) => items.map((item) => `- ${item}`).join("\n");
 
 /**
- * Plain-text version of the whole site for language models: /llms.txt and
- * the context the Ask assistant answers from.
+ * Plain-text version of the whole site for language models: /llms.txt.
  */
 export function siteDigest() {
   return [

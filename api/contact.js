@@ -113,9 +113,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const detail = await response.json().catch(() => ({}));
       console.error("contact: Resend responded", response.status, detail);
-      return res
-        .status(502)
-        .json({ success: false, message: "Could not send", reason: detail.name || `resend_${response.status}` });
+      return res.status(502).json({ success: false, message: "Could not send" });
     }
 
     // Needs a verified sending domain; Resend's shared sender only reaches the account owner.
