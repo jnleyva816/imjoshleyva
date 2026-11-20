@@ -42,9 +42,11 @@ test("projects", async ({ page }) => {
   await page.goto("/");
   await settle(page);
   const projects = page.locator("#projects");
-  await projects.scrollIntoViewIfNeeded();
+  // Pin the section to the top so the fixed wallpaper sits the same way no
+  // matter how tall the sections above it get, and keep the header out of it.
+  await projects.evaluate((el) => el.scrollIntoView({ block: "start", behavior: "instant" }));
   await page.locator("#projects img").first().evaluate((img) => img.decode());
-  await expect(projects).toHaveScreenshot("projects.png");
+  await expect(projects).toHaveScreenshot("projects.png", { stylePath: "e2e/visual-hide-header.css" });
 });
 
 test("case study", async ({ page }) => {

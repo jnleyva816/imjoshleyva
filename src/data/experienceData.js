@@ -20,6 +20,7 @@ const experienceData = [
     duration: "July 2025 — October 2026",
     description:
       "Production support for a crypto accounting platform. I handled customer-facing issues, queried production data with SQL, and worked with engineering when a ticket needed a product fix.",
+    impact: "Resolved 500+ customer tickets.",
     tags: ["SQL", "Production", "Crypto"],
   },
   {
@@ -28,6 +29,7 @@ const experienceData = [
     duration: "August 2024 — December 2024",
     description:
       "Moved a legacy WordPress site onto Ruby on Rails, then built an interactive data dashboard with the analysts so stakeholders could read the numbers without a spreadsheet.",
+    impact: "Migrated 35+ pages with no downtime, and the site got about 25% faster.",
     tags: ["Ruby on Rails", "WordPress", "Data viz"],
   },
   {
