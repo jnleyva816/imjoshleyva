@@ -1,4 +1,4 @@
-import { clientIp, rateLimit, sameOrigin } from "./_lib/guard.js";
+import { clientIp, hasSharedStore, isProduction, rateLimit, sameOrigin } from "./_lib/guard.js";
 
 const RESEND_URL = "https://api.resend.com/emails";
 const TURNSTILE_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -10,7 +10,8 @@ const overLimit = rateLimit("contact", RATE);
 
 async function passesTurnstile(token, ip) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
+  // Skipped only outside production, so local dev and previews work without keys.
+  if (!secret) return !isProduction();
   if (!token) return false;
   try {
     const response = await fetch(TURNSTILE_URL, {
@@ -64,6 +65,13 @@ export default async function handler(req, res) {
 
   if (!sameOrigin(req)) {
     return res.status(403).json({ success: false, message: "Forbidden" });
+  }
+
+  // A per-instance count is no limit at all on serverless, so production
+  // refuses to run without a shared store.
+  if (isProduction() && !hasSharedStore()) {
+    console.error("contact: no shared rate-limit store (UPSTASH_REDIS_REST_URL/TOKEN) in production");
+    return res.status(503).json({ success: false, message: "Contact form is not configured" });
   }
 
   const body = typeof req.body === "object" && req.body !== null ? req.body : {};

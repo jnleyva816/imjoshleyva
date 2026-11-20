@@ -4,7 +4,9 @@ import handler from "../api/contact.js";
 
 let ipCounter = 0;
 
-function request({ method = "POST", body = {}, origin, ip } = {}) {
+const SELF = "https://imjoshleyva.vercel.app";
+
+function request({ method = "POST", body = {}, origin = SELF, ip } = {}) {
   return {
     method,
     body,
@@ -38,6 +40,7 @@ beforeEach(() => {
   delete process.env.TURNSTILE_SECRET_KEY;
   delete process.env.UPSTASH_REDIS_REST_URL;
   delete process.env.KV_REST_API_URL;
+  delete process.env.VERCEL_ENV;
 });
 
 test("rejects anything but POST", async () => {
@@ -51,9 +54,38 @@ test("rejects cross-origin posts", async () => {
   assert.equal(res.statusCode, 403);
 });
 
+test("rejects posts with no Origin header, like a bare curl", async () => {
+  const res = await send({ body: valid, origin: null });
+  assert.equal(res.statusCode, 403);
+});
+
 test("accepts same-origin posts up to validation", async () => {
-  const res = await send({ body: valid, origin: "https://imjoshleyva.vercel.app" });
+  const res = await send({ body: valid });
   assert.equal(res.statusCode, 500, "reaches the config check");
+});
+
+test("production refuses to run without a shared rate-limit store", async () => {
+  process.env.VERCEL_ENV = "production";
+  const res = await send({ body: valid });
+  assert.equal(res.statusCode, 503);
+});
+
+test("production fails the Turnstile check when no secret is set", async () => {
+  Object.assign(process.env, {
+    VERCEL_ENV: "production",
+    UPSTASH_REDIS_REST_URL: "https://redis.example",
+    UPSTASH_REDIS_REST_TOKEN: "t",
+  });
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json([{ result: 1 }, { result: 1 }]);
+  try {
+    const res = await send({ body: valid });
+    assert.equal(res.statusCode, 403);
+    assert.match(res.body.message, /Verification/);
+  } finally {
+    globalThis.fetch = realFetch;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+  }
 });
 
 test("quietly accepts honeypot submissions without sending", async () => {
