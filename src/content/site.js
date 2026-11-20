@@ -74,16 +74,29 @@ const site = {
       id: "hiring",
       label: "Hiring",
       copy: "Senior Solutions Engineer at Cryptio, promoted from L2 support on its crypto accounting platform. Before that, a Rails migration at StartNoo and a few years at OPSWAT across support, internal tools, and test automation.",
+      // The buttons under the intro change with the tab: one or two each.
+      links: [
+        { label: "Résumé", href: "/resume" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/" },
+      ],
     },
     {
       id: "engineering",
       label: "Engineering",
       copy: "Rails, React, Java, and a lot of SQL. I like the unglamorous parts: migrations, failing tests, and queries that do not surprise anyone later.",
+      links: [
+        { label: "Case studies", href: "#projects" },
+        { label: "GitHub", href: "https://github.com/jnleyva816" },
+      ],
     },
     {
       id: "general",
       label: "General",
       copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful. Outside of work, I'm on a golf course, out on a training run, or taking photos of my dog.",
+      links: [
+        { label: "Photos", href: "#aside" },
+        { label: "Photography site", href: "https://jnleyvaphotos.vercel.app" },
+      ],
     },
   ],
   // Keys starting with "photos:" are full-width photo breaks between sections.
