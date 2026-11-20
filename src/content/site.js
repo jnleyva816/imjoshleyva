@@ -99,9 +99,15 @@ const site = {
     },
   ],
   // Keys starting with "photos:" are full-width photo breaks between sections.
-  // One photo per stretch of scrolling: the hero, one break after Work, and
-  // the carousel in "Off the clock".
-  sectionOrder: ["work", "photos:after-work", "projects", "skills", "aside", "contact"],
+  sectionOrder: [
+    "work",
+    "photos:after-work",
+    "projects",
+    "skills",
+    "photos:after-skills",
+    "aside",
+    "contact",
+  ],
   sections: {
     work: {
       id: "work",

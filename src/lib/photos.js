@@ -12,7 +12,10 @@ const files = import.meta.glob(
 
 const spots = [
   ["hero", 1],
-  ["after-work", 1],
+  ["work", 1],
+  ["after-work", 2],
+  ["education", 1],
+  ["after-skills", 1],
 ];
 
 const all = Object.entries(files)

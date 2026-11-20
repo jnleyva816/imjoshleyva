@@ -37,6 +37,9 @@ const blocks = {
   contact: <Contact />,
 };
 
+// Skills & education keeps the photo the Education heading used to have.
+const headingPhoto = { skills: "education" };
+
 function renderBlock(key) {
   if (key.startsWith("photos:")) {
     const spot = key.slice("photos:".length);
@@ -53,7 +56,7 @@ function renderBlock(key) {
       index={section.index}
       title={section.title}
       lede={section.lede}
-      photo={photosFor(key)[0]}
+      photo={photosFor(headingPhoto[key] ?? key)[0]}
     >
       {blocks[key]}
     </Section>
