@@ -18,10 +18,11 @@ const projects = [
     description:
       "Digital photo zines. Collect photos on a private board, sequence them into a full-bleed zine, and publish it. Each card flips over to show the camera settings or the Fujifilm film recipe behind the shot.",
     technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Stripe"],
+    demo: "https://folio-digital-zine.app",
     github: "https://github.com/jnleyva816/Digital-Zine",
     category: "Web",
     year: "2026",
-    status: "In progress",
+    status: "Live",
     caseStudy: {
       timeline: "November 2026 – present",
       role: "Solo: product, design, full stack",
@@ -36,7 +37,7 @@ const projects = [
         "A zine editor for sequencing photos into full-bleed pages",
         "A public page for each zine, where every card flips to show its EXIF or Fujifilm recipe",
         "Recipes read straight from Fujifilm maker notes in the photo file",
-        "PDF export of a published zine on the Pro plan",
+        "A free plan with one board and one zine, and a Pro plan with unlimited boards, unlimited zines, and PDF export",
         "Upload limits and board storage shown up front, before anything fails",
       ],
       how: [
@@ -58,7 +59,6 @@ const projects = [
           text: "Originals are converted to AVIF and dropped, which keeps storage costs predictable and lets quotas stay generous.",
         },
       ],
-      next: ["Multiple boards per creator", "A public launch"],
     },
   },
   {

@@ -19,7 +19,7 @@ const resume = {
   projects: [
     {
       name: "Folio",
-      link: "github.com/jnleyva816/Digital-Zine",
+      link: "folio-digital-zine.app",
       text: "Digital photo zines built with Next.js, PostgreSQL, and Stripe. Photos flip to show their EXIF or Fujifilm film recipe, read from the camera's maker notes. Built test-first with Vitest and Playwright.",
     },
     {
