@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, m, useReducedMotion } from "framer-motion";
-import { ease } from "../lib/motion";
 import { PhotoViewerContext } from "../lib/photoViewer";
 import { canTransition, withTransition } from "../lib/viewTransition";
 import Picture from "./ui/Picture";
@@ -8,10 +6,11 @@ import Picture from "./ui/Picture";
 const MORPH = "lightbox-photo";
 
 function Lightbox({ photos, index, onClose, onStep }) {
-  const reduce = useReducedMotion();
   const photo = photos[index];
   const many = photos.length > 1;
-  const fade = !canTransition && !reduce;
+  // Browsers with View Transitions morph the photo; the rest fade it (CSS,
+  // and off under reduced motion).
+  const fade = !canTransition;
   const dialog = useRef(null);
   const closeButton = useRef(null);
 
@@ -56,29 +55,18 @@ function Lightbox({ photos, index, onClose, onStep }) {
   );
 
   return (
-    <m.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper/95 p-4 backdrop-blur-sm sm:p-10"
+    <div
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-paper/95 p-4 backdrop-blur-sm sm:p-10 ${fade ? "fade-in" : ""}`}
       ref={dialog}
       role="dialog"
       aria-modal="true"
       aria-label={photo.caption || photo.alt || "Photo"}
-      initial={fade ? { opacity: 0 } : false}
-      animate={{ opacity: 1 }}
-      exit={fade ? { opacity: 0 } : undefined}
       onClick={onClose}
     >
       {fade ? (
-        <AnimatePresence mode="wait">
-          <m.div
-            key={photo.src}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease }}
-          >
-            {image}
-          </m.div>
-        </AnimatePresence>
+        <div key={photo.src} className="swap-in">
+          {image}
+        </div>
       ) : (
         image
       )}
@@ -121,7 +109,7 @@ function Lightbox({ photos, index, onClose, onStep }) {
           ))}
         </p>
       ) : null}
-    </m.div>
+    </div>
   );
 }
 
@@ -185,7 +173,7 @@ export default function PhotoViewer({ children }) {
   return (
     <PhotoViewerContext.Provider value={open}>
       {children}
-      {canTransition ? lightbox : <AnimatePresence>{lightbox}</AnimatePresence>}
+      {lightbox}
     </PhotoViewerContext.Provider>
   );
 }

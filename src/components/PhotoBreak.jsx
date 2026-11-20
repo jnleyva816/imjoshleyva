@@ -32,15 +32,13 @@ export default function PhotoBreak({ spot }) {
           className="col-span-9 col-start-4 sm:col-span-4 sm:col-start-9 sm:mt-24"
           drift={-28}
           tilt={2}
-          delay={0.1}
         />
-        {rest.map((photo, index) => (
+        {rest.map((photo) => (
           <Photo
             key={photo.name}
             photo={photo}
             group={group}
             className="col-span-6 sm:col-span-4"
-            delay={0.1 * (index + 2)}
           />
         ))}
       </div>

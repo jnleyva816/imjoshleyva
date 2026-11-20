@@ -1,48 +1,21 @@
-import { m, useReducedMotion } from "framer-motion";
-import { ease } from "../../lib/motion";
-
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.035, delayChildren: 0.1 } },
-  exit: { opacity: 0, transition: { duration: 0.15 } },
-};
-
-const word = {
-  hidden: { opacity: 0, y: "0.45em" },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
-};
-
+/**
+ * A paragraph that rises in word by word (CSS, see .word in index.css).
+ * Give it a new `key` to replay. Screen readers get the sentence once.
+ */
 export default function RevealText({ text, className = "", ...rest }) {
-  const reduce = useReducedMotion();
-
-  if (reduce) {
-    return (
-      <p className={className} {...rest}>
-        {text}
-      </p>
-    );
-  }
-
   const words = text.split(" ");
 
   return (
-    <m.p
-      className={className}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      {...rest}
-    >
+    <p className={className} {...rest}>
       <span className="sr-only">{text}</span>
       {words.map((item, index) => (
         <span key={`${item}-${index}`} aria-hidden="true">
-          <m.span className="inline-block" variants={word}>
+          <span className="word" style={{ "--i": index }}>
             {item}
-          </m.span>
+          </span>
           {index < words.length - 1 ? " " : null}
         </span>
       ))}
-    </m.p>
+    </p>
   );
 }

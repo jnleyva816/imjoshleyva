@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "../lib/motion";
 import { allPhotos } from "../lib/photos";
 import { usePhotoViewer } from "../lib/photoViewer";
 import site from "../content/site";

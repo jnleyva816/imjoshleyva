@@ -362,7 +362,7 @@ test("Escape closes the mobile menu and returns focus to its button", async ({ p
   await button.click();
   await expect(page.locator("#mobile-nav a").first()).toBeFocused();
   await page.keyboard.press("Escape");
-  await expect(page.locator("#mobile-nav")).toHaveCount(0);
+  await expect(page.locator("#mobile-nav")).toBeHidden();
   await expect(button).toBeFocused();
 });
 

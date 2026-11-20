@@ -10,9 +10,6 @@ const dist = path.join(root, "dist");
 const server = await import(pathToFileURL(path.join(root, ".ssr/entry-server.js")).href);
 const { pages, render, siteDigest, headTags, ORIGIN } = server;
 
-// Before any JS runs, motion that waits on JS must not hide content.
-const noscript = `<noscript><style>#root [style*="opacity:0"]{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}</style></noscript>`;
-
 const templates = new Map();
 const template = async (name) => {
   if (!templates.has(name)) templates.set(name, await fs.readFile(path.join(dist, name), "utf8"));
@@ -27,7 +24,7 @@ for (const page of pages()) {
   }
   if (!html.includes('<div id="root"></div>')) throw new Error(`${page.template}: no empty #root`);
   html = html
-    .replace("</head>", `${headTags(page)}${noscript}</head>`)
+    .replace("</head>", `${headTags(page)}</head>`)
     .replace('<div id="root"></div>', `<div id="root">${render(page.path)}</div>`);
 
   const out = path.join(dist, page.out);

@@ -1,22 +1,13 @@
-import { m, useReducedMotion } from "framer-motion";
-import { fadeUp } from "../lib/motion";
 import { projectHref } from "../lib/paths";
 
 const label = "font-mono text-[11px] uppercase tracking-[0.16em] text-muted";
 
 function Block({ title, children }) {
-  const reduce = useReducedMotion();
   return (
-    <m.section
-      className="grid gap-4 border-t border-line py-10 md:grid-cols-[11rem_1fr] md:gap-10"
-      variants={fadeUp(reduce)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
-    >
+    <section className="reveal grid gap-4 border-t border-line py-10 md:grid-cols-[11rem_1fr] md:gap-10">
       <h2 className={`${label} pt-1.5`}>{title}</h2>
       <div className="max-w-2xl">{children}</div>
-    </m.section>
+    </section>
   );
 }
 

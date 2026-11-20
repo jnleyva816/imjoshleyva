@@ -1,25 +1,14 @@
-import { m, useReducedMotion } from "framer-motion";
-import { blurIn, fadeUp } from "../../lib/motion";
 import Photo from "./Photo";
 
 export default function Section({ id, index, title, lede, photo, children }) {
-  const reduce = useReducedMotion();
-
   return (
-    <m.section
-      id={id}
-      className="border-t border-line py-16 md:py-24"
-      variants={fadeUp(reduce)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-    >
+    <section id={id} className="reveal border-t border-line py-16 md:py-24">
       <div
         className={`mb-10 md:mb-14 ${
           photo ? "grid items-end gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16" : ""
         }`}
       >
-        <m.div className="max-w-2xl" variants={blurIn(reduce)}>
+        <div className="reveal-blur max-w-2xl">
           <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
             {index}
           </p>
@@ -29,7 +18,7 @@ export default function Section({ id, index, title, lede, photo, children }) {
           {lede ? (
             <p className="mt-4 text-lg leading-relaxed text-muted">{lede}</p>
           ) : null}
-        </m.div>
+        </div>
         {photo ? (
           <Photo
             photo={photo}
@@ -42,6 +31,6 @@ export default function Section({ id, index, title, lede, photo, children }) {
         ) : null}
       </div>
       {children}
-    </m.section>
+    </section>
   );
 }
