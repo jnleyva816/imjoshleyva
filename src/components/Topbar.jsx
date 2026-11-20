@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import site from "../content/site";
 import useActiveSection from "../lib/useActiveSection";
 import { homeHref, onHome } from "../lib/paths";
@@ -9,6 +9,7 @@ export default function Topbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const shortcutLabel = useShortcutLabel();
+  const mobileNav = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -21,48 +22,15 @@ export default function Topbar() {
     site.nav.filter((item) => item.href.startsWith("#")).map((item) => item.href.slice(1)),
   );
   const isCurrent = (item) => item.href === `#${active}`;
-  const navRef = useRef(null);
-  const barRef = useRef(null);
-  const menuButton = useRef(null);
-  const mobileNav = useRef(null);
 
-  useEffect(() => {
-    if (!open) return undefined;
-    mobileNav.current?.querySelector("a, button")?.focus();
-    const onKey = (event) => {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      menuButton.current?.focus();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  useLayoutEffect(() => {
-    const nav = navRef.current;
-    const bar = barRef.current;
-    if (!nav || !bar) return undefined;
-
-    const place = () => {
-      const link = nav.querySelector('a[aria-current="location"]');
-      if (!link) {
-        bar.style.opacity = "0";
-        return;
-      }
-      const appearing = bar.style.opacity !== "1";
-      bar.style.transitionProperty = appearing ? "opacity" : "transform, width, opacity";
-      bar.style.transform = `translateX(${link.offsetLeft}px)`;
-      bar.style.width = `${link.offsetWidth}px`;
-      bar.style.top = `${link.offsetTop + link.offsetHeight}px`;
-      bar.style.opacity = "1";
-    };
-
-    place();
-    window.addEventListener("resize", place);
-    return () => window.removeEventListener("resize", place);
-  }, [active]);
-
-  const close = () => setOpen(false);
+  // The menu is a native popover: the button opens it without any script,
+  // and Escape or a click outside closes it and returns focus.
+  const close = () => mobileNav.current?.hidePopover?.();
+  const onToggle = (event) => {
+    const isOpen = event.newState === "open";
+    setOpen(isOpen);
+    if (isOpen) mobileNav.current?.querySelector("a, button")?.focus();
+  };
 
   return (
     <header
@@ -79,19 +47,14 @@ export default function Topbar() {
           {site.name}
         </a>
 
-        <nav ref={navRef} className="relative hidden items-center gap-7 md:flex" aria-label="Primary">
-          <span
-            ref={barRef}
-            aria-hidden="true"
-            className="nav-bar pointer-events-none absolute left-0 h-px bg-moss opacity-0"
-          />
+        <nav className="relative hidden items-center gap-7 md:flex" aria-label="Primary">
           {site.nav.map((item) => (
             <a
               key={item.label}
               href={homeHref(item.href)}
               aria-current={isCurrent(item) ? "location" : undefined}
               className={`pb-0.5 text-sm transition-colors hover:text-ink ${
-                isCurrent(item) ? "text-ink" : "text-muted"
+                isCurrent(item) ? "nav-current text-ink" : "text-muted"
               }`}
               {...(item.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
@@ -110,59 +73,58 @@ export default function Topbar() {
             {shortcutLabel}
           </button>
           <ThemeToggle />
+          {/* After the links: an anchor has to come before what it positions. */}
+          <span aria-hidden="true" className="nav-bar pointer-events-none absolute h-px bg-moss" />
         </nav>
 
         <button
-          ref={menuButton}
           type="button"
           className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((value) => !value)}
+          popoverTarget="mobile-nav"
         >
           {open ? "Close" : "Menu"}
         </button>
       </div>
       <div aria-hidden="true" className="scroll-progress absolute inset-x-0 bottom-[-1px] h-px bg-moss/60" />
 
-      {open ? (
-        <nav
-          id="mobile-nav"
-          ref={mobileNav}
-          className="border-t border-line bg-paper px-5 py-4 md:hidden"
-          aria-label="Mobile"
-        >
-          <div className="flex flex-col gap-3">
-            {site.nav.map((item) => (
-              <a
-                key={item.label}
-                href={homeHref(item.href)}
-                onClick={close}
-                aria-current={isCurrent(item) ? "location" : undefined}
-                className={`w-fit border-b text-base text-ink ${
-                  isCurrent(item) ? "border-moss" : "border-transparent"
-                }`}
-                {...(item.external
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              >
-                {item.label}
-              </a>
-            ))}
-            <button
-              type="button"
-              onClick={() => {
-                close();
-                openCommandMenu();
-              }}
-              className="w-fit text-left text-base text-ink"
+      <nav
+        id="mobile-nav"
+        ref={mobileNav}
+        popover="auto"
+        onToggle={onToggle}
+        className="mobile-nav md:hidden"
+        aria-label="Mobile"
+      >
+        <div className="flex flex-col gap-3">
+          {site.nav.map((item) => (
+            <a
+              key={item.label}
+              href={homeHref(item.href)}
+              onClick={close}
+              aria-current={isCurrent(item) ? "location" : undefined}
+              className={`w-fit border-b text-base text-ink ${
+                isCurrent(item) ? "border-moss" : "border-transparent"
+              }`}
+              {...(item.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
             >
-              Quick menu
-            </button>
-            <ThemeToggle className="w-fit pt-2" />
-          </div>
-        </nav>
-      ) : null}
+              {item.label}
+            </a>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              close();
+              openCommandMenu();
+            }}
+            className="w-fit text-left text-base text-ink"
+          >
+            Quick menu
+          </button>
+          <ThemeToggle className="w-fit pt-2" />
+        </div>
+      </nav>
     </header>
   );
 }

@@ -27,10 +27,20 @@ export default function Lately() {
 
   useEffect(() => {
     let live = true;
-    load("/api/writing").then((data) => live && setPosts(data?.posts ?? []));
-    load("/api/running").then((data) => live && setRunning(data?.recent?.runs ? data : null));
+    const fetchAll = () => {
+      load("/api/writing").then((data) => live && setPosts(data?.posts ?? []));
+      load("/api/running").then((data) => live && setRunning(data?.recent?.runs ? data : null));
+    };
+    // A page prerendered from a hovered link may never be opened, so it
+    // waits until someone actually lands on it before calling the APIs.
+    if (document.prerendering) {
+      document.addEventListener("prerenderingchange", fetchAll, { once: true });
+    } else {
+      fetchAll();
+    }
     return () => {
       live = false;
+      document.removeEventListener("prerenderingchange", fetchAll);
     };
   }, []);
 

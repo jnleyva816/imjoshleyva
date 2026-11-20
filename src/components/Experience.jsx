@@ -10,7 +10,7 @@ export default function Experience() {
         >
           <p className="font-mono text-xs leading-6 text-muted">{job.duration}</p>
           <div>
-            <h3 className="font-display text-2xl tracking-tight text-ink md:text-[1.7rem]">
+            <h3 className="font-display text-h4 text-ink">
               {job.role}
             </h3>
             <p className="mt-1 text-moss">
@@ -24,6 +24,12 @@ export default function Experience() {
             <p className="mt-3 max-w-2xl leading-relaxed text-muted">
               {job.description}
             </p>
+            {job.impact ? (
+              <p className="mt-3 flex max-w-2xl gap-3 font-medium text-ink">
+                <span aria-hidden="true" className="mt-[0.8em] h-px w-4 shrink-0 bg-moss" />
+                <span>{job.impact}</span>
+              </p>
+            ) : null}
             {job.tags?.length ? (
               <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
                 {job.tags.join("  ·  ")}

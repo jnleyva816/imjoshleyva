@@ -1,36 +1,28 @@
-export const ease = [0.22, 1, 0.36, 1];
+import { useSyncExternalStore } from "react";
 
-export function fadeUp(reduce) {
-  if (reduce) {
-    return {
-      hidden: { opacity: 1, y: 0 },
-      visible: { opacity: 1, y: 0 },
-    };
-  }
+/*
+ * Motion lives in CSS (src/index.css): scroll-driven entrances, the word
+ * reveal, dialog transitions. This hook is for the one place JavaScript moves
+ * things itself, the photo carousel.
+ */
 
-  return {
-    hidden: { opacity: 0, y: 12 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.55, ease },
-    },
-  };
+const query = "(prefers-reduced-motion: reduce)";
+
+function subscribe(onChange) {
+  const list = window.matchMedia(query);
+  list.addEventListener("change", onChange);
+  return () => list.removeEventListener("change", onChange);
 }
 
-/** Comes into focus: a short blur-to-sharp, used for headings. */
-export function blurIn(reduce) {
-  if (reduce) {
-    return { hidden: {}, visible: {} };
-  }
-
-  return {
-    hidden: { opacity: 0, filter: "blur(8px)", y: 6 },
-    visible: {
-      opacity: 1,
-      filter: "blur(0px)",
-      y: 0,
-      transition: { duration: 0.8, ease },
-    },
-  };
+/**
+ * True when the visitor asked for reduced motion. The pre-rendered HTML and
+ * the first client render both say false, so hydration matches; React then
+ * re-renders with the real value.
+ */
+export function useReducedMotion() {
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
 }

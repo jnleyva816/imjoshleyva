@@ -9,6 +9,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
+  // No platform suffix: baselines come from one pinned container (see e2e/visual.spec.js).
+  snapshotPathTemplate: "{testDir}/__screenshots__/{arg}-{projectName}{ext}",
+  expect: {
+    toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: "disabled", caret: "hide" },
+  },
   use: {
     baseURL: "http://127.0.0.1:4173",
     trace: "on-first-retry",

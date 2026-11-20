@@ -1,3 +1,9 @@
+/**
+ * Newest first. The first entry is your current title everywhere on the site.
+ *
+ * impact  optional: one measurable result, shown in bold under the
+ *         description and on the résumé. Under 140 characters.
+ */
 const experienceData = [
   {
     company: "Cryptio",
@@ -14,6 +20,7 @@ const experienceData = [
     duration: "July 2025 — October 2026",
     description:
       "Production support for a crypto accounting platform. I handled customer-facing issues, queried production data with SQL, and worked with engineering when a ticket needed a product fix.",
+    impact: "Resolved 500+ customer tickets.",
     tags: ["SQL", "Production", "Crypto"],
   },
   {
@@ -22,6 +29,7 @@ const experienceData = [
     duration: "August 2024 — December 2024",
     description:
       "Moved a legacy WordPress site onto Ruby on Rails, then built an interactive data dashboard with the analysts so stakeholders could read the numbers without a spreadsheet.",
+    impact: "Migrated 35+ pages with no downtime, and the site got about 25% faster.",
     tags: ["Ruby on Rails", "WordPress", "Data viz"],
   },
   {
@@ -37,7 +45,8 @@ const experienceData = [
     role: "Application Developer / QA Engineer",
     duration: "January 2022 — December 2023",
     description:
-      "Internal applications for cybersecurity operations, plus the automated tests around them. The team measured about a 20% productivity gain and about a 30% drop in defects.",
+      "Internal applications for cybersecurity operations, plus the automated tests around them.",
+    impact: "About 20% more productive and about 30% fewer defects, as the team measured it.",
     tags: ["Internal tools", "Test automation"],
   },
   {

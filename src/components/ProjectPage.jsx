@@ -15,7 +15,7 @@ export default function ProjectPage() {
         <CaseStudy project={project} others={studies.filter((item) => item !== project)} />
       ) : (
         <div className="py-24">
-          <h1 className="font-display text-5xl tracking-tight text-ink">No such project</h1>
+          <h1 className="font-display text-title text-ink">No such project</h1>
           <p className="mt-4 text-lg text-muted">
             It may have moved.{" "}
             <a className="text-link" href="/#projects">

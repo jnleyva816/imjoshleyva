@@ -38,7 +38,7 @@ const experienceHtml = companies
           <div class="row"><span class="role-name">${esc(role.role)}</span>${
             roles.length > 1 ? `<span class="when">${esc(short(role.duration))}</span>` : ""
           }</div>
-          <p>${esc(role.description)}</p>
+          <p>${esc(role.description)}</p>${role.impact ? `\n          <p class="impact">${esc(role.impact)}</p>` : ""}
         </div>`,
         )
         .join("")}
@@ -90,6 +90,7 @@ const html = `<!doctype html>
   .role { margin-top: 2pt; }
   .role-name { font-weight: 500; color: #2c4a3c; }
   .role p, .project p { color: #2a2723; }
+  .impact { margin-top: 1.5pt; font-weight: 600; }
   .skills p { margin-top: 1.5pt; }
   .skills b { font-weight: 600; }
   .edu p { margin-top: 1.5pt; color: #2a2723; }

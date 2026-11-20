@@ -2,6 +2,9 @@
  * Projects on the home page. A project with a `caseStudy` also gets its own
  * page at /projects/<slug>.
  *
+ * image  optional screenshot: { file, alt }, with the file in
+ *        src/assets/projects. Shown on the card and atop the case study.
+ *
  * caseStudy sections are plain paragraphs or lists of short points:
  *   summary   one or two sentences, shown under the title
  *   why       what the project is for
@@ -18,10 +21,15 @@ const projects = [
     description:
       "Digital photo zines. Collect photos on a private board, sequence them into a full-bleed zine, and publish it. Each card flips over to show the camera settings or the Fujifilm film recipe behind the shot.",
     technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Stripe"],
+    demo: "https://folio-digital-zine.app",
     github: "https://github.com/jnleyva816/Digital-Zine",
+    image: {
+      file: "folio.jpg",
+      alt: "Folio's home page: the headline \"Your best photographs, bound into a zine\" beside a photo card flipped to show its camera settings and Fujifilm recipe",
+    },
     category: "Web",
     year: "2026",
-    status: "In progress",
+    status: "Live",
     caseStudy: {
       timeline: "November 2026 – present",
       role: "Solo: product, design, full stack",
@@ -36,7 +44,7 @@ const projects = [
         "A zine editor for sequencing photos into full-bleed pages",
         "A public page for each zine, where every card flips to show its EXIF or Fujifilm recipe",
         "Recipes read straight from Fujifilm maker notes in the photo file",
-        "PDF export of a published zine on the Pro plan",
+        "A free plan with one board and one zine, and a Pro plan with unlimited boards, unlimited zines, and PDF export",
         "Upload limits and board storage shown up front, before anything fails",
       ],
       how: [
@@ -58,7 +66,6 @@ const projects = [
           text: "Originals are converted to AVIF and dropped, which keeps storage costs predictable and lets quotas stay generous.",
         },
       ],
-      next: ["Multiple boards per creator", "A public launch"],
     },
   },
   {
@@ -125,6 +132,10 @@ const projects = [
     technologies: ["React", "Tailwind", "Vite"],
     demo: "https://joshleyva.dev",
     github: "https://github.com/jnleyva816/imjoshleyva",
+    image: {
+      file: "personal-site.jpg",
+      alt: "This site's home page: name, audience tabs, intro copy, and a portrait over a faint plant wallpaper",
+    },
     category: "Web",
     year: "2026",
     status: "In progress",

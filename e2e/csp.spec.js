@@ -70,10 +70,13 @@ test("our pages work with Trusted Types enforced", async ({ page, baseURL }) => 
   expect(violations).toEqual([]);
 });
 
-test("speculation rules are valid and skip downloads and the API", () => {
+test("speculation rules prefetch pages, prerender only case studies, and skip downloads and the API", () => {
   const rules = JSON.parse(fs.readFileSync("public/speculation-rules.json", "utf8"));
-  const [rule] = rules.prerender;
-  expect(rule.eagerness).toBe("moderate");
-  expect(JSON.stringify(rule.where)).toContain("/api/*");
-  expect(JSON.stringify(rule.where)).toContain("[download]");
+  const [prefetch] = rules.prefetch;
+  expect(prefetch.eagerness).toBe("moderate");
+  expect(JSON.stringify(prefetch.where)).toContain("/api/*");
+  expect(JSON.stringify(prefetch.where)).toContain("[download]");
+  const [prerender] = rules.prerender;
+  expect(JSON.stringify(prerender.where)).toContain('"/projects/*"');
+  expect(JSON.stringify(prerender.where)).toContain("[download]");
 });

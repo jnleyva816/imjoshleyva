@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:flex-row sm:items-end sm:justify-between sm:px-8">
         <div>
-          <p className="font-display text-2xl tracking-tight text-ink">{site.name}</p>
+          <p className="font-display text-h4 text-ink">{site.name}</p>
           <a className="text-link mt-2 inline-block text-sm text-muted" href={`mailto:${site.email}`}>
             {site.email}
           </a>

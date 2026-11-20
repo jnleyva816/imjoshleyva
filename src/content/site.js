@@ -1,10 +1,19 @@
 /**
  * Copy, links, and section order.
  * Layout components read this file. Change wording and order here.
+ *
+ * Your job title comes from the first entry in src/data/experienceData.js,
+ * so a new role is one edit there.
  */
+import experience from "../data/experienceData.js";
+
+const [current] = experience;
+
 const site = {
   name: "Joshua Leyva",
-  title: "Senior Solutions Engineer at Cryptio",
+  role: current.role,
+  company: current.company,
+  title: `${current.role} at ${current.company}`,
   email: "joshleyva816@gmail.com",
   // Shown next to the title as a live clock.
   timeZone: { id: "America/New_York", place: "Florida" },
@@ -17,7 +26,6 @@ const site = {
   nav: [
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
-    { href: "#education", label: "Education" },
     { href: "#skills", label: "Skills" },
     { href: "#aside", label: "About" },
     { href: "#contact", label: "Contact" },
@@ -65,16 +73,29 @@ const site = {
       id: "hiring",
       label: "Hiring",
       copy: "Senior Solutions Engineer at Cryptio, promoted from L2 support on its crypto accounting platform. Before that, a Rails migration at StartNoo and a few years at OPSWAT across support, internal tools, and test automation.",
+      // The buttons under the intro change with the tab: one or two each.
+      links: [
+        { label: "Résumé", href: "/resume" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/joshua-leyva-0b9942b6/" },
+      ],
     },
     {
       id: "engineering",
       label: "Engineering",
       copy: "Rails, React, Java, and a lot of SQL. I like the unglamorous parts: migrations, failing tests, and queries that do not surprise anyone later.",
+      links: [
+        { label: "Case studies", href: "#projects" },
+        { label: "GitHub", href: "https://github.com/jnleyva816" },
+      ],
     },
     {
       id: "general",
       label: "General",
       copy: "I'm Josh. I work where software meets the people using it: production systems, customer problems, and fixes that have to be careful. Outside of work, I'm on a golf course, out on a training run, or taking photos of my dog.",
+      links: [
+        { label: "Photos", href: "#aside" },
+        { label: "Photography site", href: "https://jnleyvaphotos.vercel.app" },
+      ],
     },
   ],
   // Keys starting with "photos:" are full-width photo breaks between sections.
@@ -82,7 +103,6 @@ const site = {
     "work",
     "photos:after-work",
     "projects",
-    "education",
     "skills",
     "photos:after-skills",
     "aside",
@@ -101,27 +121,21 @@ const site = {
       title: "Projects",
       lede: "Things I've built and still stand behind.",
     },
-    education: {
-      id: "education",
-      index: "03",
-      title: "Education",
-      lede: "Computer science at Florida Polytechnic, finished December 2023.",
-    },
     skills: {
       id: "skills",
-      index: "04",
-      title: "Skills",
-      lede: "Tools I actually reach for. Years, not percentages.",
+      index: "03",
+      title: "Skills & education",
+      lede: "Tools I actually reach for, in years rather than percentages, and the degree behind them.",
     },
     aside: {
       id: "aside",
-      index: "05",
+      index: "04",
       title: "Off the clock",
       lede: "Golf, running, music, and life at home.",
     },
     contact: {
       id: "contact",
-      index: "06",
+      index: "05",
       title: "Contact",
       lede: "A role, a project, or a question about something on this page. It comes straight to my inbox, and I reply within a couple of days.",
     },

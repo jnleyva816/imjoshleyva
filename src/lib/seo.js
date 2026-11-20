@@ -1,9 +1,12 @@
 /**
- * What each built page says about itself: title, description, preview image,
- * and schema.org data. scripts/prerender.mjs bakes it into the HTML, and the
- * same content becomes /llms.txt.
+ * What each page says about itself: title, description, preview image, and
+ * schema.org data. This is the only place those tags are written:
+ * scripts/prerender.mjs bakes them into the built HTML, `vite dev` injects
+ * them through the seo-head plugin in vite.config.js, and the same content
+ * becomes /llms.txt. The HTML templates carry none of it.
  *
- * Imports keep their .js extensions because api/ask.js loads this in plain Node.
+ * Imports keep their .js extensions because the build scripts load this in
+ * plain Node.
  */
 import site from "../content/site.js";
 import resume from "../content/resume.js";
@@ -21,8 +24,8 @@ const person = {
   "@id": `${ORIGIN}/#person`,
   name: site.name,
   alternateName: resume.name,
-  jobTitle: experience[0].role,
-  worksFor: { "@type": "Organization", name: experience[0].company, url: "https://cryptio.co" },
+  jobTitle: site.role,
+  worksFor: { "@type": "Organization", name: site.company, url: "https://cryptio.co" },
   url: `${ORIGIN}/`,
   image: `${ORIGIN}/og.jpg`,
   email: `mailto:${site.email}`,
@@ -41,7 +44,7 @@ const person = {
   },
   hasOccupation: {
     "@type": "Occupation",
-    name: experience[0].role,
+    name: site.role,
     skills: skills.flatMap((group) => group.items.map((item) => item.name)).join(", "),
   },
   knowsAbout: [
@@ -77,15 +80,46 @@ const breadcrumbs = (...items) => ({
   })),
 });
 
+/** The page for a URL path, or undefined. Trailing slashes and .html are ignored. */
+export function pageFor(path) {
+  const clean = path.split(/[?#]/)[0].replace(/\.html$/, "").replace(/\/index$/, "/").replace(/(.)\/+$/, "$1");
+  return pages().find((page) => page.path === clean);
+}
+
+const escape = (text) =>
+  String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** Everything a page puts in <head> about itself. */
+export function headTags(page) {
+  const url = `${ORIGIN}${page.path}`;
+  const image = `${ORIGIN}${page.image.path}`;
+  return `
+    <title>${escape(page.title)}</title>
+    <meta name="description" content="${escape(page.description)}" />
+    <link rel="canonical" href="${url}" />
+    <meta property="og:type" content="${page.ogType}" />
+    <meta property="og:site_name" content="${escape(site.name)}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:title" content="${escape(page.title)}" />
+    <meta property="og:description" content="${escape(page.description)}" />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${escape(page.image.alt)}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="text/plain" title="LLM-readable summary" href="/llms.txt" />
+    <script type="application/ld+json">${JSON.stringify(page.jsonLd).replace(/</g, "\\u003c")}</script>
+  `;
+}
+
 /** Every pre-rendered page: where it comes from, where it goes, what it says. */
 export function pages() {
   const home = {
     path: "/",
     template: "index.html",
     out: "index.html",
-    title: `${site.name} · ${experience[0].role}`,
-    description:
-      "Joshua Leyva is a Senior Solutions Engineer at Cryptio. Production systems, SQL, and customer-facing fixes, plus photography and the occasional side project.",
+    title: `${site.name} · ${site.role}`,
+    description: `${site.name} is a ${site.title}. Production systems, SQL, and customer-facing fixes, plus photography and the occasional side project.`,
     ogType: "profile",
     image: { path: "/og.jpg", alt: "Joshua Leyva's site: name, role, and portrait" },
     jsonLd: graph(person, website, {
@@ -152,7 +186,7 @@ const list = (items) => items.map((item) => `- ${item}`).join("\n");
 export function siteDigest() {
   return [
     `# ${site.name}`,
-    `> ${experience[0].role} at ${experience[0].company}. ${resume.summary}`,
+    `> ${site.title}. ${resume.summary}`,
     `Email: ${site.email}\nSite: ${ORIGIN}\nRésumé: ${ORIGIN}/resume (with a PDF download)`,
     `## Now\n${site.now.text} (updated ${site.now.updated})`,
     `## Work\n${experience
@@ -169,8 +203,9 @@ export function siteDigest() {
           lines.push(`Features:\n${list(study.features)}`);
           lines.push(`How it works:\n${list(study.how)}`);
           lines.push(`Decisions:\n${list(study.decisions.map((item) => `${item.title}: ${item.text}`))}`);
-          lines.push(`Next:\n${list(study.next)}`);
+          if (study.next?.length) lines.push(`Next:\n${list(study.next)}`);
         }
+        if (project.demo) lines.push(`Live: ${project.demo}`);
         if (project.github) lines.push(`Code: ${project.github}`);
         return lines.join("\n");
       })

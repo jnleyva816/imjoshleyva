@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "../lib/motion";
 import { allPhotos } from "../lib/photos";
 import { usePhotoViewer } from "../lib/photoViewer";
 import site from "../content/site";
@@ -214,7 +214,7 @@ export default function PhotoCarousel() {
   return (
     <div>
       <div className="flex flex-wrap items-baseline justify-between gap-4">
-        <h3 className="font-display text-2xl text-ink">Recent frames</h3>
+        <h3 className="font-display text-h4 text-ink">Recent frames</h3>
         <a className="text-link text-sm text-muted" href={site.photography} target="_blank" rel="noopener noreferrer">
           Full portfolio ↗
         </a>

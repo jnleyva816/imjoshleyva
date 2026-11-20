@@ -9,8 +9,8 @@
  *   hero          1 photo, tucked against the portrait
  *   work          1 photo, beside the Work heading
  *   after-work    2 photos, full-width break after Work
- *   education     1 photo, beside the Education heading
- *   after-skills  1 photo, full-width break after Skills
+ *   education     1 photo, beside the Skills & education heading
+ *   after-skills  1 photo, full-width break after Skills & education
  */
 export const placements = {
   // hero: ["01-desk.jpg"],

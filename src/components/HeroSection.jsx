@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import profile from "../assets/profile_picture.jpg?w=384;640;864&format=avif;webp;jpg&as=picture";
 import Picture from "./ui/Picture";
 import site from "../content/site";
@@ -7,6 +6,8 @@ import { Sprig } from "./ui/Marks";
 import RevealText from "./ui/RevealText";
 import Photo from "./ui/Photo";
 import LocalTime from "./ui/LocalTime";
+import CopyEmail from "./ui/CopyEmail";
+import { homeHref } from "../lib/paths";
 import { photosFor } from "../lib/photos";
 
 const heroPhoto = photosFor("hero")[0];
@@ -41,7 +42,7 @@ export default function HeroSection() {
           <LocalTime />
         </p>
         <h1
-          className="mt-4 w-fit font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.92] tracking-[-0.035em] text-ink"
+          className="mt-4 w-fit font-display text-hero text-ink"
           style={{ viewTransitionName: "site-name" }}
         >
           {site.name}
@@ -79,27 +80,41 @@ export default function HeroSection() {
         </div>
 
         <div
-          className="mt-6 min-h-[5.5rem] max-w-xl"
+          className="mt-6 max-w-xl"
           role="tabpanel"
           id="intro-panel"
           aria-labelledby={`intro-tab-${audience.id}`}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <RevealText
-              key={audience.id}
-              text={audience.copy}
-              className="text-lg leading-relaxed text-muted"
-            />
-          </AnimatePresence>
+          <RevealText
+            key={audience.id}
+            text={audience.copy}
+            className="min-h-[5.5rem] text-lg leading-relaxed text-muted"
+          />
+
+          {/* Each audience gets its own next step: résumé, case studies, or photos. */}
+          <div key={`links-${audience.id}`} className="swap-in mt-8 flex flex-wrap items-center gap-3">
+            {audience.links.map((link, index) => {
+              const external = /^https?:/.test(link.href);
+              return (
+                <a
+                  key={link.href}
+                  className={`btn ${index === 0 ? "btn-fill" : "btn-quiet"}`}
+                  href={homeHref(link.href)}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {link.label}
+                  {external ? <span aria-hidden="true">↗</span> : null}
+                </a>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a className="btn btn-fill" href="/resume">
-            Resume
-          </a>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
           <a className="btn btn-quiet" href={`mailto:${site.email}`}>
-            {site.email}
+            Email me
           </a>
+          <CopyEmail />
         </div>
 
         <p className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted sm:gap-x-0">
@@ -152,7 +167,6 @@ export default function HeroSection() {
               photo={heroPhoto}
               className="absolute -bottom-10 -left-4 z-10 w-32 sm:-left-12 sm:w-40 lg:w-44"
               tilt={-5}
-              delay={0.5}
               caption={false}
               sizes="176px"
             />

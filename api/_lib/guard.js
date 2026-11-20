@@ -11,9 +11,17 @@ export function clientIp(req) {
   );
 }
 
+/** Vercel sets VERCEL_ENV; production fails closed where a check can't run. */
+export const isProduction = () => process.env.VERCEL_ENV === "production";
+
+/**
+ * True only when the request names an Origin and it matches this host.
+ * Browsers always send Origin on a cross-site or fetch() POST, so a missing
+ * one means a script, not the form.
+ */
 export function sameOrigin(req) {
   const origin = req.headers.origin;
-  if (!origin) return true;
+  if (!origin) return false;
   try {
     return new URL(origin).host === req.headers.host;
   } catch {
@@ -21,10 +29,19 @@ export function sameOrigin(req) {
   }
 }
 
-async function countInRedis(key, windowSeconds) {
+function redisConfig() {
   const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-  if (!url || !token) return null;
+  return url && token ? { url, token } : null;
+}
+
+/** True when counts are shared across every instance (Upstash or Vercel KV). */
+export const hasSharedStore = () => redisConfig() !== null;
+
+async function countInRedis(key, windowSeconds) {
+  const config = redisConfig();
+  if (!config) return null;
+  const { url, token } = config;
   try {
     const response = await fetch(`${url}/pipeline`, {
       method: "POST",

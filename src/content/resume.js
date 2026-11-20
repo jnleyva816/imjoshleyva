@@ -2,11 +2,14 @@
  * Resume-only copy. Jobs, education, and skills come from src/data/*, the
  * same files the site uses. Run `npm run resume` after changing anything.
  */
+import site from "./site.js";
+import education from "../data/educationData.js";
+
 const resume = {
   name: "Joshua N. Leyva",
-  headline: "Senior Solutions Engineer",
+  headline: site.role,
   contact: [
-    "joshleyva816@gmail.com",
+    site.email,
     "joshleyva.dev",
     "linkedin.com/in/joshua-leyva-0b9942b6",
     "github.com/jnleyva816",
@@ -16,7 +19,7 @@ const resume = {
   projects: [
     {
       name: "Folio",
-      link: "github.com/jnleyva816/Digital-Zine",
+      link: "folio-digital-zine.app",
       text: "Digital photo zines built with Next.js, PostgreSQL, and Stripe. Photos flip to show their EXIF or Fujifilm film recipe, read from the camera's maker notes. Built test-first with Vitest and Playwright.",
     },
     {
@@ -30,7 +33,7 @@ const resume = {
       text: "React, Tailwind, and Vite, with a Vercel function and Resend for the contact form. CI runs lint, unit, browser, and Lighthouse checks.",
     },
   ],
-  educationNote: "Dean's List, multiple semesters. Top 10% of the class. Capstone recognized for outstanding achievement. Innovation award for best AI project.",
+  educationNote: education.notes.map((note) => `${note}.`).join(" "),
 };
 
 export default resume;
