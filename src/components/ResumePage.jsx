@@ -74,7 +74,7 @@ function Resume() {
             {byCompany(experience).map(({ company, roles }) => (
               <div key={company} className="spotlight">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                  <h3 className="font-display text-2xl tracking-tight text-ink">{company}</h3>
+                  <h3 className="font-display text-h4 text-ink">{company}</h3>
                   <p className={when}>{span(roles)}</p>
                 </div>
                 <div className="mt-3 space-y-5">
@@ -85,6 +85,9 @@ function Resume() {
                         {roles.length > 1 ? <p className={when}>{short(role.duration)}</p> : null}
                       </div>
                       <p className="mt-1.5 max-w-2xl leading-relaxed text-muted">{role.description}</p>
+                      {role.impact ? (
+                        <p className="mt-1.5 max-w-2xl font-medium text-ink">{role.impact}</p>
+                      ) : null}
                     </div>
                   ))}
                 </div>
@@ -139,7 +142,7 @@ function Resume() {
 
         <Part title="Education">
           <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-            <h3 className="font-display text-2xl tracking-tight text-ink">{education.school}</h3>
+            <h3 className="font-display text-h4 text-ink">{education.school}</h3>
             <p className={when}>{short(education.date)}</p>
           </div>
           <p className="mt-2 text-moss">

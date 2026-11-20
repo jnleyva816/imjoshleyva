@@ -1,3 +1,9 @@
+/**
+ * Newest first. The first entry is your current title everywhere on the site.
+ *
+ * impact  optional: one measurable result, shown in bold under the
+ *         description and on the résumé. Under 140 characters.
+ */
 const experienceData = [
   {
     company: "Cryptio",
@@ -37,7 +43,8 @@ const experienceData = [
     role: "Application Developer / QA Engineer",
     duration: "January 2022 — December 2023",
     description:
-      "Internal applications for cybersecurity operations, plus the automated tests around them. The team measured about a 20% productivity gain and about a 30% drop in defects.",
+      "Internal applications for cybersecurity operations, plus the automated tests around them.",
+    impact: "About 20% more productive and about 30% fewer defects, as the team measured it.",
     tags: ["Internal tools", "Test automation"],
   },
   {

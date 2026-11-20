@@ -12,11 +12,11 @@ export default function Section({ id, index, title, lede, photo, children }) {
           <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
             {index}
           </p>
-          <h2 className="font-display text-4xl tracking-[-0.03em] text-ink md:text-5xl">
+          <h2 className="font-display text-h2 text-ink">
             {title}
           </h2>
           {lede ? (
-            <p className="mt-4 text-lg leading-relaxed text-muted">{lede}</p>
+            <p className="mt-4 text-lede text-muted">{lede}</p>
           ) : null}
         </div>
         {photo ? (

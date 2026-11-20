@@ -1,11 +1,22 @@
 {
-  "prerender": [
+  "prefetch": [
     {
       "where": {
         "and": [
           { "href_matches": "/*" },
           { "not": { "href_matches": "/api/*" } },
           { "not": { "href_matches": "/assets/*" } },
+          { "not": { "selector_matches": "[download], [target=_blank]" } }
+        ]
+      },
+      "eagerness": "moderate"
+    }
+  ],
+  "prerender": [
+    {
+      "where": {
+        "and": [
+          { "href_matches": "/projects/*" },
           { "not": { "selector_matches": "[download], [target=_blank]" } }
         ]
       },

@@ -3,38 +3,55 @@
 @variant dark (&:where(.dark, .dark *));
 
 /*
-  Grove tokens.
+  Grove tokens, in OKLCH: lightness, chroma, hue.
   Paper, ink, and one moss accent. Swap these to retheme the site.
+  These are the old sRGB hex values converted exactly; screens that can show
+  Display P3 get a slightly richer moss (below).
 */
 :root {
-  --paper: #f4f0e8;
-  --raised: #fbf8f3;
-  --ink: #1b1916;
-  --muted: #4f4a42;
-  --moss: #2c4a3c;
-  --moss-fill: #2c4a3c;
-  --moss-fill-hover: #21392e;
-  --on-moss: #f6f3ec;
-  --line: rgba(27, 25, 22, 0.14);
-  --error: #a3341f;
+  --paper: oklch(0.956 0.011 84.6);
+  --raised: oklch(0.98 0.007 80.7);
+  --ink: oklch(0.215 0.007 78.2);
+  --muted: oklch(0.411 0.015 79.7);
+  --moss: oklch(0.381 0.043 163.3);
+  --moss-fill: var(--moss);
+  --moss-fill-hover: oklch(0.321 0.036 163.7);
+  --on-moss: oklch(0.965 0.01 87.5);
+  --line: oklch(0.215 0.007 78.2 / 0.14);
+  --error: oklch(0.486 0.15 32.8);
   --veil: 92%;
+  --grain: 0.05;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: light;
 }
 
 .dark {
-  --paper: #101412;
-  --raised: #181e1b;
-  --ink: #f0ebe3;
-  --muted: #b7b1a6;
-  --moss: #c9dac8;
-  --moss-fill: #d7e6d6;
-  --moss-fill-hover: #e8f3e7;
-  --on-moss: #132018;
-  --line: rgba(240, 235, 227, 0.14);
-  --error: #f0a08c;
+  --paper: oklch(0.186 0.007 164.1);
+  --raised: oklch(0.228 0.011 163.9);
+  --ink: oklch(0.942 0.012 79.8);
+  --muted: oklch(0.762 0.017 82.8);
+  --moss: oklch(0.871 0.031 143.8);
+  --moss-fill: oklch(0.909 0.027 143.6);
+  --moss-fill-hover: oklch(0.953 0.02 143);
+  --on-moss: oklch(0.228 0.024 156.9);
+  --line: oklch(0.942 0.012 79.8 / 0.14);
+  --error: oklch(0.78 0.1 34.7);
   --veil: 88%;
+  --grain: 0.07;
   color-scheme: dark;
+}
+
+/* Same lightness, so contrast holds; more chroma than sRGB can carry. */
+@media (color-gamut: p3) {
+  :root {
+    --moss: oklch(0.381 0.068 160);
+    --moss-fill-hover: oklch(0.321 0.058 160);
+  }
+
+  .dark {
+    --moss: oklch(0.871 0.055 148);
+    --moss-fill: oklch(0.909 0.048 148);
+  }
 }
 
 @theme inline {
@@ -50,6 +67,30 @@
   --color-error: var(--error);
 }
 
+/*
+  Fluid type: each step grows smoothly from a 320px phone to a 1280px
+  desktop instead of jumping at breakpoints. Used as text-hero, text-h2, ...
+*/
+@theme {
+  --text-hero: clamp(3.4rem, 2.3rem + 5.5vw, 6rem);
+  --text-hero--line-height: 0.92;
+  --text-hero--letter-spacing: -0.035em;
+  --text-title: clamp(2.8rem, 1.9rem + 4.5vw, 5rem);
+  --text-title--line-height: 0.95;
+  --text-title--letter-spacing: -0.035em;
+  --text-h2: clamp(2.25rem, 1.85rem + 2vw, 3rem);
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h3: clamp(1.625rem, 1.45rem + 0.85vw, 1.875rem);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h4: clamp(1.375rem, 1.3rem + 0.4vw, 1.6rem);
+  --text-h4--line-height: 1.2;
+  --text-h4--letter-spacing: -0.015em;
+  --text-lede: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lede--line-height: 1.6;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -61,13 +102,30 @@
     background: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 17px;
+    font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
     line-height: 1.6;
     text-rendering: optimizeLegibility;
   }
 
+  /* Fraunces' soft, slightly wonky display cut: SOFT rounds the serifs,
+     WONK swaps in the leaning n, m, and h. Only at heading sizes. */
   .font-display {
     font-optical-sizing: auto;
+    font-variation-settings: "SOFT" 50, "WONK" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
   }
 
   section[id] {
@@ -133,8 +191,8 @@
     background-image:
       linear-gradient(currentColor, currentColor),
       linear-gradient(
-        color-mix(in srgb, var(--moss) 45%, transparent),
-        color-mix(in srgb, var(--moss) 45%, transparent)
+        color-mix(in oklch, var(--moss) 45%, transparent),
+        color-mix(in oklch, var(--moss) 45%, transparent)
       );
     background-position:
       0 100%,
@@ -160,7 +218,45 @@
   }
 
   .veil {
-    background: color-mix(in srgb, var(--paper) var(--veil), transparent);
+    position: relative;
+    isolation: isolate;
+    background: color-mix(in oklch, var(--paper) var(--veil), transparent);
+  }
+
+  /* Paper grain: a tiled noise texture over the veil, under the content. */
+  .veil::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--grain);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.6 -0.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  .dark .veil::before {
+    mix-blend-mode: screen;
+    filter: invert(1);
+  }
+
+  /* A project screenshot, framed like a window resting on the page. */
+  .screenshot {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--raised);
+    box-shadow: 0 24px 50px -32px oklch(0.215 0.007 78.2 / 0.55);
+  }
+
+  .screenshot img {
+    transition: scale 600ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .screenshot:hover img {
+      scale: 1.015;
+    }
   }
 
   /* Cursor-following glow behind a row; --mx/--my are set in lib/spotlight.js. */
@@ -177,7 +273,7 @@
     border-radius: 1rem;
     background: radial-gradient(
       420px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--moss) 14%, transparent),
+      color-mix(in oklch, var(--moss) 14%, transparent),
       transparent 70%
     );
     opacity: 0;
@@ -274,7 +370,7 @@
 @keyframes live {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--moss) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--moss) 45%, transparent);
   }
   50% {
     box-shadow: 0 0 0 4px transparent;
@@ -469,7 +565,7 @@
 }
 
 .command-dialog::backdrop {
-  background: color-mix(in srgb, var(--paper) 60%, transparent);
+  background: color-mix(in oklch, var(--paper) 60%, transparent);
   backdrop-filter: blur(4px);
   transition:
     opacity 180ms ease,
@@ -637,6 +733,10 @@ html.vt-photo::view-transition-new(lightbox-photo) {
 
   header,
   form,
+  dialog,
+  [popover],
+  .toc,
+  .screenshot,
   iframe,
   figure,
   .wallpaper,
@@ -651,6 +751,10 @@ html.vt-photo::view-transition-new(lightbox-photo) {
 
   .veil {
     background: #fff;
+  }
+
+  .veil::before {
+    display: none;
   }
 
   main * {

@@ -26,7 +26,6 @@ const site = {
   nav: [
     { href: "#work", label: "Work" },
     { href: "#projects", label: "Projects" },
-    { href: "#education", label: "Education" },
     { href: "#skills", label: "Skills" },
     { href: "#aside", label: "About" },
     { href: "#contact", label: "Contact" },
@@ -100,16 +99,9 @@ const site = {
     },
   ],
   // Keys starting with "photos:" are full-width photo breaks between sections.
-  sectionOrder: [
-    "work",
-    "photos:after-work",
-    "projects",
-    "education",
-    "skills",
-    "photos:after-skills",
-    "aside",
-    "contact",
-  ],
+  // One photo per stretch of scrolling: the hero, one break after Work, and
+  // the carousel in "Off the clock".
+  sectionOrder: ["work", "photos:after-work", "projects", "skills", "aside", "contact"],
   sections: {
     work: {
       id: "work",
@@ -123,27 +115,21 @@ const site = {
       title: "Projects",
       lede: "Things I've built and still stand behind.",
     },
-    education: {
-      id: "education",
-      index: "03",
-      title: "Education",
-      lede: "Computer science at Florida Polytechnic, finished December 2023.",
-    },
     skills: {
       id: "skills",
-      index: "04",
-      title: "Skills",
-      lede: "Tools I actually reach for. Years, not percentages.",
+      index: "03",
+      title: "Skills & education",
+      lede: "Tools I actually reach for, in years rather than percentages, and the degree behind them.",
     },
     aside: {
       id: "aside",
-      index: "05",
+      index: "04",
       title: "Off the clock",
       lede: "Golf, running, music, and life at home.",
     },
     contact: {
       id: "contact",
-      index: "06",
+      index: "05",
       title: "Contact",
       lede: "A role, a project, or a question about something on this page. It comes straight to my inbox, and I reply within a couple of days.",
     },

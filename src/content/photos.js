@@ -5,16 +5,14 @@
  * ones, in file-name order (prefix 01-, 02-, ... to control it), also fill
  * the spots below. To pin a photo to a spot, list its file name.
  *
- * Spots, in page order:
+ * Spots, in page order. One strong photo per stretch of scrolling:
  *   hero          1 photo, tucked against the portrait
- *   work          1 photo, beside the Work heading
- *   after-work    2 photos, full-width break after Work
- *   education     1 photo, beside the Education heading
- *   after-skills  1 photo, full-width break after Skills
+ *   after-work    1 photo, a full-width break after Work
+ * Listing two names for after-work gives a staggered pair instead.
  */
 export const placements = {
   // hero: ["01-desk.jpg"],
-  // "after-work": ["04-team.jpg", "05-office.jpg"],
+  // "after-work": ["04-team.jpg"],
 };
 
 export const captions = {

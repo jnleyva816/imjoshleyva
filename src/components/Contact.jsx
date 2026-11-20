@@ -116,7 +116,7 @@ export default function Contact() {
           role="status"
           className="swap-in rounded-md border border-line bg-raised p-8"
         >
-          <p className="font-display text-2xl tracking-tight text-ink">Thanks, it's on its way.</p>
+          <p className="font-display text-h4 text-ink">Thanks, it's on its way.</p>
           <p className="mt-3 text-muted">
             Your message is in my inbox. I'll reply to the address you gave.
           </p>

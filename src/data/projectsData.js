@@ -2,6 +2,9 @@
  * Projects on the home page. A project with a `caseStudy` also gets its own
  * page at /projects/<slug>.
  *
+ * image  optional screenshot: { file, alt }, with the file in
+ *        src/assets/projects. Shown on the card and atop the case study.
+ *
  * caseStudy sections are plain paragraphs or lists of short points:
  *   summary   one or two sentences, shown under the title
  *   why       what the project is for
@@ -20,6 +23,10 @@ const projects = [
     technologies: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Stripe"],
     demo: "https://folio-digital-zine.app",
     github: "https://github.com/jnleyva816/Digital-Zine",
+    image: {
+      file: "folio.jpg",
+      alt: "Folio's home page: the headline \"Your best photographs, bound into a zine\" beside a photo card flipped to show its camera settings and Fujifilm recipe",
+    },
     category: "Web",
     year: "2026",
     status: "Live",
@@ -125,6 +132,10 @@ const projects = [
     technologies: ["React", "Tailwind", "Vite"],
     demo: "https://joshleyva.dev",
     github: "https://github.com/jnleyva816/imjoshleyva",
+    image: {
+      file: "personal-site.jpg",
+      alt: "This site's home page: name, audience tabs, intro copy, and a portrait over a faint plant wallpaper",
+    },
     category: "Web",
     year: "2026",
     status: "In progress",

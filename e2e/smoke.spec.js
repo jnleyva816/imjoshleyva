@@ -18,9 +18,10 @@ test("home page renders without errors", async ({ page }) => {
 
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Joshua Leyva" })).toBeVisible();
-  for (const id of ["work", "projects", "education", "skills", "aside", "contact"]) {
+  for (const id of ["work", "projects", "skills", "aside", "contact"]) {
     await expect(page.locator(`section#${id}`)).toBeAttached();
   }
+  await expect(page.locator("#skills #education")).toBeAttached();
   expect(errors).toEqual([]);
 });
 
@@ -159,9 +160,8 @@ test("the nav marks the section you are reading", async ({ page, isMobile }) => 
   test.skip(isMobile, "the desktop nav is hidden on phones");
   await page.goto("/");
   await expect(page.locator('nav[aria-label="Primary"] [aria-current]')).toHaveCount(0);
-  await page.locator("#education").scrollIntoViewIfNeeded();
-  await page.evaluate(() => document.getElementById("education").scrollIntoView({ behavior: "instant" }));
-  await expect(page.locator('nav[aria-label="Primary"] a[aria-current="location"]')).toHaveText("Education");
+  await page.evaluate(() => document.getElementById("skills").scrollIntoView({ behavior: "instant" }));
+  await expect(page.locator('nav[aria-label="Primary"] a[aria-current="location"]')).toHaveText("Skills");
 });
 
 test("the contact form explains what is wrong next to the field", async ({ page }) => {
@@ -336,9 +336,9 @@ test("the command menu opens with the keyboard and runs commands", async ({ page
   await expect(page.locator("html")).toHaveClass(/dark/);
 
   await page.keyboard.press("Control+k");
-  await page.keyboard.type("educ");
+  await page.keyboard.type("skill");
   await page.keyboard.press("Enter");
-  await expect(page.locator("#education")).toBeInViewport();
+  await expect(page.locator("#skills")).toBeInViewport();
 
   await page.keyboard.press("Control+k");
   await page.keyboard.press("Escape");

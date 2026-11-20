@@ -18,8 +18,12 @@ import { photosFor } from "./lib/photos";
 const blocks = {
   work: <Experience />,
   projects: <ProjectList />,
-  education: <Education />,
-  skills: <Skills />,
+  skills: (
+    <>
+      <Skills />
+      <Education />
+    </>
+  ),
   aside: (
     <div className="space-y-14">
       <About />

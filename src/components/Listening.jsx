@@ -11,7 +11,7 @@ export default function Listening() {
 
   return (
     <div>
-      <h3 className="font-display text-2xl text-ink">Listening</h3>
+      <h3 className="font-display text-h4 text-ink">Listening</h3>
       <p className="mt-2 text-sm text-muted">{track.note}</p>
       <div className="mt-4 overflow-hidden rounded-md border border-line bg-raised">
         <div className="relative aspect-video bg-ink/5">

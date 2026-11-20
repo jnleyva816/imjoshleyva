@@ -42,7 +42,7 @@ export default function HeroSection() {
           <LocalTime />
         </p>
         <h1
-          className="mt-4 w-fit font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.92] tracking-[-0.035em] text-ink"
+          className="mt-4 w-fit font-display text-hero text-ink"
           style={{ viewTransitionName: "site-name" }}
         >
           {site.name}
