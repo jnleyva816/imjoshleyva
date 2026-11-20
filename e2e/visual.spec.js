@@ -11,7 +11,7 @@ import { test, expect } from "@playwright/test";
  *
  * Baselines live in e2e/__screenshots__. Review the diff before committing.
  */
-test.skip(!process.env.VISUAL, "screenshot tests run in the Playwright container: npm run test:visual");
+test.skip(!process.env.VISUAL_TESTS, "screenshot tests run in the Playwright container: npm run test:visual");
 
 test.use({ reducedMotion: "reduce" });
 

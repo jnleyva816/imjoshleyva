@@ -496,9 +496,11 @@
   animation: word 500ms var(--ease-out) calc(100ms + var(--i, 0) * 35ms) both;
 }
 
+/* 0.01, not 0: Chrome skips fully transparent text when it picks the
+   Largest Contentful Paint, which would push LCP past hydration. */
 @keyframes word {
   from {
-    opacity: 0;
+    opacity: 0.01;
     translate: 0 0.45em;
   }
 }
@@ -635,7 +637,7 @@
 
 @keyframes rise {
   from {
-    opacity: 0;
+    opacity: 0.01;
     transform: translateY(14px);
   }
 }
