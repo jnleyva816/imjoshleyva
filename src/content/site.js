@@ -1,10 +1,19 @@
 /**
  * Copy, links, and section order.
  * Layout components read this file. Change wording and order here.
+ *
+ * Your job title comes from the first entry in src/data/experienceData.js,
+ * so a new role is one edit there.
  */
+import experience from "../data/experienceData.js";
+
+const [current] = experience;
+
 const site = {
   name: "Joshua Leyva",
-  title: "Senior Solutions Engineer at Cryptio",
+  role: current.role,
+  company: current.company,
+  title: `${current.role} at ${current.company}`,
   email: "joshleyva816@gmail.com",
   // Shown next to the title as a live clock.
   timeZone: { id: "America/New_York", place: "Florida" },

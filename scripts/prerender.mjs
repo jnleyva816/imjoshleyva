@@ -8,42 +8,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const server = await import(pathToFileURL(path.join(root, ".ssr/entry-server.js")).href);
-const { pages, render, siteDigest, ORIGIN } = server;
+const { pages, render, siteDigest, headTags, ORIGIN } = server;
 
-const escape = (text) =>
-  String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-// Tags each page sets for itself; the template's copies are dropped first.
-const perPage = [
-  /\s*<title>[\s\S]*?<\/title>/,
-  /\s*<meta\s+name="description"[\s\S]*?\/>/,
-  /\s*<link\s+rel="canonical"[^>]*>/,
-  /\s*<meta\s+property="og:(?:type|url|title|description|image(?::\w+)?)"[\s\S]*?\/>/g,
-  /\s*<meta\s+name="twitter:[\w:]+"[\s\S]*?\/>/g,
-  /\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-];
-
-function head(page) {
-  const url = `${ORIGIN}${page.path}`;
-  const image = `${ORIGIN}${page.image.path}`;
-  return `
-    <title>${escape(page.title)}</title>
-    <meta name="description" content="${escape(page.description)}" />
-    <link rel="canonical" href="${url}" />
-    <meta property="og:type" content="${page.ogType}" />
-    <meta property="og:url" content="${url}" />
-    <meta property="og:title" content="${escape(page.title)}" />
-    <meta property="og:description" content="${escape(page.description)}" />
-    <meta property="og:image" content="${image}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="${escape(page.image.alt)}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="alternate" type="text/plain" title="LLM-readable summary" href="/llms.txt" />
-    <script type="application/ld+json">${JSON.stringify(page.jsonLd).replace(/</g, "\\u003c")}</script>
-    <noscript><style>#root [style*="opacity:0"]{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}</style></noscript>
-  `;
-}
+// Before any JS runs, motion that waits on JS must not hide content.
+const noscript = `<noscript><style>#root [style*="opacity:0"]{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}</style></noscript>`;
 
 const templates = new Map();
 const template = async (name) => {
@@ -53,10 +21,13 @@ const template = async (name) => {
 
 for (const page of pages()) {
   let html = await template(page.template);
-  for (const pattern of perPage) html = html.replace(pattern, "");
+  // src/lib/seo.js owns these tags; a copy in a template would be a second source.
+  if (/<title>|rel="canonical"|property="og:(?!site_name)|application\/ld\+json/.test(html)) {
+    throw new Error(`${page.template}: page tags belong in src/lib/seo.js, not the template`);
+  }
   if (!html.includes('<div id="root"></div>')) throw new Error(`${page.template}: no empty #root`);
   html = html
-    .replace("</head>", `${head(page)}</head>`)
+    .replace("</head>", `${headTags(page)}${noscript}</head>`)
     .replace('<div id="root"></div>', `<div id="root">${render(page.path)}</div>`);
 
   const out = path.join(dist, page.out);

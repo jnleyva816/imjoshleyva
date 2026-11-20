@@ -4,7 +4,7 @@ import App from "./App";
 import ResumePage from "./components/ResumePage";
 import ProjectPage from "./components/ProjectPage";
 
-export { pages, siteDigest, ORIGIN } from "./lib/seo";
+export { pages, siteDigest, headTags, ORIGIN } from "./lib/seo";
 
 const pageFor = (path) => (path === "/" ? App : path === "/resume" ? ResumePage : ProjectPage);
 

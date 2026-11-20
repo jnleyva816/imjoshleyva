@@ -62,6 +62,25 @@ function pageRewrites() {
   }
 }
 
+// The HTML templates carry no title, description, or schema.org tags; the
+// build adds them in scripts/prerender.mjs. This does the same under
+// `vite dev`, from the same src/lib/seo.js, so dev and prod can't drift.
+function seoHead() {
+  let server
+  return {
+    name: 'seo-head',
+    apply: 'serve',
+    configureServer(s) {
+      server = s
+    },
+    async transformIndexHtml(html, ctx) {
+      const { pageFor, headTags } = await server.ssrLoadModule('/src/lib/seo.js')
+      const page = pageFor(ctx.originalUrl ?? ctx.path)
+      return page ? html.replace('</head>', `${headTags(page)}</head>`) : html
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
   // No index.html fallback: unknown paths 404 like they do on Vercel.
@@ -73,6 +92,7 @@ export default defineConfig(({ isSsrBuild }) => ({
     photoExif({ dir: 'src/assets/photos/working' }),
     localApi(),
     pageRewrites(),
+    seoHead(),
   ],
   // The SSR build (see "build" in package.json) only needs src/entry-server.jsx.
   build: isSsrBuild
